@@ -345,7 +345,7 @@
         "icnrad": 30,
         "help": "",
         "sw": true,
-        "bg": "#FFFFFF",
+        "bg": "#0d0d0d",
         "bgg": "",
         "bgrepeat": "no-repeat",
         "bgposition": "center_center",
