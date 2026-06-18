@@ -1,0 +1,126 @@
+/* ==========================================================================
+   PILLOWTA — Dark Store Safety Net
+   ==========================================================================
+   Catches native theme components that hardcode light values in theme.css
+   and that the Theme-Settings flip cannot reach. Loaded LAST in <head>.
+
+   Principles:
+   - Most of the store goes dark via the flipped Theme Settings (bodybg, text,
+     links, inputs, header). This file only fills the gaps.
+   - Uses the design tokens, so changing the palette in Theme Editor still
+     propagates here.
+   - !important is used sparingly, only where the theme's inline/compiled CSS
+     would otherwise win.
+   ========================================================================== */
+
+
+/* --------------------------------------------------------------------------
+   1. STORE-WIDE — safe, low-risk dark fixes
+   -------------------------------------------------------------------------- */
+
+/* Structural separators that the theme draws with light hardcoded colors */
+hr { border-color: var(--color-border); }
+table, th, td { border-color: var(--color-border); }
+blockquote { border-color: var(--color-border); }
+
+/* Form controls — belt-and-suspenders over the flipped field settings */
+input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]),
+textarea,
+select {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+input::placeholder,
+textarea::placeholder { color: var(--color-text-muted); }
+input:focus, textarea:focus, select:focus { border-color: var(--color-accent); }
+
+/* In-content rich-text links resolve to the accent (kills any leftover blue) */
+.rte a,
+.article-content a,
+.userContent a { color: var(--color-text-accent); }
+.rte a:hover,
+.article-content a:hover,
+.userContent a:hover { color: var(--color-text-primary); }
+
+
+/* --------------------------------------------------------------------------
+   2. BLOG + ARTICLE (template-scoped)
+   -------------------------------------------------------------------------- */
+
+/* Category / tag pills: kill the blue, become dark outlined chips */
+.template-blog .blogTags a,
+.template-article .blogTags a {
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-text-secondary);
+  padding: 6px 12px;
+  border-radius: var(--badge-radius);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+.template-blog .blogTags a:hover,
+.template-article .blogTags a:hover {
+  border-color: var(--color-text-primary) !important;
+  color: var(--color-text-primary);
+}
+
+/* Article titles + their links stay legible on dark */
+.template-blog .blogTtl a,
+.template-article .blogTtl a,
+.template-blog .blogTtl,
+.template-article .blogTtl { color: var(--color-text-primary); }
+.template-blog .blogTtl a:hover,
+.template-article .blogTtl a:hover { color: var(--color-accent); }
+
+/* Meta (date / author) muted */
+.template-blog .artDet,
+.template-article .artDet,
+.template-blog .artDet * ,
+.template-article .artDet * { color: var(--color-text-muted); }
+
+/* "Read more" links → accent (theme renders these in body/link color) */
+.template-blog .readMore,
+.template-blog a.readMore,
+.template-article .readMore { color: var(--color-text-accent); }
+
+/* Pagination → match button system on dark */
+.template-blog .pagination li a,
+.template-article .pagination li a,
+.template-page .pagination li a {
+  color: var(--color-text-secondary);
+  border-color: var(--color-border);
+  background: transparent;
+}
+.template-blog .pagination li a:hover,
+.template-article .pagination li a:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-text-primary);
+}
+.template-blog .pagination li.active a,
+.template-article .pagination li.active a {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-text-primary);
+}
+
+/* Comment area on articles */
+.template-article .article-comments,
+.template-article .comment { border-color: var(--color-border); }
+
+
+/* --------------------------------------------------------------------------
+   3. ACCESSIBILITY — visible focus everywhere
+   -------------------------------------------------------------------------- */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Respect reduced motion for our transitions */
+@media (prefers-reduced-motion: reduce) {
+  .ds-btn, .ds-card, .ds-badge { transition: none; }
+}

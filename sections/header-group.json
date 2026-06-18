@@ -1,1 +1,354 @@
-{"type":"header","name":"Header Group","sections":{"promotion_bar_9zhpji":{"type":"promotion-bar","blocks":{"bar_mVMgNU":{"type":"bar","settings":{"title":"🔥UP TO 80% OFF ON THE ENTIRE STORE! \n [countdown] Hurry up!","date":"06\/20\/2025","btn_txt":"Shop Now","link":"shopify:\/\/collections\/women","hdbtn":true}},"bar_ka8DVD":{"type":"bar","settings":{"title":"FREE SHIPPING ON ORDER OVER $99","date":"06\/20\/2025","btn_txt":"Shop Now","link":"","hdbtn":true}}},"block_order":["bar_mVMgNU","bar_ka8DVD"],"disabled":true,"settings":{"fontFm":"ft1","fts":13,"ftsm":13,"fw":"500","lh":1,"cl":"#ffffff","clhl":"#ffffff","cnt_txt":"#ffffff","btncl":"#ffffff","btnbg":"#333333","fade":false,"autoplay":true,"speed":3,"arrow":true,"arrowm":false,"arr_show":"hover","sw":false,"bg":"#111111","bgg":"","overlay":"#111111","overlay_op":0.8,"sstn":10,"ssbn":10,"sstmn":8,"ssbmn":8,"hidem":false,"hided":false}},"top_header_izH78y":{"type":"top-header","blocks":{"text_w3DfjQ":{"type":"text","settings":{"txt":"Available 24\/7 at +566 4444 9940","icon":"phone","url1":"","newtab1":false,"txt1":"","icon2":"none","url2":"","newtab2":false,"al":"tl","hdm":true}},"text_PVp7xP":{"type":"text","settings":{"txt":"Free Delivery on orders over $99. Don’t miss.","icon":"phone","url1":"","newtab1":false,"txt1":"","icon2":"none","url2":"","newtab2":false,"al":"tc f-jcc","hdm":false}},"cl_VWnwcW":{"type":"cl","settings":{"sc":false,"menu":"","txt":"","hdm":true,"al":"tr f-jce"}}},"block_order":["text_w3DfjQ","text_PVp7xP","cl_VWnwcW"],"disabled":true,"settings":{"fs":13,"fw":"500","tu":true,"cl":"#ffffff","clh":"#ffffff","icns":13,"sw":true,"bg":"#000000","btmbd":"#000000","sst":16,"ssb":14,"sstm":15,"ssbm":14,"hidem":false,"hided":false}},"header_menu_inline_Ned4rC":{"type":"header-menu-inline","blocks":{"home_49PKt6":{"type":"home","settings":{"title":"Home"}},"slink_cG4KcG":{"type":"slink","disabled":true,"settings":{"title":"Shop","url":"shopify:\/\/collections\/all"}},"slink_hzrhND":{"type":"slink","settings":{"title":"About us","url":"shopify:\/\/pages\/about-us"}},"slink_YpyqLQ":{"type":"slink","disabled":true,"settings":{"title":"Katha","url":"shopify:\/\/blogs\/katha-of-shringar"}},"slink_pqXXcp":{"type":"slink","settings":{"title":"Unfiltered","url":"shopify:\/\/blogs\/unfiltered"}},"m1_gGLBGr":{"type":"m1","disabled":true,"settings":{"title":"Home","url":"\/","newtab":false,"menu":"","mcol":1,"callPos":"right","colWd":65,"icol":1,"iTtl1":"NEW IN","imgurl1":"","iTtl2":"","imgurl2":"","iTtl3":"","imgurl3":"","iTtl4":"","imgurl4":"","icnbr":8,"overlay_lbl":true,"ttcl":"#000000","ttbg":"#ffffff","ttfs":13,"ttfw":"600","ttla":"tc","cwd":true,"bxwd":"600","mmal":"left","bxsz":true}},"m1_GUpQcM":{"type":"m1","disabled":true,"settings":{"title":"Shop","url":"shopify:\/\/collections","newtab":false,"menu":"","mcol":4,"callPos":"right","colWd":30,"icol":1,"iTtl1":"","imgurl1":"","iTtl2":"","imgurl2":"","iTtl3":"","imgurl3":"","iTtl4":"","imgurl4":"","icnbr":8,"overlay_lbl":false,"ttcl":"#111111","ttbg":"#ffffff","ttfs":13,"ttfw":"600","ttla":"tc","cwd":true,"bxwd":"800","mmal":"left","bxsz":false}},"m1_RhD88E":{"type":"m1","disabled":true,"settings":{"title":"Products","url":"shopify:\/\/collections\/all","newtab":false,"menu":"","mcol":4,"callPos":"right","colWd":50,"icol":2,"iTtl1":"","imgurl1":"","iTtl2":"","imgurl2":"","iTtl3":"","imgurl3":"","iTtl4":"","imgurl4":"","icnbr":0,"overlay_lbl":false,"ttcl":"#111111","ttbg":"#ffffff","ttfs":13,"ttfw":"600","ttla":"tc","cwd":true,"bxwd":"1000","mmal":"left","bxsz":true}},"dd_89tFn7":{"type":"dd","disabled":true,"settings":{"title":"Pages","url":"#","menu":""}},"dd_J4Rmi3":{"type":"dd","disabled":true,"settings":{"title":"Blogs","url":"shopify:\/\/blogs\/fashion","menu":""}},"slink_eceU7K":{"type":"slink","settings":{"title":"Co-Create","url":"shopify:\/\/pages\/co-create"}}},"block_order":["home_49PKt6","slink_cG4KcG","slink_hzrhND","slink_YpyqLQ","slink_pqXXcp","m1_gGLBGr","m1_GUpQcM","m1_RhD88E","dd_89tFn7","dd_J4Rmi3","slink_eceU7K"],"settings":{"ht":70,"hdrStyle":"2","logo":"shopify:\/\/shop_images\/Pillowta_logo_1-removebg-preview.png","logowd":120,"icntyp":"1","icon":18,"fs":12,"cl":"#222222","clh":"#000000","gap":30,"sticky_type":"top","sticky_shadow":true,"trhead":true,"trheadcl":true,"trheadbg":false,"trheadar":false,"thcl":"#ffffff","logowdm":100,"cntlogo":true,"htm":52,"spnav":false,"mbmenu":"","catnav":true,"catmenu":"","sicnm":true,"icnm":30,"icnrad":30,"help":"","sw":true,"bg":"#ffffff","bgg":"","bgrepeat":"no-repeat","bgposition":"center_center","bgsize":"auto","hdrbd":false,"hdrbd_cl":"#eeeeee"}}},"order":["promotion_bar_9zhpji","top_header_izH78y","header_menu_inline_Ned4rC"]}
+{
+  "type": "header",
+  "name": "Header Group",
+  "sections": {
+    "promotion_bar_9zhpji": {
+      "type": "promotion-bar",
+      "blocks": {
+        "bar_mVMgNU": {
+          "type": "bar",
+          "settings": {
+            "title": "🔥UP TO 80% OFF ON THE ENTIRE STORE! \n [countdown] Hurry up!",
+            "date": "06/20/2025",
+            "btn_txt": "Shop Now",
+            "link": "shopify://collections/women",
+            "hdbtn": true
+          }
+        },
+        "bar_ka8DVD": {
+          "type": "bar",
+          "settings": {
+            "title": "FREE SHIPPING ON ORDER OVER $99",
+            "date": "06/20/2025",
+            "btn_txt": "Shop Now",
+            "link": "",
+            "hdbtn": true
+          }
+        }
+      },
+      "block_order": [
+        "bar_mVMgNU",
+        "bar_ka8DVD"
+      ],
+      "disabled": true,
+      "settings": {
+        "fontFm": "ft1",
+        "fts": 13,
+        "ftsm": 13,
+        "fw": "500",
+        "lh": 1,
+        "cl": "#ffffff",
+        "clhl": "#ffffff",
+        "cnt_txt": "#ffffff",
+        "btncl": "#ffffff",
+        "btnbg": "#333333",
+        "fade": false,
+        "autoplay": true,
+        "speed": 3,
+        "arrow": true,
+        "arrowm": false,
+        "arr_show": "hover",
+        "sw": false,
+        "bg": "#111111",
+        "bgg": "",
+        "overlay": "#111111",
+        "overlay_op": 0.8,
+        "sstn": 10,
+        "ssbn": 10,
+        "sstmn": 8,
+        "ssbmn": 8,
+        "hidem": false,
+        "hided": false
+      }
+    },
+    "top_header_izH78y": {
+      "type": "top-header",
+      "blocks": {
+        "text_w3DfjQ": {
+          "type": "text",
+          "settings": {
+            "txt": "Available 24/7 at +566 4444 9940",
+            "icon": "phone",
+            "url1": "",
+            "newtab1": false,
+            "txt1": "",
+            "icon2": "none",
+            "url2": "",
+            "newtab2": false,
+            "al": "tl",
+            "hdm": true
+          }
+        },
+        "text_PVp7xP": {
+          "type": "text",
+          "settings": {
+            "txt": "Free Delivery on orders over $99. Don’t miss.",
+            "icon": "phone",
+            "url1": "",
+            "newtab1": false,
+            "txt1": "",
+            "icon2": "none",
+            "url2": "",
+            "newtab2": false,
+            "al": "tc f-jcc",
+            "hdm": false
+          }
+        },
+        "cl_VWnwcW": {
+          "type": "cl",
+          "settings": {
+            "sc": false,
+            "menu": "",
+            "txt": "",
+            "hdm": true,
+            "al": "tr f-jce"
+          }
+        }
+      },
+      "block_order": [
+        "text_w3DfjQ",
+        "text_PVp7xP",
+        "cl_VWnwcW"
+      ],
+      "disabled": true,
+      "settings": {
+        "fs": 13,
+        "fw": "500",
+        "tu": true,
+        "cl": "#ffffff",
+        "clh": "#ffffff",
+        "icns": 13,
+        "sw": true,
+        "bg": "#000000",
+        "btmbd": "#000000",
+        "sst": 16,
+        "ssb": 14,
+        "sstm": 15,
+        "ssbm": 14,
+        "hidem": false,
+        "hided": false
+      }
+    },
+    "header_menu_inline_Ned4rC": {
+      "type": "header-menu-inline",
+      "blocks": {
+        "home_49PKt6": {
+          "type": "home",
+          "settings": {
+            "title": "Home"
+          }
+        },
+        "slink_cG4KcG": {
+          "type": "slink",
+          "disabled": true,
+          "settings": {
+            "title": "Shop",
+            "url": "shopify://collections/all"
+          }
+        },
+        "slink_hzrhND": {
+          "type": "slink",
+          "settings": {
+            "title": "About us",
+            "url": "shopify://pages/about-us"
+          }
+        },
+        "slink_YpyqLQ": {
+          "type": "slink",
+          "disabled": true,
+          "settings": {
+            "title": "Katha",
+            "url": "shopify://blogs/katha-of-shringar"
+          }
+        },
+        "slink_pqXXcp": {
+          "type": "slink",
+          "settings": {
+            "title": "Unfiltered",
+            "url": "shopify://blogs/unfiltered"
+          }
+        },
+        "m1_gGLBGr": {
+          "type": "m1",
+          "disabled": true,
+          "settings": {
+            "title": "Home",
+            "url": "/",
+            "newtab": false,
+            "menu": "",
+            "mcol": 1,
+            "callPos": "right",
+            "colWd": 65,
+            "icol": 1,
+            "iTtl1": "NEW IN",
+            "imgurl1": "",
+            "iTtl2": "",
+            "imgurl2": "",
+            "iTtl3": "",
+            "imgurl3": "",
+            "iTtl4": "",
+            "imgurl4": "",
+            "icnbr": 8,
+            "overlay_lbl": true,
+            "ttcl": "#000000",
+            "ttbg": "#ffffff",
+            "ttfs": 13,
+            "ttfw": "600",
+            "ttla": "tc",
+            "cwd": true,
+            "bxwd": "600",
+            "mmal": "left",
+            "bxsz": true
+          }
+        },
+        "m1_GUpQcM": {
+          "type": "m1",
+          "disabled": true,
+          "settings": {
+            "title": "Shop",
+            "url": "shopify://collections",
+            "newtab": false,
+            "menu": "",
+            "mcol": 4,
+            "callPos": "right",
+            "colWd": 30,
+            "icol": 1,
+            "iTtl1": "",
+            "imgurl1": "",
+            "iTtl2": "",
+            "imgurl2": "",
+            "iTtl3": "",
+            "imgurl3": "",
+            "iTtl4": "",
+            "imgurl4": "",
+            "icnbr": 8,
+            "overlay_lbl": false,
+            "ttcl": "#111111",
+            "ttbg": "#ffffff",
+            "ttfs": 13,
+            "ttfw": "600",
+            "ttla": "tc",
+            "cwd": true,
+            "bxwd": "800",
+            "mmal": "left",
+            "bxsz": false
+          }
+        },
+        "m1_RhD88E": {
+          "type": "m1",
+          "disabled": true,
+          "settings": {
+            "title": "Products",
+            "url": "shopify://collections/all",
+            "newtab": false,
+            "menu": "",
+            "mcol": 4,
+            "callPos": "right",
+            "colWd": 50,
+            "icol": 2,
+            "iTtl1": "",
+            "imgurl1": "",
+            "iTtl2": "",
+            "imgurl2": "",
+            "iTtl3": "",
+            "imgurl3": "",
+            "iTtl4": "",
+            "imgurl4": "",
+            "icnbr": 0,
+            "overlay_lbl": false,
+            "ttcl": "#111111",
+            "ttbg": "#ffffff",
+            "ttfs": 13,
+            "ttfw": "600",
+            "ttla": "tc",
+            "cwd": true,
+            "bxwd": "1000",
+            "mmal": "left",
+            "bxsz": true
+          }
+        },
+        "dd_89tFn7": {
+          "type": "dd",
+          "disabled": true,
+          "settings": {
+            "title": "Pages",
+            "url": "#",
+            "menu": ""
+          }
+        },
+        "dd_J4Rmi3": {
+          "type": "dd",
+          "disabled": true,
+          "settings": {
+            "title": "Blogs",
+            "url": "shopify://blogs/fashion",
+            "menu": ""
+          }
+        },
+        "slink_eceU7K": {
+          "type": "slink",
+          "settings": {
+            "title": "Co-Create",
+            "url": "shopify://pages/co-create"
+          }
+        }
+      },
+      "block_order": [
+        "home_49PKt6",
+        "slink_cG4KcG",
+        "slink_hzrhND",
+        "slink_YpyqLQ",
+        "slink_pqXXcp",
+        "m1_gGLBGr",
+        "m1_GUpQcM",
+        "m1_RhD88E",
+        "dd_89tFn7",
+        "dd_J4Rmi3",
+        "slink_eceU7K"
+      ],
+      "settings": {
+        "ht": 70,
+        "hdrStyle": "2",
+        "logo": "shopify://shop_images/Pillowta_logo_1-removebg-preview.png",
+        "logowd": 120,
+        "icntyp": "1",
+        "icon": 18,
+        "fs": 12,
+        "cl": "#ffffff",
+        "clh": "#e63946",
+        "gap": 30,
+        "sticky_type": "top",
+        "sticky_shadow": true,
+        "trhead": true,
+        "trheadcl": true,
+        "trheadbg": false,
+        "trheadar": false,
+        "thcl": "#ffffff",
+        "logowdm": 100,
+        "cntlogo": true,
+        "htm": 52,
+        "spnav": false,
+        "mbmenu": "",
+        "catnav": true,
+        "catmenu": "",
+        "sicnm": true,
+        "icnm": 30,
+        "icnrad": 30,
+        "help": "",
+        "sw": true,
+        "bg": "#0d0d0d",
+        "bgg": "",
+        "bgrepeat": "no-repeat",
+        "bgposition": "center_center",
+        "bgsize": "auto",
+        "hdrbd": false,
+        "hdrbd_cl": "#333333"
+      }
+    }
+  },
+  "order": [
+    "promotion_bar_9zhpji",
+    "top_header_izH78y",
+    "header_menu_inline_Ned4rC"
+  ]
+}

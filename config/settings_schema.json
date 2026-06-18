@@ -4827,5 +4827,461 @@
         "unit": "px"
       }
     ]
+  },
+  {
+    "name": "DS — Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Background Colors"
+      },
+      {
+        "type": "color",
+        "id": "color_bg_primary",
+        "label": "Primary Background",
+        "default": "#0d0d0d",
+        "info": "Main page background across the store."
+      },
+      {
+        "type": "color",
+        "id": "color_bg_secondary",
+        "label": "Secondary Background",
+        "default": "#1a1a1a",
+        "info": "Alternate sections, card backgrounds."
+      },
+      {
+        "type": "color",
+        "id": "color_bg_tertiary",
+        "label": "Tertiary Background",
+        "default": "#2a2a2a",
+        "info": "Elevated surfaces, hover states."
+      },
+      {
+        "type": "color",
+        "id": "color_bg_warm",
+        "label": "Warm Background",
+        "default": "#1c1714",
+        "info": "Story / editorial sections."
+      },
+      {
+        "type": "header",
+        "content": "Brand Colors"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Accent Color",
+        "default": "#e63946",
+        "info": "Primary accent — CTAs, emphasis, links."
+      },
+      {
+        "type": "color",
+        "id": "color_accent_hover",
+        "label": "Accent Hover",
+        "default": "#d32f3f"
+      },
+      {
+        "type": "header",
+        "content": "Text Colors"
+      },
+      {
+        "type": "color",
+        "id": "color_text_primary",
+        "label": "Primary Text",
+        "default": "#ffffff",
+        "info": "Headlines, primary content on dark."
+      },
+      {
+        "type": "color",
+        "id": "color_text_secondary",
+        "label": "Secondary Text",
+        "default": "#b0b0b0",
+        "info": "Body text, descriptions."
+      },
+      {
+        "type": "color",
+        "id": "color_text_muted",
+        "label": "Muted Text",
+        "default": "#6b6b6b",
+        "info": "Captions, timestamps, metadata."
+      },
+      {
+        "type": "header",
+        "content": "Border Colors"
+      },
+      {
+        "type": "color",
+        "id": "color_border",
+        "label": "Default Border",
+        "default": "#333333"
+      },
+      {
+        "type": "color",
+        "id": "color_border_light",
+        "label": "Light Border",
+        "default": "#444444"
+      }
+    ]
+  },
+  {
+    "name": "DS — Typography",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Font families are set under the theme's own Typography settings. These control sizes only."
+      },
+      {
+        "type": "header",
+        "content": "Heading Sizes"
+      },
+      {
+        "type": "range",
+        "id": "font_size_h1",
+        "label": "H1 Size",
+        "min": 32,
+        "max": 72,
+        "step": 2,
+        "default": 56,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "font_size_h2",
+        "label": "H2 Size",
+        "min": 24,
+        "max": 52,
+        "step": 2,
+        "default": 40,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "font_size_h3",
+        "label": "H3 Size",
+        "min": 18,
+        "max": 36,
+        "step": 2,
+        "default": 28,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "font_size_h4",
+        "label": "H4 Size",
+        "min": 16,
+        "max": 28,
+        "step": 1,
+        "default": 22,
+        "unit": "px"
+      },
+      {
+        "type": "header",
+        "content": "Body Text"
+      },
+      {
+        "type": "range",
+        "id": "font_size_body",
+        "label": "Body Size",
+        "min": 14,
+        "max": 20,
+        "step": 1,
+        "default": 16,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "font_size_small",
+        "label": "Small Text Size",
+        "min": 12,
+        "max": 16,
+        "step": 1,
+        "default": 14,
+        "unit": "px"
+      },
+      {
+        "type": "header",
+        "content": "Line Heights"
+      },
+      {
+        "type": "select",
+        "id": "line_height_heading",
+        "label": "Heading Line Height",
+        "default": "1.25",
+        "options": [
+          {
+            "value": "1.1",
+            "label": "Tight (1.1)"
+          },
+          {
+            "value": "1.2",
+            "label": "Compact (1.2)"
+          },
+          {
+            "value": "1.25",
+            "label": "Standard (1.25)"
+          },
+          {
+            "value": "1.3",
+            "label": "Relaxed (1.3)"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "line_height_body",
+        "label": "Body Line Height",
+        "default": "1.6",
+        "options": [
+          {
+            "value": "1.4",
+            "label": "Compact (1.4)"
+          },
+          {
+            "value": "1.5",
+            "label": "Standard (1.5)"
+          },
+          {
+            "value": "1.6",
+            "label": "Comfortable (1.6)"
+          },
+          {
+            "value": "1.75",
+            "label": "Spacious (1.75)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "DS — Layout",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Container Widths"
+      },
+      {
+        "type": "range",
+        "id": "container_max_width",
+        "label": "Max Content Width",
+        "min": 1000,
+        "max": 1600,
+        "step": 20,
+        "default": 1200,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "container_narrow_width",
+        "label": "Narrow Content Width",
+        "min": 600,
+        "max": 1000,
+        "step": 20,
+        "default": 800,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "container_padding",
+        "label": "Container Side Padding",
+        "min": 16,
+        "max": 48,
+        "step": 4,
+        "default": 24,
+        "unit": "px"
+      },
+      {
+        "type": "header",
+        "content": "Grid"
+      },
+      {
+        "type": "range",
+        "id": "grid_gap",
+        "label": "Grid Gap",
+        "min": 16,
+        "max": 48,
+        "step": 4,
+        "default": 32,
+        "unit": "px"
+      }
+    ]
+  },
+  {
+    "name": "DS — Spacing",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Section Spacing"
+      },
+      {
+        "type": "range",
+        "id": "section_padding_desktop",
+        "label": "Section Padding — Desktop",
+        "min": 48,
+        "max": 160,
+        "step": 8,
+        "default": 96,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "section_padding_tablet",
+        "label": "Section Padding — Tablet",
+        "min": 40,
+        "max": 120,
+        "step": 8,
+        "default": 80,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "section_padding_mobile",
+        "label": "Section Padding — Mobile",
+        "min": 32,
+        "max": 96,
+        "step": 8,
+        "default": 64,
+        "unit": "px"
+      }
+    ]
+  },
+  {
+    "name": "DS — Buttons",
+    "settings": [
+      {
+        "type": "range",
+        "id": "btn_border_radius",
+        "label": "Border Radius",
+        "min": 0,
+        "max": 24,
+        "step": 1,
+        "default": 2,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "btn_padding_vertical",
+        "label": "Vertical Padding",
+        "min": 8,
+        "max": 24,
+        "step": 2,
+        "default": 14,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "btn_padding_horizontal",
+        "label": "Horizontal Padding",
+        "min": 16,
+        "max": 48,
+        "step": 4,
+        "default": 28,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "btn_font_size",
+        "label": "Font Size",
+        "min": 10,
+        "max": 16,
+        "step": 1,
+        "default": 12,
+        "unit": "px"
+      },
+      {
+        "type": "select",
+        "id": "btn_font_weight",
+        "label": "Font Weight",
+        "default": "500",
+        "options": [
+          {
+            "value": "400",
+            "label": "Regular"
+          },
+          {
+            "value": "500",
+            "label": "Medium"
+          },
+          {
+            "value": "600",
+            "label": "Semibold"
+          },
+          {
+            "value": "700",
+            "label": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "btn_letter_spacing",
+        "label": "Letter Spacing",
+        "default": "0.08em",
+        "options": [
+          {
+            "value": "0",
+            "label": "None"
+          },
+          {
+            "value": "0.05em",
+            "label": "Subtle"
+          },
+          {
+            "value": "0.08em",
+            "label": "Standard"
+          },
+          {
+            "value": "0.12em",
+            "label": "Wide"
+          },
+          {
+            "value": "0.15em",
+            "label": "Extra Wide"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "btn_uppercase",
+        "label": "Uppercase text",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "DS — Cards",
+    "settings": [
+      {
+        "type": "range",
+        "id": "card_border_radius",
+        "label": "Border Radius",
+        "min": 0,
+        "max": 16,
+        "step": 1,
+        "default": 4,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "card_padding",
+        "label": "Inner Padding",
+        "min": 12,
+        "max": 40,
+        "step": 4,
+        "default": 24,
+        "unit": "px"
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_border",
+        "label": "Show border",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "card_hover_lift",
+        "label": "Hover lift effect",
+        "default": true
+      }
+    ]
   }
 ]

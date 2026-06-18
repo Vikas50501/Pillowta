@@ -1,0 +1,79 @@
+{% comment %}
+  ==========================================================================
+  PILLOWTA DESIGN SYSTEM — Theme Settings -> CSS Variables Bridge
+  ==========================================================================
+  Rendered in layout/theme.liquid <head> AFTER pillowta-design-system.css so
+  these Theme-Editor values override the static fallbacks defined there.
+
+  Adapted for the Revone theme:
+  - Font tokens reuse the theme's existing font vars (--ft1/--ft2/--ft3),
+    so NO extra webfonts are loaded. Change fonts under Theme Settings ->
+    Typography (the theme's own font pickers), not here.
+  - Every value has a | default so a blank setting can never emit invalid CSS.
+  ==========================================================================
+{% endcomment %}
+<style>
+  :root {
+    /* ----- Colors ----- */
+    --color-bg-primary:    {{ settings.color_bg_primary    | default: '#0d0d0d' }};
+    --color-bg-secondary:  {{ settings.color_bg_secondary  | default: '#1a1a1a' }};
+    --color-bg-tertiary:   {{ settings.color_bg_tertiary   | default: '#2a2a2a' }};
+    --color-bg-warm:       {{ settings.color_bg_warm        | default: '#1c1714' }};
+
+    --color-accent:        {{ settings.color_accent        | default: '#e63946' }};
+    --color-accent-hover:  {{ settings.color_accent_hover  | default: '#d32f3f' }};
+    {%- if settings.color_accent != blank %}
+    --color-accent-subtle: {{ settings.color_accent | color_modify: 'alpha', 0.15 }};
+    {%- endif %}
+
+    --color-text-primary:   {{ settings.color_text_primary   | default: '#ffffff' }};
+    --color-text-secondary: {{ settings.color_text_secondary | default: '#b0b0b0' }};
+    --color-text-muted:     {{ settings.color_text_muted     | default: '#6b6b6b' }};
+    --color-text-inverse:   {{ settings.color_bg_primary     | default: '#0d0d0d' }};
+    --color-text-accent:    {{ settings.color_accent         | default: '#e63946' }};
+
+    --color-border:        {{ settings.color_border        | default: '#333333' }};
+    --color-border-light:  {{ settings.color_border_light  | default: '#444444' }};
+
+    /* ----- Type sizes ----- */
+    --text-h1: clamp(32px, 4vw,   {{ settings.font_size_h1 | default: 56 }}px);
+    --text-h2: clamp(26px, 3.2vw, {{ settings.font_size_h2 | default: 40 }}px);
+    --text-h3: clamp(22px, 2.4vw, {{ settings.font_size_h3 | default: 28 }}px);
+    --text-h4: clamp(18px, 1.8vw, {{ settings.font_size_h4 | default: 22 }}px);
+    --text-body:  {{ settings.font_size_body  | default: 16 }}px;
+    --text-small: {{ settings.font_size_small | default: 14 }}px;
+
+    --leading-heading: {{ settings.line_height_heading | default: '1.25' }};
+    --leading-body:    {{ settings.line_height_body    | default: '1.6' }};
+
+    /* ----- Layout ----- */
+    --container-max:     {{ settings.container_max_width    | default: 1200 }}px;
+    --container-narrow:  {{ settings.container_narrow_width | default: 800 }}px;
+    --container-padding: {{ settings.container_padding      | default: 24 }}px;
+    --grid-gap:          {{ settings.grid_gap              | default: 32 }}px;
+
+    /* ----- Spacing ----- */
+    --section-padding-desktop: {{ settings.section_padding_desktop | default: 96 }}px;
+    --section-padding-tablet:  {{ settings.section_padding_tablet  | default: 80 }}px;
+    --section-padding-mobile:  {{ settings.section_padding_mobile  | default: 64 }}px;
+
+    /* ----- Buttons ----- */
+    --btn-border-radius:  {{ settings.btn_border_radius      | default: 2 }}px;
+    --btn-padding-y:      {{ settings.btn_padding_vertical   | default: 14 }}px;
+    --btn-padding-x:      {{ settings.btn_padding_horizontal | default: 28 }}px;
+    --btn-font-size:      {{ settings.btn_font_size          | default: 12 }}px;
+    --btn-font-weight:    {{ settings.btn_font_weight        | default: '500' }};
+    --btn-letter-spacing: {{ settings.btn_letter_spacing     | default: '0.08em' }};
+    --btn-text-transform: {% if settings.btn_uppercase == false %}none{% else %}uppercase{% endif %};
+
+    /* ----- Cards ----- */
+    --card-border-radius: {{ settings.card_border_radius | default: 4 }}px;
+    --card-padding:       {{ settings.card_padding       | default: 24 }}px;
+    {%- if settings.card_show_border == false %}
+    --card-border: none;
+    {%- endif %}
+    {%- if settings.card_hover_lift == false %}
+    --card-hover-transform: none;
+    {%- endif %}
+  }
+</style>
