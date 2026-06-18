@@ -1,1 +1,627 @@
-{"sections":{"banner":{"type":"page-banner","blocks":{"title":{"type":"title","settings":{"htag":"h1","tff":"ft2","fts":22,"ftsm":20,"fw":"600","tuu":false,"cl":"#ffffff","mb":5,"mbm":5}}},"block_order":["title"],"disabled":true,"settings":{"hit":200,"hitt":200,"hitm":150,"bg":"#f4f4f4","bgg":"","overlay":"#000","overlay_op":0.6,"cntwd":1600,"text-align":true}},"breadcrumb":{"type":"breadcrumb","disabled":true,"settings":{"sw":false,"hidemb":false,"tc":false}},"main":{"type":"main-page","disabled":true,"settings":{"hidettl":true,"hide_hdft":false,"sst":30,"ssb":30,"sstm":15,"ssbm":15,"bg":"","sw":false}},"about_hero_YbhPwd":{"type":"About-hero","name":"About Hero","settings":{"bg_color":"#000000","layout_reverse":false,"content_max_width":700,"eyebrow_text":"Our Story","eyebrow_color":"#b8963e","eyebrow_font_size":11,"heading_line1":"We inherited","heading_italic":"extraordinary.","heading_line3":"And forgot it.","heading_color":"#ffffff","heading_italic_color":"#f0d5cc","heading_size_desktop":72,"heading_size_min":34,"heading_size_mobile":36,"show_rule":true,"rule_color":"#b8963e","sub_text":"India gave the world the Kamasutra. A philosophy of desire, presence, and intimacy as art. Somewhere along the way, we decided to be ashamed of it.","sub_color":"#fefcf88c","sub_font_size":16,"sub_max_width":420,"quote_text":"Our ancestors built that knowledge deliberately,\nand treated it with reverence.","quote_bg":"rgba(0,0,0,0)","quote_align":"left","quote_italic_enable":true,"quote_padding":8,"quote_radius":0,"quote_line_height":13,"quote_letter_spacing":1,"quote_font_weight":"400","show_cta_button":false,"cta_button_text":"Explore Our Story","cta_button_url":"","cta_button_style":"button_5","show_decorative_symbol":true,"decorative_symbol":"❧","deco_symbol_color":"#ffffff0a","hero_image":"shopify:\/\/shop_images\/WhatsApp_Image_2026-04-28_at_5.41.41_PM.jpg","image_url":"","image_alt":"About hero image","image_brightness":70,"image_sepia":15,"image_overlay_opacity":0,"image_gradient_overlay":true,"left_padding_top":64,"left_padding_bottom":64,"left_padding_x":64,"mobile_image_height":320}},"about_why_exist_VbAc9m":{"type":"About-why-exist","name":"About — Why We Exist","settings":{"section_bg":"#fefcf8","column_ratio":"1-2","max_width":1200,"section_padding_x":80,"column_gap":6,"section_margin_top":2,"section_margin_bottom":2,"show_section_tag":true,"tag_text":"01","tag_color":"#7a736b","tag_size":10,"show_section_number":true,"section_number":"01","num_color":"#f2ede4","num_size":5,"num_overlap":2,"heading_line1":"Why we","heading_italic":"exist.","heading_color":"#1a1714","heading_italic_color":"#1a1714","heading_size_max":45,"heading_size_min":28,"sub_label":"The problem no one was talking about.","sub_label_color":"#7a736b","sub_label_size":13,"paragraph_1":"<p><strong>The Kamasutra was never just about sex positions.<\/strong> It was a science of relationships. A guide to understanding our own desires, your partner's body, and the art of being fully present.<\/p>","paragraph_2":"<p>Our ancestors built that knowledge deliberately, and treated it with reverence. We live in its birthplace and know almost none of it.<\/p>","paragraph_3":"<p>The result is chronic dissatisfaction: partners feeling disconnected, people carrying shame around their own pleasure, and an entire conversation that never happens.<\/p>","body_color":"#4a4540","body_strong_color":"#1a1714","body_font_size":17,"show_callout":true,"callout_bg":"#1a1714","callout_text":"We live in its birthplace and know almost none of it.","callout_text_color":"#fefcf8","callout_text_size":19,"callout_accent_text":"This is the problem we were built to solve.","callout_accent_color":"#b8963e","callout_accent_size":11,"callout_deco_color":"#ffffff0f","callout_border_radius":2}},"about_building_YecegK":{"type":"About-building","blocks":{"pillar_card_3FkcEc":{"type":"pillar_card","settings":{"card_title":"Premium Sensual Wellness Products","card_body":"Formulated with intention. Tested by real people. Built around your body, not a marketing brief.","card_accent_override":""}},"pillar_card_U7aGGa":{"type":"pillar_card","settings":{"card_title":"Honest Education","card_body":"No euphemisms. No shame. The information your body deserved from the beginning.","card_accent_override":""}},"pillar_card_tQqjkw":{"type":"pillar_card","settings":{"card_title":"A Community That's Real","card_body":"Open to all genders, relationships, and comfort levels. Because pleasure is not a niche.","card_accent_override":""}}},"block_order":["pillar_card_3FkcEc","pillar_card_U7aGGa","pillar_card_tQqjkw"],"name":"About — What We're Building","settings":{"section_bg":"#0e0c0a","column_ratio":"2-1","max_width":1200,"section_padding_top":4,"section_padding_bottom":3,"section_padding_x":80,"column_gap":6,"show_grid_pattern":true,"grid_line_color":"#b8963e0a","grid_spacing":60,"show_section_tag":true,"tag_text":"What we're building","tag_color":"#b8963e","tag_size":10,"heading_line1":"Tools to know yourself.","heading_italic":"Own your pleasure.","heading_color":"#fefcf8","heading_italic_color":"#f0d5cc","heading_size_max":45,"heading_size_min":28,"paragraph_1":"Our focus is to build a complete ecosystem around sexual wellness with one idea: that knowing your own desires and being present with them changes everything.","paragraph_2":"Not a product catalogue. Not a wellness trend. A living body of knowledge, ancient in origin, built for now.","body_color":"#fefcf88c","body_font_size":16,"card_bg":"#ffffff0a","card_border_color":"#ffffff14","card_accent_border_color":"#b8963e","card_accent_border_width":2,"card_border_radius":1,"card_gap":2,"card_padding_x":2,"card_padding_y":2,"card_title_color":"#fefcf8","card_title_size":16,"card_body_color":"#fefcf873","card_body_size":13}},"176772055327cff1ee":{"type":"_blocks","blocks":{"ai_gen_block_95ea420_Rp8qgz":{"type":"ai_gen_block_95ea420","settings":{"banner_image":"shopify:\/\/shop_images\/WhatsApp_Image_2026-02-17_at_22.18.49.jpg","banner_height":500,"banner_height_mobile":400,"show_overlay":true,"overlay_color":"#000000","overlay_opacity":0.3,"content_max_width":700,"heading":"Redefine Intimacy","heading_color":"#ffffff","heading_size":48,"heading_size_mobile":32,"heading_weight":"700","heading_spacing":15,"subheading":"","subheading_color":"#ffffff","subheading_size":18,"subheading_size_mobile":16,"subheading_weight":"400","button_text":"Shop now","button_link":"","button_spacing":20,"button_bg_color":"#ffffff","button_text_color":"#000000","button_border_color":"#ffffff","button_bg_hover":"#000000","button_text_hover":"#ffffff","button_border_hover":"#000000","button_font_size":16,"button_font_size_mobile":14,"button_font_weight":"600","button_padding_vertical":14,"button_padding_horizontal":30,"button_padding_vertical_mobile":12,"button_padding_horizontal_mobile":24,"button_border_radius":4,"button_border_width":2},"blocks":{}}},"block_order":["ai_gen_block_95ea420_Rp8qgz"],"disabled":true,"settings":{}},"1767720917b3a09774":{"type":"_blocks","blocks":{"ai_gen_block_b7fb800_cpkhUg":{"type":"ai_gen_block_b7fb800","settings":{"heading":"Born From Desire","subtitle":"","container_width":1200,"text_alignment":"center","heading_color":"#ffffff","heading_size":40,"heading_size_mobile":28,"heading_weight":"700","line_height":1.2,"text_transform":"none","subtitle_color":"#ffffff","subtitle_size":16,"subtitle_size_mobile":14,"subtitle_spacing":16,"background_color":"#000000","padding_top":25,"padding_bottom":0,"padding_horizontal":20,"padding_top_mobile":40,"padding_bottom_mobile":40,"padding_horizontal_mobile":15},"blocks":{}}},"block_order":["ai_gen_block_b7fb800_cpkhUg"],"disabled":true,"settings":{}},"176812109685b52ebf":{"type":"_blocks","blocks":{"ai_gen_block_a59906c_CMCUdH":{"type":"ai_gen_block_a59906c","settings":{"liquid_code":"","desktop_width_percent":100,"padding_top":40,"padding_bottom":40,"padding_horizontal":20,"padding_top_mobile":30,"padding_bottom_mobile":30,"padding_horizontal_mobile":15},"blocks":{}}},"block_order":["ai_gen_block_a59906c_CMCUdH"],"disabled":true,"settings":{}},"1767858914068bd03e":{"type":"_blocks","blocks":{"ai_gen_block_dfb127f_GFtJBB":{"type":"ai_gen_block_dfb127f","settings":{"layout":"image_left","image_aspect_ratio":"3\/4","image_width":50,"gap":40,"gap_mobile":30,"image":"shopify:\/\/shop_images\/2.png","image_border_radius":0,"heading":"","text":"<p>Pillowta was created with one simple belief everyone deserves to feel truly <em><strong>Connected <\/strong><\/em>to themselves and to others. <br\/>In a fast-moving world, intimacy often fades into routine. Pillowta brings you back to <em><strong>Presence, Warmth, and Emotional Honesty<\/strong><\/em><em>. <\/em>We believe desire should be felt openly, connection should feel safe, and intimacy should always be human.<em><strong><br\/>Not pressured. Not performative. Just real<\/strong><\/em><strong>.<br\/><\/strong>Pillowta is for couples seeking closeness, individuals exploring themselves, and anyone longing for deeper meaning in connection. Here, intimacy doesn’t start with someone else.<em><strong><br\/>It Starts With You.<\/strong><\/em><\/p>","button_text":"Learn more","button_link":"","heading_color":"#ffffff","heading_size":32,"heading_size_mobile":24,"heading_weight":"600","heading_margin":20,"text_color":"#ffffff","text_size":16,"text_size_mobile":14,"text_margin":25,"button_bg_color":"#ffffff","button_text_color":"#000000","button_border_color":"#ffffff","button_bg_hover":"#000000","button_text_hover":"#ffffff","button_border_hover":"#ffffff","button_font_size":14,"button_font_size_mobile":13,"button_font_weight":"500","button_padding_vertical":12,"button_padding_horizontal":30,"button_border_radius":4,"button_border_width":1,"background_color":"#000000","padding_top":50,"padding_bottom":50,"padding_horizontal":40,"padding_top_mobile":30,"padding_bottom_mobile":30,"padding_horizontal_mobile":20},"blocks":{}}},"block_order":["ai_gen_block_dfb127f_GFtJBB"],"disabled":true,"settings":{}},"blocks_7nHRDQ":{"type":"_blocks","blocks":{"ai_gen_block_b7fb800_qDbhV7":{"type":"ai_gen_block_b7fb800","settings":{"heading":"The Feeling We Protect","subtitle":"","container_width":1200,"text_alignment":"center","heading_color":"#ffffff","heading_size":40,"heading_size_mobile":28,"heading_weight":"700","line_height":1.2,"text_transform":"none","subtitle_color":"#ffffff","subtitle_size":16,"subtitle_size_mobile":14,"subtitle_spacing":16,"background_color":"#000000","padding_top":25,"padding_bottom":0,"padding_horizontal":20,"padding_top_mobile":40,"padding_bottom_mobile":40,"padding_horizontal_mobile":15},"blocks":{}}},"block_order":["ai_gen_block_b7fb800_qDbhV7"],"disabled":true,"settings":{}},"blocks_WmEpkh":{"type":"_blocks","blocks":{"ai_gen_block_dfb127f_WkMfAD":{"type":"ai_gen_block_dfb127f","settings":{"layout":"image_right","image_aspect_ratio":"3\/4","image_width":50,"gap":40,"gap_mobile":30,"image":"shopify:\/\/shop_images\/1.png","image_border_radius":0,"heading":"","text":"<p>Pillowta believes intimacy should<strong> F<\/strong><em><strong>eel Safe, Natural, And Real<\/strong><\/em>. <\/p><p>In a world driven by speed and distraction, we offer a pause, a gentle return to <em><strong>Presence, Warmth, And Connection. <\/strong><\/em><\/p><p>Whether you seek closeness, comfort after a long day, or a deeper connection with yourself. <\/p><p>Pillowta creates space for <em><strong>Emotions, Honesty, And Touch That Truly Feels Human<\/strong><\/em><em>.<\/em><\/p><p>What we offer is only the beginning.<\/p><p><em><strong>The Real Experience Happens Within You.<\/strong><\/em><\/p>","button_text":"Join Us","button_link":"https:\/\/www.whatsapp.com\/channel\/0029VbC3B86AO7R9qwsGDp3R","heading_color":"#ffffff","heading_size":32,"heading_size_mobile":24,"heading_weight":"600","heading_margin":20,"text_color":"#ffffff","text_size":16,"text_size_mobile":14,"text_margin":25,"button_bg_color":"#ffffff","button_text_color":"#000000","button_border_color":"#ffffff","button_bg_hover":"#000000","button_text_hover":"#ffffff","button_border_hover":"#ffffff","button_font_size":14,"button_font_size_mobile":13,"button_font_weight":"500","button_padding_vertical":12,"button_padding_horizontal":30,"button_border_radius":4,"button_border_width":1,"background_color":"#000000","padding_top":50,"padding_bottom":50,"padding_horizontal":40,"padding_top_mobile":30,"padding_bottom_mobile":30,"padding_horizontal_mobile":20},"blocks":{}}},"block_order":["ai_gen_block_dfb127f_WkMfAD"],"disabled":true,"settings":{}},"about_ancient_RVEc9w":{"type":"About-ancient","blocks":{"manifesto_item_Rth4zj":{"type":"manifesto_item","settings":{"glyph":"❧","item_title":"Science of Relationships","item_body":"The Kamasutra codified desire, presence, and mutual understanding centuries before modern psychology existed."}},"manifesto_item_868w6T":{"type":"manifesto_item","disabled":true,"settings":{"glyph":"✦","item_title":"Colonised, Not Lost","item_body":"A British colonial editor in 1883 removed entire sections on women's pleasure and emotional intimacy. We're putting them back."}},"manifesto_item_jVKN6p":{"type":"manifesto_item","settings":{"glyph":"◈","item_title":"Living, Not Museum","item_body":"Our ancestors had answers. We're not preserving history. We're translating it into something you can use today."}}},"block_order":["manifesto_item_Rth4zj","manifesto_item_868w6T","manifesto_item_jVKN6p"],"name":"About — Why Ancient Wisdom","settings":{"section_bg":"#fefcf8","max_width":1200,"section_padding_x":80,"section_margin_top":2,"section_margin_bottom":4,"top_column_gap":5,"show_section_tag":true,"tag_text":"02","tag_color":"#c8593a","tag_size":10,"show_section_number":true,"section_number":"02","num_color":"#f2ede4","num_size":5,"num_overlap":2,"heading_line1":"Why ancient","heading_italic":"wisdom.","heading_color":"#1a1714","heading_italic_color":"#1a1714","heading_size_max":45,"heading_size_min":28,"paragraph_1":"<p>We didn't need to import a framework for sex. Intimacy wasn't always reduced to technique or outcome. There was a time when it was understood as something deeper, something to be explored, not rushed.<\/p>","paragraph_2":"<p>Our own tradition, which saw sex as science, poetry, and self-knowledge, was quietly buried. The Kamasutra was not lost. It was colonised out of our consciousness.<\/p>","paragraph_3":"<p><strong>Pillowta exists to bring it back. Not as a museum exhibit, but as living, practical wisdom for the problems of modern intimacy.<\/strong><\/p>","body_color":"#4a4540","body_strong_color":"#1a1714","body_font_size":16,"body_strong_size":17,"strip_bg":"#f2ede4","strip_border_color":"#1a17141a","strip_border_radius":2,"strip_padding_x":4,"strip_padding_y":3,"strip_column_gap":3,"strip_divider_color":"#1a171433","strip_margin_top":5,"glyph_color":"#b8963e","glyph_size":2,"item_title_color":"#1a1714","item_title_size":17,"item_body_color":"#4a4540","item_body_size":13}},"about_founder_Y8RHNz":{"type":"About-founder","custom_css":["span.fc-attr {font-weight: 700;}"],"name":"About — Founder Closing","settings":{"section_bg":"#faf7f2","section_border_top":true,"section_border_color":"#1a17141a","section_padding_top":4,"section_padding_bottom":4,"section_padding_x":72,"inner_max_width":740,"show_rule":false,"rule_color":"#b8963e","rule_width":40,"rule_margin_bottom":3,"quote_line1":"Our ancestors had answers.","quote_line2":"We're just","quote_italic_word":"translating them.","quote_color":"#1a1714","quote_italic_color":"#c8593a","quote_size_max":32,"quote_size_min":22,"attribution_text":"Pillowta Founders","attribution_color":"#7a736b","attribution_size":13,"show_button":true,"button_text":"Join the Community →","button_url":"","button_new_tab":false,"button_style":"button_3"}}},"order":["banner","breadcrumb","main","about_hero_YbhPwd","about_why_exist_VbAc9m","about_building_YecegK","176772055327cff1ee","1767720917b3a09774","176812109685b52ebf","1767858914068bd03e","blocks_7nHRDQ","blocks_WmEpkh","about_ancient_RVEc9w","about_founder_Y8RHNz"]}
+{
+  "sections": {
+    "banner": {
+      "type": "page-banner",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {
+            "htag": "h1",
+            "tff": "ft2",
+            "fts": 22,
+            "ftsm": 20,
+            "fw": "600",
+            "tuu": false,
+            "cl": "#ffffff",
+            "mb": 5,
+            "mbm": 5
+          }
+        }
+      },
+      "block_order": [
+        "title"
+      ],
+      "disabled": true,
+      "settings": {
+        "hit": 200,
+        "hitt": 200,
+        "hitm": 150,
+        "bg": "#f4f4f4",
+        "bgg": "",
+        "overlay": "#000",
+        "overlay_op": 0.6,
+        "cntwd": 1600,
+        "text-align": true
+      }
+    },
+    "breadcrumb": {
+      "type": "breadcrumb",
+      "disabled": true,
+      "settings": {
+        "sw": false,
+        "hidemb": false,
+        "tc": false
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "hidettl": true,
+        "hide_hdft": false,
+        "sst": 30,
+        "ssb": 30,
+        "sstm": 15,
+        "ssbm": 15,
+        "bg": "",
+        "sw": false
+      }
+    },
+    "about_hero_YbhPwd": {
+      "type": "About-hero",
+      "name": "About Hero",
+      "settings": {
+        "bg_color": "#0d0d0d",
+        "layout_reverse": false,
+        "content_max_width": 700,
+        "eyebrow_text": "Our Story",
+        "eyebrow_color": "#e63946",
+        "eyebrow_font_size": 11,
+        "heading_line1": "We inherited",
+        "heading_italic": "extraordinary.",
+        "heading_line3": "And forgot it.",
+        "heading_color": "#ffffff",
+        "heading_italic_color": "#e63946",
+        "heading_size_desktop": 72,
+        "heading_size_min": 34,
+        "heading_size_mobile": 36,
+        "show_rule": true,
+        "rule_color": "#e63946",
+        "sub_text": "India gave the world the Kamasutra. A philosophy of desire, presence, and intimacy as art. Somewhere along the way, we decided to be ashamed of it.",
+        "sub_color": "#b0b0b0",
+        "sub_font_size": 16,
+        "sub_max_width": 420,
+        "quote_text": "Our ancestors built that knowledge deliberately,\nand treated it with reverence.",
+        "quote_bg": "#1a1a1a",
+        "quote_align": "left",
+        "quote_italic_enable": true,
+        "quote_padding": 8,
+        "quote_radius": 0,
+        "quote_line_height": 13,
+        "quote_letter_spacing": 1,
+        "quote_font_weight": "400",
+        "show_cta_button": false,
+        "cta_button_text": "Explore Our Story",
+        "cta_button_url": "",
+        "cta_button_style": "button_5",
+        "show_decorative_symbol": true,
+        "decorative_symbol": "❧",
+        "deco_symbol_color": "#ffffff0a",
+        "hero_image": "shopify://shop_images/WhatsApp_Image_2026-04-28_at_5.41.41_PM.jpg",
+        "image_url": "",
+        "image_alt": "About hero image",
+        "image_brightness": 70,
+        "image_sepia": 15,
+        "image_overlay_opacity": 0,
+        "image_gradient_overlay": true,
+        "left_padding_top": 64,
+        "left_padding_bottom": 64,
+        "left_padding_x": 64,
+        "mobile_image_height": 320
+      }
+    },
+    "about_why_exist_VbAc9m": {
+      "type": "About-why-exist",
+      "name": "About — Why We Exist",
+      "settings": {
+        "section_bg": "#0d0d0d",
+        "column_ratio": "1-2",
+        "max_width": 1200,
+        "section_padding_x": 80,
+        "column_gap": 6,
+        "section_margin_top": 2,
+        "section_margin_bottom": 2,
+        "show_section_tag": true,
+        "tag_text": "01",
+        "tag_color": "#e63946",
+        "tag_size": 10,
+        "show_section_number": true,
+        "section_number": "01",
+        "num_color": "#1c1c1c",
+        "num_size": 5,
+        "num_overlap": 2,
+        "heading_line1": "Why we",
+        "heading_italic": "exist.",
+        "heading_color": "#ffffff",
+        "heading_italic_color": "#e63946",
+        "heading_size_max": 45,
+        "heading_size_min": 28,
+        "sub_label": "The problem no one was talking about.",
+        "sub_label_color": "#6b6b6b",
+        "sub_label_size": 13,
+        "paragraph_1": "<p><strong>The Kamasutra was never just about sex positions.</strong> It was a science of relationships. A guide to understanding our own desires, your partner's body, and the art of being fully present.</p>",
+        "paragraph_2": "<p>Our ancestors built that knowledge deliberately, and treated it with reverence. We live in its birthplace and know almost none of it.</p>",
+        "paragraph_3": "<p>The result is chronic dissatisfaction: partners feeling disconnected, people carrying shame around their own pleasure, and an entire conversation that never happens.</p>",
+        "body_color": "#b0b0b0",
+        "body_strong_color": "#ffffff",
+        "body_font_size": 17,
+        "show_callout": true,
+        "callout_bg": "#1a1a1a",
+        "callout_text": "We live in its birthplace and know almost none of it.",
+        "callout_text_color": "#ffffff",
+        "callout_text_size": 19,
+        "callout_accent_text": "This is the problem we were built to solve.",
+        "callout_accent_color": "#e63946",
+        "callout_accent_size": 11,
+        "callout_deco_color": "#ffffff0f",
+        "callout_border_radius": 2
+      }
+    },
+    "about_building_YecegK": {
+      "type": "About-building",
+      "blocks": {
+        "pillar_card_3FkcEc": {
+          "type": "pillar_card",
+          "settings": {
+            "card_title": "Premium Sensual Wellness Products",
+            "card_body": "Formulated with intention. Tested by real people. Built around your body, not a marketing brief.",
+            "card_accent_override": ""
+          }
+        },
+        "pillar_card_U7aGGa": {
+          "type": "pillar_card",
+          "settings": {
+            "card_title": "Honest Education",
+            "card_body": "No euphemisms. No shame. The information your body deserved from the beginning.",
+            "card_accent_override": ""
+          }
+        },
+        "pillar_card_tQqjkw": {
+          "type": "pillar_card",
+          "settings": {
+            "card_title": "A Community That's Real",
+            "card_body": "Open to all genders, relationships, and comfort levels. Because pleasure is not a niche.",
+            "card_accent_override": ""
+          }
+        }
+      },
+      "block_order": [
+        "pillar_card_3FkcEc",
+        "pillar_card_U7aGGa",
+        "pillar_card_tQqjkw"
+      ],
+      "name": "About — What We're Building",
+      "settings": {
+        "section_bg": "#0d0d0d",
+        "column_ratio": "2-1",
+        "max_width": 1200,
+        "section_padding_top": 4,
+        "section_padding_bottom": 3,
+        "section_padding_x": 80,
+        "column_gap": 6,
+        "show_grid_pattern": true,
+        "grid_line_color": "#b8963e0a",
+        "grid_spacing": 60,
+        "show_section_tag": true,
+        "tag_text": "What we're building",
+        "tag_color": "#e63946",
+        "tag_size": 10,
+        "heading_line1": "Tools to know yourself.",
+        "heading_italic": "Own your pleasure.",
+        "heading_color": "#ffffff",
+        "heading_italic_color": "#e63946",
+        "heading_size_max": 45,
+        "heading_size_min": 28,
+        "paragraph_1": "Our focus is to build a complete ecosystem around sexual wellness with one idea: that knowing your own desires and being present with them changes everything.",
+        "paragraph_2": "Not a product catalogue. Not a wellness trend. A living body of knowledge, ancient in origin, built for now.",
+        "body_color": "#fefcf88c",
+        "body_font_size": 16,
+        "card_bg": "#ffffff0a",
+        "card_border_color": "#ffffff14",
+        "card_accent_border_color": "#e63946",
+        "card_accent_border_width": 2,
+        "card_border_radius": 1,
+        "card_gap": 2,
+        "card_padding_x": 2,
+        "card_padding_y": 2,
+        "card_title_color": "#ffffff",
+        "card_title_size": 16,
+        "card_body_color": "#fefcf873",
+        "card_body_size": 13
+      }
+    },
+    "176772055327cff1ee": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_95ea420_Rp8qgz": {
+          "type": "ai_gen_block_95ea420",
+          "settings": {
+            "banner_image": "shopify://shop_images/WhatsApp_Image_2026-02-17_at_22.18.49.jpg",
+            "banner_height": 500,
+            "banner_height_mobile": 400,
+            "show_overlay": true,
+            "overlay_color": "#000000",
+            "overlay_opacity": 0.3,
+            "content_max_width": 700,
+            "heading": "Redefine Intimacy",
+            "heading_color": "#ffffff",
+            "heading_size": 48,
+            "heading_size_mobile": 32,
+            "heading_weight": "700",
+            "heading_spacing": 15,
+            "subheading": "",
+            "subheading_color": "#ffffff",
+            "subheading_size": 18,
+            "subheading_size_mobile": 16,
+            "subheading_weight": "400",
+            "button_text": "Shop now",
+            "button_link": "",
+            "button_spacing": 20,
+            "button_bg_color": "#ffffff",
+            "button_text_color": "#000000",
+            "button_border_color": "#ffffff",
+            "button_bg_hover": "#000000",
+            "button_text_hover": "#ffffff",
+            "button_border_hover": "#000000",
+            "button_font_size": 16,
+            "button_font_size_mobile": 14,
+            "button_font_weight": "600",
+            "button_padding_vertical": 14,
+            "button_padding_horizontal": 30,
+            "button_padding_vertical_mobile": 12,
+            "button_padding_horizontal_mobile": 24,
+            "button_border_radius": 4,
+            "button_border_width": 2
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_95ea420_Rp8qgz"
+      ],
+      "disabled": true,
+      "settings": {}
+    },
+    "1767720917b3a09774": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_b7fb800_cpkhUg": {
+          "type": "ai_gen_block_b7fb800",
+          "settings": {
+            "heading": "Born From Desire",
+            "subtitle": "",
+            "container_width": 1200,
+            "text_alignment": "center",
+            "heading_color": "#ffffff",
+            "heading_size": 40,
+            "heading_size_mobile": 28,
+            "heading_weight": "700",
+            "line_height": 1.2,
+            "text_transform": "none",
+            "subtitle_color": "#ffffff",
+            "subtitle_size": 16,
+            "subtitle_size_mobile": 14,
+            "subtitle_spacing": 16,
+            "background_color": "#000000",
+            "padding_top": 25,
+            "padding_bottom": 0,
+            "padding_horizontal": 20,
+            "padding_top_mobile": 40,
+            "padding_bottom_mobile": 40,
+            "padding_horizontal_mobile": 15
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_b7fb800_cpkhUg"
+      ],
+      "disabled": true,
+      "settings": {}
+    },
+    "176812109685b52ebf": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_a59906c_CMCUdH": {
+          "type": "ai_gen_block_a59906c",
+          "settings": {
+            "liquid_code": "",
+            "desktop_width_percent": 100,
+            "padding_top": 40,
+            "padding_bottom": 40,
+            "padding_horizontal": 20,
+            "padding_top_mobile": 30,
+            "padding_bottom_mobile": 30,
+            "padding_horizontal_mobile": 15
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_a59906c_CMCUdH"
+      ],
+      "disabled": true,
+      "settings": {}
+    },
+    "1767858914068bd03e": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_dfb127f_GFtJBB": {
+          "type": "ai_gen_block_dfb127f",
+          "settings": {
+            "layout": "image_left",
+            "image_aspect_ratio": "3/4",
+            "image_width": 50,
+            "gap": 40,
+            "gap_mobile": 30,
+            "image": "shopify://shop_images/2.png",
+            "image_border_radius": 0,
+            "heading": "",
+            "text": "<p>Pillowta was created with one simple belief everyone deserves to feel truly <em><strong>Connected </strong></em>to themselves and to others. <br/>In a fast-moving world, intimacy often fades into routine. Pillowta brings you back to <em><strong>Presence, Warmth, and Emotional Honesty</strong></em><em>. </em>We believe desire should be felt openly, connection should feel safe, and intimacy should always be human.<em><strong><br/>Not pressured. Not performative. Just real</strong></em><strong>.<br/></strong>Pillowta is for couples seeking closeness, individuals exploring themselves, and anyone longing for deeper meaning in connection. Here, intimacy doesn’t start with someone else.<em><strong><br/>It Starts With You.</strong></em></p>",
+            "button_text": "Learn more",
+            "button_link": "",
+            "heading_color": "#ffffff",
+            "heading_size": 32,
+            "heading_size_mobile": 24,
+            "heading_weight": "600",
+            "heading_margin": 20,
+            "text_color": "#ffffff",
+            "text_size": 16,
+            "text_size_mobile": 14,
+            "text_margin": 25,
+            "button_bg_color": "#ffffff",
+            "button_text_color": "#000000",
+            "button_border_color": "#ffffff",
+            "button_bg_hover": "#000000",
+            "button_text_hover": "#ffffff",
+            "button_border_hover": "#ffffff",
+            "button_font_size": 14,
+            "button_font_size_mobile": 13,
+            "button_font_weight": "500",
+            "button_padding_vertical": 12,
+            "button_padding_horizontal": 30,
+            "button_border_radius": 4,
+            "button_border_width": 1,
+            "background_color": "#000000",
+            "padding_top": 50,
+            "padding_bottom": 50,
+            "padding_horizontal": 40,
+            "padding_top_mobile": 30,
+            "padding_bottom_mobile": 30,
+            "padding_horizontal_mobile": 20
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_dfb127f_GFtJBB"
+      ],
+      "disabled": true,
+      "settings": {}
+    },
+    "blocks_7nHRDQ": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_b7fb800_qDbhV7": {
+          "type": "ai_gen_block_b7fb800",
+          "settings": {
+            "heading": "The Feeling We Protect",
+            "subtitle": "",
+            "container_width": 1200,
+            "text_alignment": "center",
+            "heading_color": "#ffffff",
+            "heading_size": 40,
+            "heading_size_mobile": 28,
+            "heading_weight": "700",
+            "line_height": 1.2,
+            "text_transform": "none",
+            "subtitle_color": "#ffffff",
+            "subtitle_size": 16,
+            "subtitle_size_mobile": 14,
+            "subtitle_spacing": 16,
+            "background_color": "#000000",
+            "padding_top": 25,
+            "padding_bottom": 0,
+            "padding_horizontal": 20,
+            "padding_top_mobile": 40,
+            "padding_bottom_mobile": 40,
+            "padding_horizontal_mobile": 15
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_b7fb800_qDbhV7"
+      ],
+      "disabled": true,
+      "settings": {}
+    },
+    "blocks_WmEpkh": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_dfb127f_WkMfAD": {
+          "type": "ai_gen_block_dfb127f",
+          "settings": {
+            "layout": "image_right",
+            "image_aspect_ratio": "3/4",
+            "image_width": 50,
+            "gap": 40,
+            "gap_mobile": 30,
+            "image": "shopify://shop_images/1.png",
+            "image_border_radius": 0,
+            "heading": "",
+            "text": "<p>Pillowta believes intimacy should<strong> F</strong><em><strong>eel Safe, Natural, And Real</strong></em>. </p><p>In a world driven by speed and distraction, we offer a pause, a gentle return to <em><strong>Presence, Warmth, And Connection. </strong></em></p><p>Whether you seek closeness, comfort after a long day, or a deeper connection with yourself. </p><p>Pillowta creates space for <em><strong>Emotions, Honesty, And Touch That Truly Feels Human</strong></em><em>.</em></p><p>What we offer is only the beginning.</p><p><em><strong>The Real Experience Happens Within You.</strong></em></p>",
+            "button_text": "Join Us",
+            "button_link": "https://www.whatsapp.com/channel/0029VbC3B86AO7R9qwsGDp3R",
+            "heading_color": "#ffffff",
+            "heading_size": 32,
+            "heading_size_mobile": 24,
+            "heading_weight": "600",
+            "heading_margin": 20,
+            "text_color": "#ffffff",
+            "text_size": 16,
+            "text_size_mobile": 14,
+            "text_margin": 25,
+            "button_bg_color": "#ffffff",
+            "button_text_color": "#000000",
+            "button_border_color": "#ffffff",
+            "button_bg_hover": "#000000",
+            "button_text_hover": "#ffffff",
+            "button_border_hover": "#ffffff",
+            "button_font_size": 14,
+            "button_font_size_mobile": 13,
+            "button_font_weight": "500",
+            "button_padding_vertical": 12,
+            "button_padding_horizontal": 30,
+            "button_border_radius": 4,
+            "button_border_width": 1,
+            "background_color": "#000000",
+            "padding_top": 50,
+            "padding_bottom": 50,
+            "padding_horizontal": 40,
+            "padding_top_mobile": 30,
+            "padding_bottom_mobile": 30,
+            "padding_horizontal_mobile": 20
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_dfb127f_WkMfAD"
+      ],
+      "disabled": true,
+      "settings": {}
+    },
+    "about_ancient_RVEc9w": {
+      "type": "About-ancient",
+      "blocks": {
+        "manifesto_item_Rth4zj": {
+          "type": "manifesto_item",
+          "settings": {
+            "glyph": "❧",
+            "item_title": "Science of Relationships",
+            "item_body": "The Kamasutra codified desire, presence, and mutual understanding centuries before modern psychology existed."
+          }
+        },
+        "manifesto_item_868w6T": {
+          "type": "manifesto_item",
+          "disabled": true,
+          "settings": {
+            "glyph": "✦",
+            "item_title": "Colonised, Not Lost",
+            "item_body": "A British colonial editor in 1883 removed entire sections on women's pleasure and emotional intimacy. We're putting them back."
+          }
+        },
+        "manifesto_item_jVKN6p": {
+          "type": "manifesto_item",
+          "settings": {
+            "glyph": "◈",
+            "item_title": "Living, Not Museum",
+            "item_body": "Our ancestors had answers. We're not preserving history. We're translating it into something you can use today."
+          }
+        }
+      },
+      "block_order": [
+        "manifesto_item_Rth4zj",
+        "manifesto_item_868w6T",
+        "manifesto_item_jVKN6p"
+      ],
+      "name": "About — Why Ancient Wisdom",
+      "settings": {
+        "section_bg": "#0d0d0d",
+        "max_width": 1200,
+        "section_padding_x": 80,
+        "section_margin_top": 2,
+        "section_margin_bottom": 4,
+        "top_column_gap": 5,
+        "show_section_tag": true,
+        "tag_text": "02",
+        "tag_color": "#e63946",
+        "tag_size": 10,
+        "show_section_number": true,
+        "section_number": "02",
+        "num_color": "#1c1c1c",
+        "num_size": 5,
+        "num_overlap": 2,
+        "heading_line1": "Why ancient",
+        "heading_italic": "wisdom.",
+        "heading_color": "#ffffff",
+        "heading_italic_color": "#ffffff",
+        "heading_size_max": 45,
+        "heading_size_min": 28,
+        "paragraph_1": "<p>We didn't need to import a framework for sex. Intimacy wasn't always reduced to technique or outcome. There was a time when it was understood as something deeper, something to be explored, not rushed.</p>",
+        "paragraph_2": "<p>Our own tradition, which saw sex as science, poetry, and self-knowledge, was quietly buried. The Kamasutra was not lost. It was colonised out of our consciousness.</p>",
+        "paragraph_3": "<p><strong>Pillowta exists to bring it back. Not as a museum exhibit, but as living, practical wisdom for the problems of modern intimacy.</strong></p>",
+        "body_color": "#b0b0b0",
+        "body_strong_color": "#ffffff",
+        "body_font_size": 16,
+        "body_strong_size": 17,
+        "strip_bg": "#1a1a1a",
+        "strip_border_color": "rgba(255,255,255,0.10)",
+        "strip_border_radius": 2,
+        "strip_padding_x": 4,
+        "strip_padding_y": 3,
+        "strip_column_gap": 3,
+        "strip_divider_color": "rgba(255,255,255,0.16)",
+        "strip_margin_top": 5,
+        "glyph_color": "#e63946",
+        "glyph_size": 2,
+        "item_title_color": "#ffffff",
+        "item_title_size": 17,
+        "item_body_color": "#b0b0b0",
+        "item_body_size": 13
+      }
+    },
+    "about_founder_Y8RHNz": {
+      "type": "About-founder",
+      "custom_css": [
+        "span.fc-attr {font-weight: 700;}"
+      ],
+      "name": "About — Founder Closing",
+      "settings": {
+        "section_bg": "#0d0d0d",
+        "section_border_top": true,
+        "section_border_color": "rgba(255,255,255,0.10)",
+        "section_padding_top": 4,
+        "section_padding_bottom": 4,
+        "section_padding_x": 72,
+        "inner_max_width": 740,
+        "show_rule": false,
+        "rule_color": "#e63946",
+        "rule_width": 40,
+        "rule_margin_bottom": 3,
+        "quote_line1": "Our ancestors had answers.",
+        "quote_line2": "We're just",
+        "quote_italic_word": "translating them.",
+        "quote_color": "#ffffff",
+        "quote_italic_color": "#e63946",
+        "quote_size_max": 32,
+        "quote_size_min": 22,
+        "attribution_text": "Pillowta Founders",
+        "attribution_color": "#6b6b6b",
+        "attribution_size": 13,
+        "show_button": true,
+        "button_text": "Join the Community →",
+        "button_url": "",
+        "button_new_tab": false,
+        "button_style": "button_3"
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "breadcrumb",
+    "main",
+    "about_hero_YbhPwd",
+    "about_why_exist_VbAc9m",
+    "about_building_YecegK",
+    "176772055327cff1ee",
+    "1767720917b3a09774",
+    "176812109685b52ebf",
+    "1767858914068bd03e",
+    "blocks_7nHRDQ",
+    "blocks_WmEpkh",
+    "about_ancient_RVEc9w",
+    "about_founder_Y8RHNz"
+  ]
+}

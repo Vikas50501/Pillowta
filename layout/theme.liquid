@@ -57,6 +57,12 @@
       <script src="{{ 'vendor.js' | asset_url }}" defer></script>
     {%- endcapture -%}
     {{ head_data | strip_newlines | remove: "  " | remove: "	" }}
+
+    {%- comment %} Pillowta Design System — emitted after theme CSS so tokens + dark cascade win {% endcomment -%}
+    {{ 'pillowta-design-system.css' | asset_url | stylesheet_tag }}
+    {%- render 'design-system-variables' -%}
+    {{ 'pillowta-dark.css' | asset_url | stylesheet_tag }}
+
     {{ content_for_header }}
   </head>
 
