@@ -757,7 +757,7 @@
         "dotm": false,
         "sw": false,
         "bg": "#444444",
-        "bgg": "linear-gradient(101deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, 1) 100%)",
+        "bgg": "",
         "overlay": "#000000",
         "overlay_op": 0,
         "headings_cl": "#ffffff",
