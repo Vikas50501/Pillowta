@@ -809,6 +809,9 @@
         "storista_stories_rfaWn4",
         "storista_hero_4BRPMg"
       ],
+      "custom_css": [
+        "h2 {font-size: 35px; font-weight: 600; color: #fff;}"
+      ],
       "settings": {
         "sst": 30,
         "ssb": 30,
