@@ -1,0 +1,621 @@
+{%- comment -%}
+  ============================================================
+  SECTION: Give / Get (Two-column comparison)
+  ------------------------------------------------------------
+  Heading on top.
+  Two columns side by side:
+    LEFT  — usually light (e.g. "You get")
+    RIGHT — usually dark (e.g. "We ask")
+  Each column has: small eyebrow label, title, list of items.
+  List items are added as blocks so they're fully manageable.
+  ============================================================
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+  assign section_id = 'give-get-' | append: section.id
+-%}
+
+<section
+  id="{{ section_id }}"
+  class="gg gg--align-{{ s.heading_alignment }}"
+  style="
+    --gg-bg: {{ s.bg_color }};
+    --gg-heading: {{ s.heading_color }};
+    --gg-accent: {{ s.accent_color }};
+    --gg-heading-font: {{ s.heading_font_family }};
+    --gg-body-font: {{ s.body_font_family }};
+    --gg-heading-size: {{ s.heading_size }}px;
+    --gg-heading-size-mobile: {{ s.heading_size_mobile }}px;
+    --gg-title-size: {{ s.col_title_size }}px;
+    --gg-body-size: {{ s.body_size }}px;
+    --gg-pad-top: {{ s.padding_top }}px;
+    --gg-pad-bottom: {{ s.padding_bottom }}px;
+    --gg-pad-top-mobile: {{ s.padding_top_mobile }}px;
+    --gg-pad-bottom-mobile: {{ s.padding_bottom_mobile }}px;
+    --gg-side-pad: {{ s.side_padding }}vw;
+    --gg-max-width: {{ s.container_max_width }}px;
+    --gg-heading-margin: {{ s.heading_margin_bottom }}px;
+    --gg-col-gap: {{ s.column_gap }}px;
+    --gg-col-pad-x: {{ s.column_padding_x }}px;
+    --gg-col-pad-y: {{ s.column_padding_y }}px;
+    --gg-list-gap: {{ s.list_item_gap }}px;
+
+    --gg-col1-bg: {{ s.col1_bg }};
+    --gg-col1-eyebrow: {{ s.col1_eyebrow_color }};
+    --gg-col1-title: {{ s.col1_title_color }};
+    --gg-col1-text: {{ s.col1_text_color }};
+    --gg-col1-dash: {{ s.col1_dash_color }};
+
+    --gg-col2-bg: {{ s.col2_bg }};
+    --gg-col2-eyebrow: {{ s.col2_eyebrow_color }};
+    --gg-col2-title: {{ s.col2_title_color }};
+    --gg-col2-text: {{ s.col2_text_color }};
+    --gg-col2-dash: {{ s.col2_dash_color }};
+  "
+>
+  <div class="gg__inner">
+
+    {%- comment -%} ── HEADING ── {%- endcomment -%}
+    {%- if s.heading != blank -%}
+      <div class="gg__heading-wrap">
+        <{{ s.heading_tag }} class="gg__heading">
+          {{ s.heading }}
+        </{{ s.heading_tag }}>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ── TWO COLUMNS ── {%- endcomment -%}
+    <div class="gg__grid">
+
+      {%- comment -%} ── COLUMN 1 (LEFT / LIGHT) ── {%- endcomment -%}
+      <div class="gg__col gg__col--1">
+        {%- if s.col1_eyebrow != blank -%}
+          <div class="gg__col-eyebrow">{{ s.col1_eyebrow }}</div>
+        {%- endif -%}
+        {%- if s.col1_title != blank -%}
+          <h3 class="gg__col-title">{{ s.col1_title }}</h3>
+        {%- endif -%}
+
+        {%- assign col1_items = section.blocks | where: "type", "col1_item" -%}
+        {%- if col1_items.size > 0 -%}
+          <ul class="gg__list">
+            {%- for block in col1_items -%}
+              <li class="gg__list-item" {{ block.shopify_attributes }}>
+                {{ block.settings.text }}
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} ── COLUMN 2 (RIGHT / DARK) ── {%- endcomment -%}
+      <div class="gg__col gg__col--2">
+        {%- if s.col2_eyebrow != blank -%}
+          <div class="gg__col-eyebrow">{{ s.col2_eyebrow }}</div>
+        {%- endif -%}
+        {%- if s.col2_title != blank -%}
+          <h3 class="gg__col-title">{{ s.col2_title }}</h3>
+        {%- endif -%}
+
+        {%- assign col2_items = section.blocks | where: "type", "col2_item" -%}
+        {%- if col2_items.size > 0 -%}
+          <ul class="gg__list">
+            {%- for block in col2_items -%}
+              <li class="gg__list-item" {{ block.shopify_attributes }}>
+                {{ block.settings.text }}
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  #{{ section_id }}.gg {
+    background: var(--gg-bg);
+    padding: var(--gg-pad-top) var(--gg-side-pad) var(--gg-pad-bottom);
+    font-family: var(--gg-body-font);
+    font-weight: 300;
+  }
+
+  #{{ section_id }} .gg__inner {
+    max-width: var(--gg-max-width);
+    margin: 0 auto;
+  }
+
+  /* ── HEADING ── */
+  #{{ section_id }}.gg--align-left   .gg__heading-wrap { text-align: left; }
+  #{{ section_id }}.gg--align-center .gg__heading-wrap { text-align: center; }
+  #{{ section_id }}.gg--align-right  .gg__heading-wrap { text-align: right; }
+
+  #{{ section_id }} .gg__heading-wrap {
+    margin-bottom: var(--gg-heading-margin);
+  }
+
+  #{{ section_id }} .gg__heading {
+    font-family: var(--gg-heading-font);
+    font-size: var(--gg-heading-size);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--gg-heading);
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  #{{ section_id }} .gg__heading em,
+  #{{ section_id }} .gg__heading i {
+    font-style: italic;
+    color: var(--gg-accent);
+  }
+
+  /* ── GRID ── */
+  #{{ section_id }} .gg__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--gg-col-gap);
+  }
+
+  /* ── COLUMNS ── */
+  #{{ section_id }} .gg__col {
+    padding: var(--gg-col-pad-y) var(--gg-col-pad-x);
+  }
+
+  #{{ section_id }} .gg__col--1 {
+    background: var(--gg-col1-bg);
+  }
+  #{{ section_id }} .gg__col--2 {
+    background: var(--gg-col2-bg);
+  }
+
+  #{{ section_id }} .gg__col--1 .gg__col-eyebrow { color: var(--gg-col1-eyebrow); }
+  #{{ section_id }} .gg__col--2 .gg__col-eyebrow { color: var(--gg-col2-eyebrow); }
+  #{{ section_id }} .gg__col--1 .gg__col-title   { color: var(--gg-col1-title); }
+  #{{ section_id }} .gg__col--2 .gg__col-title   { color: var(--gg-col2-title); }
+  #{{ section_id }} .gg__col--1 .gg__list-item   { color: var(--gg-col1-text); }
+  #{{ section_id }} .gg__col--2 .gg__list-item   { color: var(--gg-col2-text); }
+  #{{ section_id }} .gg__col--1 .gg__list-item::before { color: var(--gg-col1-dash); }
+  #{{ section_id }} .gg__col--2 .gg__list-item::before { color: var(--gg-col2-dash); }
+
+  #{{ section_id }} .gg__col-eyebrow {
+    font-family: var(--gg-body-font);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    font-weight: 500;
+  }
+
+  #{{ section_id }} .gg__col-title {
+    font-family: var(--gg-heading-font);
+    font-size: var(--gg-title-size);
+    font-weight: 300;
+    line-height: 1.2;
+    margin: 0 0 28px;
+  }
+
+  /* ── LIST ── */
+  #{{ section_id }} .gg__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gg-list-gap);
+  }
+
+  #{{ section_id }} .gg__list-item {
+    font-family: var(--gg-body-font);
+    font-size: var(--gg-body-size);
+    line-height: 1.7;
+    padding-left: 22px;
+    position: relative;
+    font-weight: 300;
+  }
+
+  #{{ section_id }} .gg__list-item::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    #{{ section_id }} .gg__grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    #{{ section_id }}.gg {
+      padding: var(--gg-pad-top-mobile) 6vw var(--gg-pad-bottom-mobile);
+    }
+    #{{ section_id }} .gg__heading {
+      font-size: var(--gg-heading-size-mobile);
+    }
+    #{{ section_id }} .gg__heading-wrap {
+      text-align: left !important;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Give / Get",
+  "tag": "section",
+  "class": "section-give-get",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Main heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading tag (SEO)",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Wrap words in <em> tags for italic accent style.",
+      "default": "<p>What you <em>get</em> vs what we ask</p>"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "options": [
+        { "value": "left",   "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right",  "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "label": "Space below heading",
+      "min": 20,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+
+    {
+      "type": "header",
+      "content": "Left column (light)"
+    },
+    {
+      "type": "text",
+      "id": "col1_eyebrow",
+      "label": "Eyebrow label",
+      "default": "For You"
+    },
+    {
+      "type": "text",
+      "id": "col1_title",
+      "label": "Column title",
+      "default": "You get"
+    },
+    {
+      "type": "color",
+      "id": "col1_bg",
+      "label": "Background",
+      "default": "#EDE8E1"
+    },
+    {
+      "type": "color",
+      "id": "col1_eyebrow_color",
+      "label": "Eyebrow color",
+      "default": "#6B6860"
+    },
+    {
+      "type": "color",
+      "id": "col1_title_color",
+      "label": "Title color",
+      "default": "#1A1A18"
+    },
+    {
+      "type": "color",
+      "id": "col1_text_color",
+      "label": "List text color",
+      "default": "#1A1A18"
+    },
+    {
+      "type": "color",
+      "id": "col1_dash_color",
+      "label": "Dash / bullet color",
+      "default": "#C4A882"
+    },
+
+    {
+      "type": "header",
+      "content": "Right column (dark)"
+    },
+    {
+      "type": "text",
+      "id": "col2_eyebrow",
+      "label": "Eyebrow label",
+      "default": "From You"
+    },
+    {
+      "type": "text",
+      "id": "col2_title",
+      "label": "Column title",
+      "default": "We ask"
+    },
+    {
+      "type": "color",
+      "id": "col2_bg",
+      "label": "Background",
+      "default": "#1A1A18"
+    },
+    {
+      "type": "color",
+      "id": "col2_eyebrow_color",
+      "label": "Eyebrow color",
+      "default": "#C4A882"
+    },
+    {
+      "type": "color",
+      "id": "col2_title_color",
+      "label": "Title color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "col2_text_color",
+      "label": "List text color",
+      "default": "#D6D2CA"
+    },
+    {
+      "type": "color",
+      "id": "col2_dash_color",
+      "label": "Dash / bullet color",
+      "default": "#C4A882"
+    },
+
+    {
+      "type": "header",
+      "content": "Layout & spacing"
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "label": "Max content width",
+      "min": 1000,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "default": 1440
+    },
+    {
+      "type": "range",
+      "id": "side_padding",
+      "label": "Side padding",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "unit": "vw",
+      "default": 7
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "label": "Gap between columns",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "column_padding_x",
+      "label": "Column horizontal padding",
+      "min": 20,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "column_padding_y",
+      "label": "Column vertical padding",
+      "min": 24,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "list_item_gap",
+      "label": "Gap between list items",
+      "min": 4,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Section padding top (desktop)",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Section padding bottom (desktop)",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Section padding top (mobile)",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Section padding bottom (mobile)",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+
+    {
+      "type": "header",
+      "content": "Colors (section)"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section background",
+      "default": "#FAF8F5"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#1A1A18"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Italic accent color",
+      "default": "#1A1A18"
+    },
+
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "text",
+      "id": "heading_font_family",
+      "label": "Heading font-family (CSS)",
+      "default": "'Cormorant Garamond', Georgia, serif"
+    },
+    {
+      "type": "text",
+      "id": "body_font_family",
+      "label": "Body font-family (CSS)",
+      "default": "'DM Sans', system-ui, -apple-system, sans-serif"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size (desktop)",
+      "min": 28,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "label": "Heading size (mobile)",
+      "min": 22,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "default": 34
+    },
+    {
+      "type": "range",
+      "id": "col_title_size",
+      "label": "Column title size",
+      "min": 18,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "label": "List item text size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    }
+  ],
+
+  "blocks": [
+    {
+      "type": "col1_item",
+      "name": "Left column — list item",
+      "limit": 12,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "List item text",
+          "default": "A benefit you receive"
+        }
+      ]
+    },
+    {
+      "type": "col2_item",
+      "name": "Right column — list item",
+      "limit": 12,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "List item text",
+          "default": "Something we ask of you"
+        }
+      ]
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "Give / Get",
+      "category": "Text",
+      "blocks": [
+        { "type": "col1_item", "settings": { "text": "20% off the new product at launch — automatically applied" } },
+        { "type": "col1_item", "settings": { "text": "Early access before public release" } },
+        { "type": "col1_item", "settings": { "text": "Your input directly reflected in what we make" } },
+        { "type": "col1_item", "settings": { "text": "A permanent seat in the Pillowta co-creator community" } },
+        { "type": "col2_item", "settings": { "text": "10 minutes to fill the survey honestly" } },
+        { "type": "col2_item", "settings": { "text": "Real answers — not what sounds good, what's actually true for you" } },
+        { "type": "col2_item", "settings": { "text": "Optional: one line about what intimacy means to you" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

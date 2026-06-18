@@ -1,0 +1,393 @@
+{% doc %}
+  @prompt
+    create a section where i add my own html css design , make a section where i add one side content in content give me 1 heading and 2 paragraphs, one learn more button and in other part, keep the image. The size of image should be equal to size of content, keept  the bg black, keep the heading color white and aslo image side bg color black and give me option of change fornt family of text
+    
+    keep the button size small give me the option to increase the lenght of button, give me the option of keep button in center , keep font family Aleo
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-split-section-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-split-container-{{ ai_gen_id }} {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    min-height: 400px;
+  }
+
+  .ai-split-content-{{ ai_gen_id }} {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px;
+    background-color: {{ block.settings.content_bg_color }};
+  }
+
+  .ai-split-content-wrapper-{{ ai_gen_id }} {
+    max-width: 600px;
+  }
+
+  .ai-split-heading-{{ ai_gen_id }} {
+    margin: 0 0 20px 0;
+    color: {{ block.settings.heading_color }};
+    font-size: {{ block.settings.heading_size }}px;
+    font-family: 'Aleo', serif;
+    line-height: 1.2;
+  }
+
+  .ai-split-paragraph-{{ ai_gen_id }} {
+    margin: 0 0 15px 0;
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.text_size }}px;
+    font-family: 'Aleo', serif;
+    line-height: 1.6;
+  }
+
+  .ai-split-paragraph-{{ ai_gen_id }}:last-of-type {
+    margin-bottom: 30px;
+  }
+
+  .ai-split-button-wrapper-{{ ai_gen_id }} {
+    text-align: {{ block.settings.button_alignment }};
+  }
+
+  .ai-split-button-{{ ai_gen_id }} {
+    display: inline-block;
+    padding: {{ block.settings.button_padding_vertical }}px {{ block.settings.button_padding_horizontal }}px;
+    background-color: {{ block.settings.button_bg_color }};
+    color: {{ block.settings.button_text_color }};
+    text-decoration: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: {{ block.settings.button_font_size }}px;
+    font-family: 'Aleo', serif;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .ai-split-button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_bg_color }};
+    color: {{ block.settings.button_hover_text_color }};
+  }
+
+  .ai-split-image-{{ ai_gen_id }} {
+    flex: 1;
+    background-color: {{ block.settings.image_bg_color }};
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-split-image-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .ai-split-image-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: {{ block.settings.image_bg_color }};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ai-split-image-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 400px;
+    max-height: 400px;
+  }
+
+  .ai-split-empty-state-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-split-container-{{ ai_gen_id }} {
+      flex-direction: column;
+    }
+
+    .ai-split-content-{{ ai_gen_id }} {
+      padding: 40px 20px;
+    }
+
+    .ai-split-heading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_size | times: 0.8 }}px;
+    }
+
+    .ai-split-image-{{ ai_gen_id }} {
+      min-height: 300px;
+    }
+  }
+{% endstyle %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aleo:wght@300;400;700&display=swap" rel="stylesheet">
+
+<div class="ai-split-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-split-container-{{ ai_gen_id }}">
+    <div class="ai-split-content-{{ ai_gen_id }}">
+      <div class="ai-split-content-wrapper-{{ ai_gen_id }}">
+        {% if block.settings.heading != blank %}
+          <h2 class="ai-split-heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+        {% endif %}
+
+        {% if block.settings.paragraph_1 != blank %}
+          <p class="ai-split-paragraph-{{ ai_gen_id }}">{{ block.settings.paragraph_1 }}</p>
+        {% endif %}
+
+        {% if block.settings.paragraph_2 != blank %}
+          <p class="ai-split-paragraph-{{ ai_gen_id }}">{{ block.settings.paragraph_2 }}</p>
+        {% endif %}
+
+        {% if block.settings.button_text != blank %}
+          <div class="ai-split-button-wrapper-{{ ai_gen_id }}">
+            {% comment %} <a href="{{ block.settings.button_link }}" class="ai-split-button-{{ ai_gen_id }}"> {% endcomment %}
+            <a href="{{ block.settings.button_link }}" class="btn btn-md btn1">
+
+              {{ block.settings.button_text }}
+            </a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="ai-split-image-{{ ai_gen_id }}">
+      {% if block.settings.image %}
+        <img
+          src="{{ block.settings.image | image_url: width: 1200 }}"
+          alt="{{ block.settings.image.alt | escape }}"
+          loading="lazy"
+          width="{{ block.settings.image.width }}"
+          height="{{ block.settings.image.height }}"
+        >
+      {% else %}
+        <div class="ai-split-image-placeholder-{{ ai_gen_id }}">
+          {{ 'image' | placeholder_svg_tag }}
+          <div class="ai-split-empty-state-{{ ai_gen_id }}">
+            Add an image to complete the section
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Split content section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Welcome to our store"
+    },
+    {
+      "type": "textarea",
+      "id": "paragraph_1",
+      "label": "Paragraph 1",
+      "default": "Discover our amazing collection of products designed to make your life better. We offer quality, style, and value in everything we do."
+    },
+    {
+      "type": "textarea",
+      "id": "paragraph_2",
+      "label": "Paragraph 2",
+      "default": "Shop with confidence knowing that every purchase is backed by our commitment to excellence and customer satisfaction."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Learn more"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Text size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "content_bg_color",
+      "label": "Content background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#cccccc"
+    },
+    {
+      "type": "color",
+      "id": "image_bg_color",
+      "label": "Image background",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Button style"
+    },
+    {
+      "type": "select",
+      "id": "button_alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "button_padding_vertical",
+      "label": "Vertical padding",
+      "min": 8,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "button_padding_horizontal",
+      "label": "Horizontal padding",
+      "min": 15,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg_color",
+      "label": "Hover background",
+      "default": "#cccccc"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_text_color",
+      "label": "Hover text",
+      "default": "#000000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Split content section"
+    }
+  ]
+}
+{% endschema %}

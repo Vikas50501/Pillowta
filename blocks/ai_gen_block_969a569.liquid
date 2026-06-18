@@ -1,0 +1,634 @@
+{% doc %}
+  @prompt
+    create a section where one side video and on the video give me the option of write text and secod side give me the option of putting content and blow the content give a button , video is not working when i uplaod it , KEEP THE BACKGROUND black 
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-video-content-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+  }
+
+  .ai-video-content-container-{{ ai_gen_id }} {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    max-width: 100%;
+    padding: {{ block.settings.section_padding_top }}px {{ block.settings.section_padding_horizontal }}px {{ block.settings.section_padding_bottom }}px;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-video-content-video-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ai-video-content-video-container-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    background-color: #f4f4f4;
+    border-radius: {{ block.settings.video_border_radius }}px;
+    overflow: hidden;
+  }
+
+  .ai-video-content-video-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-video-content-video-placeholder-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f4f4f4;
+  }
+
+  .ai-video-content-video-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 200px;
+    max-height: 200px;
+  }
+
+  .ai-video-content-text-overlay-{{ ai_gen_id }} {
+    position: absolute;
+    top: {{ block.settings.overlay_vertical_position }}%;
+    left: {{ block.settings.overlay_horizontal_position }}%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    text-align: center;
+    width: 90%;
+    max-width: 500px;
+  }
+
+  .ai-video-content-overlay-text-{{ ai_gen_id }} {
+    color: {{ block.settings.overlay_text_color }};
+    font-size: {{ block.settings.overlay_text_size }}px;
+    font-weight: {{ block.settings.overlay_text_weight }};
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .ai-video-content-content-wrapper-{{ ai_gen_id }} {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ai-video-content-heading-{{ ai_gen_id }} {
+    color: {{ block.settings.heading_color }};
+    font-size: {{ block.settings.heading_size }}px;
+    font-weight: {{ block.settings.heading_weight }};
+    margin: 0 0 16px;
+  }
+
+  .ai-video-content-text-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.text_size }}px;
+    line-height: 1.6;
+    margin: 0 0 24px;
+  }
+
+  .ai-video-content-button-{{ ai_gen_id }} {
+    display: inline-block;
+    padding: {{ block.settings.button_padding_vertical }}px {{ block.settings.button_padding_horizontal }}px;
+    background-color: {{ block.settings.button_bg_color }};
+    color: {{ block.settings.button_text_color }};
+    text-decoration: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: {{ block.settings.button_text_size }}px;
+    font-weight: {{ block.settings.button_text_weight }};
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .ai-video-content-button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_bg_hover_color }};
+    color: {{ block.settings.button_text_hover_color }};
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-video-content-container-{{ ai_gen_id }} {
+      flex-direction: {% if block.settings.mobile_layout == 'video_top' %}column{% else %}column-reverse{% endif %};
+      gap: 24px;
+      padding: {{ block.settings.section_padding_top | times: 0.6 }}px {{ block.settings.section_padding_horizontal | times: 0.6 }}px {{ block.settings.section_padding_bottom | times: 0.6 }}px;
+    }
+
+    .ai-video-content-heading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_size | times: 0.7 }}px;
+    }
+
+    .ai-video-content-text-{{ ai_gen_id }} {
+      font-size: {{ block.settings.text_size | times: 0.9 }}px;
+    }
+
+    .ai-video-content-overlay-text-{{ ai_gen_id }} {
+      font-size: {{ block.settings.overlay_text_size | times: 0.7 }}px;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .ai-video-content-container-{{ ai_gen_id }} {
+      flex-direction: {% if block.settings.layout == 'video_left' %}row{% else %}row-reverse{% endif %};
+    }
+  }
+{% endstyle %}
+
+<video-content-section-{{ ai_gen_id }} class="ai-video-content-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-video-content-container-{{ ai_gen_id }}">
+    <div class="ai-video-content-video-wrapper-{{ ai_gen_id }}">
+      <div class="ai-video-content-video-container-{{ ai_gen_id }}">
+        {% if block.settings.video != blank %}
+          {{
+            block.settings.video
+            | video_tag:
+              class: 'ai-video-content-video-' | append: ai_gen_id,
+              autoplay: block.settings.autoplay,
+              loop: block.settings.loop,
+              muted: block.settings.muted,
+              controls: block.settings.show_controls
+          }}
+        {% elsif block.settings.video_url != blank %}
+          <video
+            class="ai-video-content-video-{{ ai_gen_id }}"
+            {% if block.settings.autoplay %}autoplay{% endif %}
+            {% if block.settings.loop %}loop{% endif %}
+            {% if block.settings.muted %}muted{% endif %}
+            {% if block.settings.show_controls %}controls{% endif %}
+            playsinline
+          >
+            <source src="{{ block.settings.video_url }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        {% else %}
+          <div class="ai-video-content-video-placeholder-{{ ai_gen_id }}">
+            {{ 'image' | placeholder_svg_tag }}
+          </div>
+        {% endif %}
+
+        {% if block.settings.overlay_text != blank %}
+          <div class="ai-video-content-text-overlay-{{ ai_gen_id }}">
+            <h2 class="ai-video-content-overlay-text-{{ ai_gen_id }}">
+              {{ block.settings.overlay_text }}
+            </h2>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="ai-video-content-content-wrapper-{{ ai_gen_id }}">
+      {% if block.settings.heading != blank %}
+        <h2 class="ai-video-content-heading-{{ ai_gen_id }}">
+          {{ block.settings.heading }}
+        </h2>
+      {% endif %}
+
+      {% if block.settings.text != blank %}
+        <div class="ai-video-content-text-{{ ai_gen_id }}">
+          {{ block.settings.text }}
+        </div>
+      {% endif %}
+
+      {% if block.settings.button_text != blank %}
+        <a
+          href="{{ block.settings.button_link }}"
+          class="ai-video-content-button-{{ ai_gen_id }}"
+        >
+          {{ block.settings.button_text }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</video-content-section-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class VideoContentSection{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.video = this.querySelector('.ai-video-content-video-{{ ai_gen_id }}');
+        if (this.video && !this.video.hasAttribute('controls')) {
+          this.setupVideoControls();
+        }
+      }
+
+      setupVideoControls() {
+        this.video.addEventListener('click', () => {
+          if (this.video.paused) {
+            this.video.play();
+          } else {
+            this.video.pause();
+          }
+        });
+      }
+    }
+
+    customElements.define('video-content-section-{{ ai_gen_id }}', VideoContentSection{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Video with content",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Desktop layout",
+      "options": [
+        {
+          "value": "video_left",
+          "label": "Video left"
+        },
+        {
+          "value": "video_right",
+          "label": "Video right"
+        }
+      ],
+      "default": "video_left"
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "Mobile layout",
+      "options": [
+        {
+          "value": "video_top",
+          "label": "Video top"
+        },
+        {
+          "value": "video_bottom",
+          "label": "Video bottom"
+        }
+      ],
+      "default": "video_top"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "section_padding_horizontal",
+      "label": "Padding horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Video"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video file"
+    },
+    {
+      "type": "url",
+      "id": "video_url",
+      "label": "Video URL"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Loop",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "muted",
+      "label": "Muted",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_controls",
+      "label": "Show controls",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "video_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Video overlay text"
+    },
+    {
+      "type": "text",
+      "id": "overlay_text",
+      "label": "Text",
+      "default": "Watch Our Story"
+    },
+    {
+      "type": "color",
+      "id": "overlay_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "overlay_text_size",
+      "label": "Text size",
+      "min": 16,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "select",
+      "id": "overlay_text_weight",
+      "label": "Text weight",
+      "options": [
+        {
+          "value": "300",
+          "label": "Light"
+        },
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi Bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "range",
+      "id": "overlay_horizontal_position",
+      "label": "Horizontal position",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "overlay_vertical_position",
+      "label": "Vertical position",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Discover Our Brand"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 16,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading weight",
+      "options": [
+        {
+          "value": "300",
+          "label": "Light"
+        },
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi Bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Share your brand story, values, and what makes your products special. Connect with your customers through compelling content.</p>"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#cccccc"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Text size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_hover_color",
+      "label": "Hover background color",
+      "default": "#cccccc"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_hover_color",
+      "label": "Hover text color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "button_text_size",
+      "label": "Text size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "button_text_weight",
+      "label": "Text weight",
+      "options": [
+        {
+          "value": "300",
+          "label": "Light"
+        },
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi Bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "500"
+    },
+    {
+      "type": "range",
+      "id": "button_padding_vertical",
+      "label": "Padding vertical",
+      "min": 8,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "button_padding_horizontal",
+      "label": "Padding horizontal",
+      "min": 16,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video with content"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,733 @@
+{% doc %}
+  @prompt
+    create a section where one side keep form and other side keep image and make the bg black and keep same size of both form and image and like keep the form in the middle of the box , means you take 2 box in one you keep form and other image in the form box keep the for in middle like the bottom space is not appering more , 1.  Your name  
+    2. Where may we reach you softly?
+    3. Where are you based?  
+    4.  What brings you to the Tester Circle?  
+    5.   Are you open to sharing your experience with us?  
+    
+    Yes
+    Yes, anonymously
+    Yes, with a short review
+    Yes, with audio/video feedback
+    
+    in fifth give like they can sectect one one option with in 4 option add these are in the form and keep the form file 80 %width , i am saying the input field not div keep both 50 50 % image and form , keep the image size small like give give the space all around the image like back in image div only and keep the image in the middle , , increase the leght of image , keep the less  space of form between two field and incease the  form field width where user put the conetent , keep space more less between the field and in placeholder remove the white color keep black keep line, form field space keep less if you see the space b/w two filed is more keep less only and also the white color inside the input field keep back and put line at the place of it , give the border of input field , keep the space less between the input field and keep the input field border is brownies 
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-form-image-section-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    background-color: {{ block.settings.background_color }};
+    padding: {{ block.settings.section_padding }}px 0;
+  }
+
+  .ai-form-image-container-{{ ai_gen_id }} {
+    display: flex;
+    max-width: 1400px;
+    margin: 0 auto;
+    gap: 0;
+  }
+
+  .ai-form-side-{{ ai_gen_id }} {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 40px;
+  }
+
+  .ai-image-side-{{ ai_gen_id }} {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+  }
+
+  .ai-form-wrapper-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .ai-form-title-{{ ai_gen_id }} {
+    color: {{ block.settings.form_text_color }};
+    font-size: {{ block.settings.title_size }}px;
+    margin-bottom: 30px;
+    font-weight: 600;
+  }
+
+  .ai-form-field-{{ ai_gen_id }} {
+    margin-bottom: 12px;
+  }
+
+  .ai-form-label-{{ ai_gen_id }} {
+    display: block;
+    color: {{ block.settings.form_text_color }};
+    font-size: {{ block.settings.label_size }}px;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  .ai-form-input-{{ ai_gen_id }} {
+    width: 80%;
+    padding: 10px 12px;
+    border: {{ block.settings.input_border_width }}px solid {{ block.settings.input_border_color }};
+    border-radius: {{ block.settings.input_border_radius }}px;
+    background-color: {{ block.settings.input_bg_color }};
+    color: {{ block.settings.input_text_color }};
+    font-size: 14px;
+  }
+
+  .ai-form-input-{{ ai_gen_id }}::placeholder {
+    color: {{ block.settings.placeholder_color }};
+  }
+
+  .ai-form-input-{{ ai_gen_id }}:focus {
+    outline: none;
+    border-color: {{ block.settings.input_focus_color }};
+  }
+
+  .ai-form-textarea-{{ ai_gen_id }} {
+    width: 80%;
+    padding: 10px 12px;
+    border: {{ block.settings.input_border_width }}px solid {{ block.settings.input_border_color }};
+    border-radius: {{ block.settings.input_border_radius }}px;
+    background-color: {{ block.settings.input_bg_color }};
+    color: {{ block.settings.input_text_color }};
+    font-size: 14px;
+    min-height: 80px;
+    resize: vertical;
+  }
+
+  .ai-form-textarea-{{ ai_gen_id }}::placeholder {
+    color: {{ block.settings.placeholder_color }};
+  }
+
+  .ai-form-textarea-{{ ai_gen_id }}:focus {
+    outline: none;
+    border-color: {{ block.settings.input_focus_color }};
+  }
+
+  .ai-radio-group-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 80%;
+  }
+
+  .ai-radio-option-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ai-radio-input-{{ ai_gen_id }} {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+
+  .ai-radio-label-{{ ai_gen_id }} {
+    color: {{ block.settings.form_text_color }};
+    font-size: 14px;
+    cursor: pointer;
+    margin: 0;
+  }
+
+  .ai-form-submit-{{ ai_gen_id }} {
+    width: 80%;
+    padding: 14px 24px;
+    background-color: {{ block.settings.button_bg_color }};
+    color: {{ block.settings.button_text_color }};
+    border: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: {{ block.settings.button_font_size }}px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+  }
+
+  .ai-form-submit-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_bg_color }};
+  }
+
+  .ai-image-wrapper-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-image-wrapper-{{ ai_gen_id }} img {
+    width: 100%;
+    height: auto;
+    border-radius: {{ block.settings.image_border_radius }}px;
+    object-fit: cover;
+  }
+
+  .ai-image-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    background-color: {{ block.settings.background_color }};
+    border: 1px solid {{ block.settings.placeholder_border_color }};
+    border-radius: {{ block.settings.image_border_radius }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+  }
+
+  .ai-image-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 300px;
+    max-height: 300px;
+    fill: {{ block.settings.placeholder_icon_color }};
+  }
+
+  .ai-form-success-{{ ai_gen_id }} {
+    color: {{ block.settings.success_color }};
+    margin-top: 16px;
+    font-size: 14px;
+  }
+
+  .ai-form-error-{{ ai_gen_id }} {
+    color: {{ block.settings.error_color }};
+    margin-top: 4px;
+    font-size: 13px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-form-image-container-{{ ai_gen_id }} {
+      flex-direction: column;
+    }
+
+    .ai-form-side-{{ ai_gen_id }},
+    .ai-image-side-{{ ai_gen_id }} {
+      width: 100%;
+      padding: 40px 20px;
+    }
+
+    .ai-form-input-{{ ai_gen_id }},
+    .ai-form-textarea-{{ ai_gen_id }},
+    .ai-radio-group-{{ ai_gen_id }},
+    .ai-form-submit-{{ ai_gen_id }} {
+      width: 100%;
+    }
+  }
+{% endstyle %}
+
+<form-section-{{ ai_gen_id }}
+  class="ai-form-image-section-{{ ai_gen_id }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-form-image-container-{{ ai_gen_id }}">
+    <div class="ai-form-side-{{ ai_gen_id }}">
+      <div class="ai-form-wrapper-{{ ai_gen_id }}">
+        {%- if block.settings.form_title != blank -%}
+          <h2 class="ai-form-title-{{ ai_gen_id }}">{{ block.settings.form_title }}</h2>
+        {%- endif -%}
+
+        {%- form 'contact' -%}
+          <input
+            type="hidden"
+            name="contact[form_type]"
+            value="tester_circle"
+          >
+
+          <div class="ai-form-field-{{ ai_gen_id }}">
+            <label
+              for="name-{{ ai_gen_id }}"
+              class="ai-form-label-{{ ai_gen_id }}"
+            >
+              {{ block.settings.label_name }}
+            </label>
+            <input
+              type="text"
+              id="name-{{ ai_gen_id }}"
+              name="contact[name]"
+              class="ai-form-input-{{ ai_gen_id }}"
+              value="{{ form.name }}"
+              required
+              {% if form.errors %}
+                aria-invalid="true"
+              {% endif %}
+            >
+            {%- if form.errors contains 'name' -%}
+              <div class="ai-form-error-{{ ai_gen_id }}">
+                {{ form.errors.messages.name }}
+              </div>
+            {%- endif -%}
+          </div>
+
+          <div class="ai-form-field-{{ ai_gen_id }}">
+            <label
+              for="email-{{ ai_gen_id }}"
+              class="ai-form-label-{{ ai_gen_id }}"
+            >
+              {{ block.settings.label_email }}
+            </label>
+            <input
+              type="email"
+              id="email-{{ ai_gen_id }}"
+              name="contact[email]"
+              class="ai-form-input-{{ ai_gen_id }}"
+              value="{{ form.email }}"
+              autocomplete="email"
+              required
+              {% if form.errors %}
+                aria-invalid="true"
+              {% endif %}
+            >
+            {%- if form.errors contains 'email' -%}
+              <div class="ai-form-error-{{ ai_gen_id }}">
+                {{ form.errors.messages.email }}
+              </div>
+            {%- endif -%}
+          </div>
+
+          <div class="ai-form-field-{{ ai_gen_id }}">
+            <label
+              for="location-{{ ai_gen_id }}"
+              class="ai-form-label-{{ ai_gen_id }}"
+            >
+              {{ block.settings.label_location }}
+            </label>
+            <input
+              type="text"
+              id="location-{{ ai_gen_id }}"
+              name="contact[location]"
+              class="ai-form-input-{{ ai_gen_id }}"
+              required
+            >
+          </div>
+
+          <div class="ai-form-field-{{ ai_gen_id }}">
+            <label
+              for="reason-{{ ai_gen_id }}"
+              class="ai-form-label-{{ ai_gen_id }}"
+            >
+              {{ block.settings.label_reason }}
+            </label>
+            <textarea
+              id="reason-{{ ai_gen_id }}"
+              name="contact[reason]"
+              class="ai-form-textarea-{{ ai_gen_id }}"
+              required
+            ></textarea>
+          </div>
+
+          <div class="ai-form-field-{{ ai_gen_id }}">
+            <label class="ai-form-label-{{ ai_gen_id }}">
+              {{ block.settings.label_feedback }}
+            </label>
+            <div class="ai-radio-group-{{ ai_gen_id }}">
+              <div class="ai-radio-option-{{ ai_gen_id }}">
+                <input
+                  type="radio"
+                  id="feedback-yes-{{ ai_gen_id }}"
+                  name="contact[feedback_type]"
+                  value="Yes"
+                  class="ai-radio-input-{{ ai_gen_id }}"
+                  required
+                >
+                <label
+                  for="feedback-yes-{{ ai_gen_id }}"
+                  class="ai-radio-label-{{ ai_gen_id }}"
+                >
+                  {{ block.settings.option_yes }}
+                </label>
+              </div>
+
+              <div class="ai-radio-option-{{ ai_gen_id }}">
+                <input
+                  type="radio"
+                  id="feedback-anonymous-{{ ai_gen_id }}"
+                  name="contact[feedback_type]"
+                  value="Yes, anonymously"
+                  class="ai-radio-input-{{ ai_gen_id }}"
+                >
+                <label
+                  for="feedback-anonymous-{{ ai_gen_id }}"
+                  class="ai-radio-label-{{ ai_gen_id }}"
+                >
+                  {{ block.settings.option_anonymous }}
+                </label>
+              </div>
+
+              <div class="ai-radio-option-{{ ai_gen_id }}">
+                <input
+                  type="radio"
+                  id="feedback-review-{{ ai_gen_id }}"
+                  name="contact[feedback_type]"
+                  value="Yes, with a short review"
+                  class="ai-radio-input-{{ ai_gen_id }}"
+                >
+                <label
+                  for="feedback-review-{{ ai_gen_id }}"
+                  class="ai-radio-label-{{ ai_gen_id }}"
+                >
+                  {{ block.settings.option_review }}
+                </label>
+              </div>
+
+              <div class="ai-radio-option-{{ ai_gen_id }}">
+                <input
+                  type="radio"
+                  id="feedback-video-{{ ai_gen_id }}"
+                  name="contact[feedback_type]"
+                  value="Yes, with audio/video feedback"
+                  class="ai-radio-input-{{ ai_gen_id }}"
+                >
+                <label
+                  for="feedback-video-{{ ai_gen_id }}"
+                  class="ai-radio-label-{{ ai_gen_id }}"
+                >
+                  {{ block.settings.option_video }}
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            class="ai-form-submit-{{ ai_gen_id }}"
+          >
+            {{ block.settings.button_text }}
+          </button>
+
+          {%- if form.posted_successfully? -%}
+            <div class="ai-form-success-{{ ai_gen_id }}">
+              {{ block.settings.success_message }}
+            </div>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+    </div>
+
+    <div class="ai-image-side-{{ ai_gen_id }}">
+      <div class="ai-image-wrapper-{{ ai_gen_id }}">
+        {% if block.settings.image %}
+          <img
+            src="{{ block.settings.image | image_url: width: 1000 }}"
+            alt="{{ block.settings.image.alt | escape }}"
+            loading="lazy"
+            width="{{ block.settings.image.width }}"
+            height="{{ block.settings.image.height }}"
+          >
+        {% else %}
+          <div class="ai-image-placeholder-{{ ai_gen_id }}">
+            {{ 'image' | placeholder_svg_tag }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</form-section-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class FormSection{{ai_gen_id}} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        const form = this.querySelector('form');
+        if (form) {
+          form.addEventListener('submit', function(e) {
+            const radioGroup = form.querySelector('input[name="contact[feedback_type]"]:checked');
+            if (!radioGroup) {
+              e.preventDefault();
+              alert('Please select a feedback option');
+            }
+          });
+        }
+      }
+    }
+
+    customElements.define('form-section-{{ ai_gen_id }}', FormSection{{ai_gen_id}});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Tester circle form",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Form content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "form_title",
+      "label": "Form title",
+      "default": "Join the Tester Circle"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "label_name",
+      "label": "Name label",
+      "default": "Your name"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "label_email",
+      "label": "Email label",
+      "default": "Where may we reach you softly?"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "label_location",
+      "label": "Location label",
+      "default": "Where are you based?"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "label_reason",
+      "label": "Reason label",
+      "default": "What brings you to the Tester Circle?"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "label_feedback",
+      "label": "Feedback label",
+      "default": "Are you open to sharing your experience with us?"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "option_yes",
+      "label": "Option 1",
+      "default": "Yes"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "option_anonymous",
+      "label": "Option 2",
+      "default": "Yes, anonymously"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "option_review",
+      "label": "Option 3",
+      "default": "Yes, with a short review"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "option_video",
+      "label": "Option 4",
+      "default": "Yes, with audio/video feedback"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Submit"
+    },
+    {
+      "type": "richtext",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "<p>Thank you for joining the Tester Circle! We'll be in touch soon.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "label": "Image border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "form_text_color",
+      "label": "Form text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "input_bg_color",
+      "label": "Input background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "input_text_color",
+      "label": "Input text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "placeholder_color",
+      "label": "Placeholder text color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "input_border_color",
+      "label": "Input border color",
+      "default": "#8B4513"
+    },
+    {
+      "type": "color",
+      "id": "input_focus_color",
+      "label": "Input focus color",
+      "default": "#A0522D"
+    },
+    {
+      "type": "color",
+      "id": "placeholder_border_color",
+      "label": "Placeholder border color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "placeholder_icon_color",
+      "label": "Placeholder icon color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg_color",
+      "label": "Button hover background",
+      "default": "#f0f0f0"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "success_color",
+      "label": "Success message color",
+      "default": "#4caf50"
+    },
+    {
+      "type": "color",
+      "id": "error_color",
+      "label": "Error message color",
+      "default": "#f44336"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "label_size",
+      "label": "Label size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Button font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Input styling"
+    },
+    {
+      "type": "range",
+      "id": "input_border_width",
+      "label": "Border width",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "input_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Section padding",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Button border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tester circle form"
+    }
+  ]
+}
+{% endschema %}

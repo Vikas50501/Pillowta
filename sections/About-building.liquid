@@ -1,0 +1,682 @@
+{% comment %}
+  ============================================================
+  ABOUT — SECTION 02: WHAT WE'RE BUILDING
+  Full-width dark band · Grid pattern background overlay
+  Left: section tag + heading + body paragraphs
+  Right: stacked pillar cards with gold left border
+  Full 100% schema-driven customisation · Matches theme fonts & colors
+  ============================================================
+{% endcomment %}
+
+{%- liquid
+  assign section_bg          = section.settings.section_bg
+  assign section_padding_top    = section.settings.section_padding_top
+  assign section_padding_bottom = section.settings.section_padding_bottom
+  assign section_padding_x      = section.settings.section_padding_x
+  assign max_width           = section.settings.max_width
+  assign col_gap             = section.settings.column_gap
+  assign col_ratio           = section.settings.column_ratio
+
+  assign show_grid_pattern   = section.settings.show_grid_pattern
+  assign grid_line_color     = section.settings.grid_line_color
+  assign grid_spacing        = section.settings.grid_spacing
+
+  assign show_tag            = section.settings.show_section_tag
+  assign tag_text            = section.settings.tag_text
+  assign tag_color           = section.settings.tag_color
+  assign tag_size            = section.settings.tag_size
+
+  assign heading_line1       = section.settings.heading_line1
+  assign heading_italic      = section.settings.heading_italic
+  assign heading_color       = section.settings.heading_color
+  assign heading_italic_color = section.settings.heading_italic_color
+  assign heading_size_max    = section.settings.heading_size_max
+  assign heading_size_min    = section.settings.heading_size_min
+
+  assign para1               = section.settings.paragraph_1
+  assign para2               = section.settings.paragraph_2
+  assign body_color          = section.settings.body_color
+  assign body_size           = section.settings.body_font_size
+
+  assign card_bg             = section.settings.card_bg
+  assign card_border_color   = section.settings.card_border_color
+  assign card_accent_border  = section.settings.card_accent_border_color
+  assign card_accent_width   = section.settings.card_accent_border_width
+  assign card_radius         = section.settings.card_border_radius
+  assign card_gap            = section.settings.card_gap
+  assign card_padding_x      = section.settings.card_padding_x
+  assign card_padding_y      = section.settings.card_padding_y
+  assign card_title_color    = section.settings.card_title_color
+  assign card_title_size     = section.settings.card_title_size
+  assign card_body_color     = section.settings.card_body_color
+  assign card_body_size      = section.settings.card_body_size
+
+  assign blocks_count        = section.blocks.size
+
+  # Extract section_bg RGB for smooth gradients if needed
+  assign bg_hex = section_bg | remove: '#'
+  assign bg_r   = bg_hex | slice: 0, 2 | prepend: '0x' | times: 1
+  assign bg_g   = bg_hex | slice: 2, 2 | prepend: '0x' | times: 1
+  assign bg_b   = bg_hex | slice: 4, 2 | prepend: '0x' | times: 1
+-%}
+
+<style>
+  /* ── Section root variables ── */
+  #shopify-section-{{ section.id }} {
+    --wb-bg:               {{ section_bg }};
+    --wb-pt:               {{ section_padding_top }}rem;
+    --wb-pb:               {{ section_padding_bottom }}rem;
+    --wb-px:               {{ section_padding_x }}px;
+    --wb-max-width:        {{ max_width }}px;
+    --wb-gap:              {{ col_gap }}rem;
+    --wb-tag-color:        {{ tag_color }};
+    --wb-tag-size:         {{ tag_size }}px;
+    --wb-h-color:          {{ heading_color }};
+    --wb-h-italic:         {{ heading_italic_color }};
+    --wb-h-max:            {{ heading_size_max }}px;
+    --wb-h-min:            {{ heading_size_min }}px;
+    --wb-body-color:       {{ body_color }};
+    --wb-body-size:        {{ body_size }}px;
+    --wb-card-bg:          {{ card_bg }};
+    --wb-card-border:      {{ card_border_color }};
+    --wb-card-accent:      {{ card_accent_border }};
+    --wb-card-accent-w:    {{ card_accent_width }}px;
+    --wb-card-radius:      {{ card_radius }}px;
+    --wb-card-gap:         {{ card_gap }}rem;
+    --wb-card-px:          {{ card_padding_x }}rem;
+    --wb-card-py:          {{ card_padding_y }}rem;
+    --wb-card-title:       {{ card_title_color }};
+    --wb-card-title-size:  {{ card_title_size }}px;
+    --wb-card-body:        {{ card_body_color }};
+    --wb-card-body-size:   {{ card_body_size }}px;
+    --font-heading:        {{ settings.type_header_font.family | default: 'Aleo' }}, Georgia, serif;
+    --font-body:           {{ settings.type_base_font.family | default: 'Aleo' }}, sans-serif;
+    --font-mono:           'SF Mono', 'Fira Code', monospace;
+  }
+
+  /* ── Section wrapper ── */
+  .wb-section {
+    background: var(--wb-bg);
+    padding: var(--wb-pt) var(--wb-px) var(--wb-pb);
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  /* ── Decorative grid pattern overlay ── */
+  .wb-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent {{ grid_spacing | minus: 1 }}px,
+        {{ grid_line_color }} {{ grid_spacing | minus: 1 }}px,
+        {{ grid_line_color }} {{ grid_spacing }}px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent {{ grid_spacing | minus: 1 }}px,
+        {{ grid_line_color }} {{ grid_spacing | minus: 1 }}px,
+        {{ grid_line_color }} {{ grid_spacing }}px
+      );
+    pointer-events: none;
+    display: {% if show_grid_pattern %}block{% else %}none{% endif %};
+  }
+
+  /* ── Inner grid ── */
+  .wb-inner {
+    max-width: var(--wb-max-width);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: {% case col_ratio %}{% when '2-1' %}2fr 1fr{% when '3-2' %}3fr 2fr{% when '1-1' %}1fr 1fr{% when '3-1' %}3fr 1fr{% else %}2fr 1fr{% endcase %};
+    gap: var(--wb-gap);
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── LEFT: Tag + Heading + Body ── */
+  .wb-left {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .wb-tag {
+    font-family: var(--font-mono);
+    font-size: var(--wb-tag-size);
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--wb-tag-color);
+    margin-bottom: 1.25rem;
+    display: {% if show_tag %}block{% else %}none{% endif %};
+  }
+
+  .wb-heading {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--wb-h-min), 3.5vw, var(--wb-h-max));
+    font-weight: {{ settings.type_header_font.weight | default: 500 }};
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--wb-h-color);
+    margin-bottom: 2rem;
+    margin-top: 0;
+  }
+
+  .wb-heading em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--wb-h-italic);
+  }
+
+  .wb-body p {
+    font-family: var(--font-body);
+    font-size: var(--wb-body-size);
+    color: var(--wb-body-color);
+    line-height: 1.9;
+    margin-bottom: 1.25rem;
+    letter-spacing: {{ settings.type_base_spacing | default: 0.002 }}em;
+  }
+
+  .wb-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ── RIGHT: Pillar cards ── */
+  .wb-right {
+    display: flex;
+    flex-direction: column;
+    gap: var(--wb-card-gap);
+  }
+
+  .wb-card {
+    background: var(--wb-card-bg);
+    border: 0.5px solid var(--wb-card-border);
+    border-left: var(--wb-card-accent-w) solid var(--wb-card-accent);
+    padding: var(--wb-card-py) var(--wb-card-px);
+    border-radius: var(--wb-card-radius);
+    transition: background 0.25s, border-left-color 0.25s;
+  }
+
+  .wb-card:hover {
+    background: rgba(255, 255, 255, 0.07);
+  }
+
+  .wb-card__title {
+    font-family: var(--font-heading);
+    font-size: var(--wb-card-title-size);
+    font-weight: 600;
+    color: var(--wb-card-title);
+    margin-bottom: 0.4rem;
+    margin-top: 0;
+    line-height: 1.3;
+  }
+
+  .wb-card__body {
+    font-family: var(--font-body);
+    font-size: var(--wb-card-body-size);
+    color: var(--wb-card-body);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .wb-section {
+      padding: 4rem 1.5rem;
+    }
+
+    .wb-inner {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .wb-heading {
+      font-size: clamp(1.8rem, 6vw, var(--wb-h-max));
+    }
+  }
+
+  @media (max-width: 480px) {
+    .wb-section {
+      padding: 3rem 1.25rem;
+    }
+
+    .wb-card {
+      padding: 1.25rem 1.25rem;
+    }
+  }
+</style>
+
+<section
+  class="wb-section"
+  id="about-building-{{ section.id }}"
+  aria-labelledby="wb-heading-{{ section.id }}"
+>
+  <div class="wb-inner">
+
+    <!-- LEFT COLUMN -->
+    <div class="wb-left">
+      {%- if show_tag and tag_text != blank -%}
+        <span class="wb-tag">{{ tag_text }}</span>
+      {%- endif -%}
+
+      <h2 class="wb-heading" id="wb-heading-{{ section.id }}">
+        {%- if heading_line1 != blank -%}{{ heading_line1 }}{%- endif -%}
+        {%- if heading_italic != blank -%}<br><em>{{ heading_italic }}</em>{%- endif -%}
+      </h2>
+
+      <div class="wb-body">
+        {%- if para1 != blank -%}
+          <p>{{ para1 }}</p>
+        {%- endif -%}
+        {%- if para2 != blank -%}
+          <p>{{ para2 }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN — Pillar Cards (blocks) -->
+    <div class="wb-right">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'pillar_card' -%}
+          <div
+            class="wb-card"
+            {{ block.shopify_attributes }}
+            {% if block.settings.card_accent_override != blank %}
+              style="border-left-color: {{ block.settings.card_accent_override }};"
+            {% endif %}
+          >
+            {%- if block.settings.card_title != blank -%}
+              <h4 class="wb-card__title">{{ block.settings.card_title }}</h4>
+            {%- endif -%}
+            {%- if block.settings.card_body != blank -%}
+              <p class="wb-card__body">{{ block.settings.card_body }}</p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About — Building",
+  "tag": "div",
+  "class": "about-building-wrapper",
+  "max_blocks": 8,
+  "settings": [
+
+    {
+      "type": "header",
+      "content": "── Section Layout ──"
+    },
+    {
+      "type": "color",
+      "id": "section_bg",
+      "label": "Section Background Color",
+      "default": "#0E0C0A"
+    },
+    {
+      "type": "select",
+      "id": "column_ratio",
+      "label": "Column Ratio (Left : Right)",
+      "options": [
+        { "value": "2-1", "label": "2 : 1 (default)" },
+        { "value": "3-2", "label": "3 : 2" },
+        { "value": "1-1", "label": "1 : 1 (equal)" },
+        { "value": "3-1", "label": "3 : 1 (wide left)" }
+      ],
+      "default": "2-1"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Content Max Width (px)",
+      "min": 800,
+      "max": 1600,
+      "step": 40,
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Section Padding Top (rem)",
+      "min": 2,
+      "max": 16,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Section Padding Bottom (rem)",
+      "min": 2,
+      "max": 16,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "section_padding_x",
+      "label": "Horizontal Padding (px)",
+      "min": 16,
+      "max": 120,
+      "step": 8,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "label": "Column Gap (rem)",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 6
+    },
+
+    {
+      "type": "header",
+      "content": "── Grid Pattern Overlay ──"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_grid_pattern",
+      "label": "Show Decorative Grid Pattern",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "grid_line_color",
+      "label": "Grid Line Color",
+      "default": "rgba(184,150,62,0.04)",
+      "info": "Use rgba() for subtle effect, e.g. rgba(184,150,62,0.04)"
+    },
+    {
+      "type": "range",
+      "id": "grid_spacing",
+      "label": "Grid Cell Size (px)",
+      "min": 20,
+      "max": 120,
+      "step": 4,
+      "default": 60
+    },
+
+    {
+      "type": "header",
+      "content": "── Section Tag ──"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_section_tag",
+      "label": "Show Section Tag",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tag_text",
+      "label": "Tag Text",
+      "default": "What we're building"
+    },
+    {
+      "type": "color",
+      "id": "tag_color",
+      "label": "Tag Color",
+      "default": "#B8963E"
+    },
+    {
+      "type": "range",
+      "id": "tag_size",
+      "label": "Tag Font Size (px)",
+      "min": 8,
+      "max": 16,
+      "step": 1,
+      "default": 10
+    },
+
+    {
+      "type": "header",
+      "content": "── Heading ──"
+    },
+    {
+      "type": "text",
+      "id": "heading_line1",
+      "label": "Heading Line 1",
+      "default": "Tools to know yourself."
+    },
+    {
+      "type": "text",
+      "id": "heading_italic",
+      "label": "Heading Italic Line",
+      "default": "Own your pleasure."
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#FEFCF8"
+    },
+    {
+      "type": "color",
+      "id": "heading_italic_color",
+      "label": "Heading Italic Color",
+      "default": "#F0D5CC"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_max",
+      "label": "Heading Max Size — Desktop (px)",
+      "min": 25,
+      "max": 75,
+      "step": 5,
+      "default": 45
+    },
+    {
+      "type": "range",
+      "id": "heading_size_min",
+      "label": "Heading Min Size — Mobile floor (px)",
+      "min": 18,
+      "max": 40,
+      "step": 1,
+      "default": 28
+    },
+
+    {
+      "type": "header",
+      "content": "── Body Paragraphs ──"
+    },
+    {
+      "type": "textarea",
+      "id": "paragraph_1",
+      "label": "Paragraph 1",
+      "default": "Our focus is to build a complete ecosystem around sexual wellness with one idea: that knowing your own desires and being present with them changes everything."
+    },
+    {
+      "type": "textarea",
+      "id": "paragraph_2",
+      "label": "Paragraph 2 (optional)",
+      "default": "Not a product catalogue. Not a wellness trend. A living body of knowledge, ancient in origin, built for now."
+    },
+    {
+      "type": "color",
+      "id": "body_color",
+      "label": "Body Text Color",
+      "default": "rgba(254,252,248,0.55)",
+      "info": "Use rgba() for transparency"
+    },
+    {
+      "type": "range",
+      "id": "body_font_size",
+      "label": "Body Font Size (px)",
+      "min": 12,
+      "max": 22,
+      "step": 1,
+      "default": 16
+    },
+
+    {
+      "type": "header",
+      "content": "── Pillar Cards (global defaults) ──"
+    },
+    {
+      "type": "color",
+      "id": "card_bg",
+      "label": "Card Background Color",
+      "default": "rgba(255,255,255,0.04)",
+      "info": "Use rgba() for subtle glass effect"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card Border Color",
+      "default": "rgba(255,255,255,0.08)",
+      "info": "Thin outer border around all cards"
+    },
+    {
+      "type": "color",
+      "id": "card_accent_border_color",
+      "label": "Card Left Accent Border Color",
+      "default": "#B8963E"
+    },
+    {
+      "type": "range",
+      "id": "card_accent_border_width",
+      "label": "Card Left Accent Border Width (px)",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Card Border Radius (px)",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Gap Between Cards (rem)",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "card_padding_x",
+      "label": "Card Horizontal Padding (rem)",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "card_padding_y",
+      "label": "Card Vertical Padding (rem)",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "label": "Card Title Color",
+      "default": "#FEFCF8"
+    },
+    {
+      "type": "range",
+      "id": "card_title_size",
+      "label": "Card Title Font Size (px)",
+      "min": 12,
+      "max": 22,
+      "step": 1,
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "card_body_color",
+      "label": "Card Body Text Color",
+      "default": "rgba(254,252,248,0.45)",
+      "info": "Use rgba() for transparency"
+    },
+    {
+      "type": "range",
+      "id": "card_body_size",
+      "label": "Card Body Font Size (px)",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "default": 13
+    }
+
+  ],
+
+  "blocks": [
+    {
+      "type": "pillar_card",
+      "name": "Pillar Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "card_title",
+          "label": "Card Title",
+          "default": "Premium Sensual Wellness Products"
+        },
+        {
+          "type": "textarea",
+          "id": "card_body",
+          "label": "Card Body Text",
+          "default": "Formulated with intention. Tested by real people. Built around your body, not a marketing brief."
+        },
+        {
+          "type": "color",
+          "id": "card_accent_override",
+          "label": "Left Accent Border Color Override",
+          "info": "Leave blank to use the global card accent color above"
+        }
+      ]
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "About — What We're Building",
+      "category": "Text",
+      "blocks": [
+        {
+          "type": "pillar_card",
+          "settings": {
+            "card_title": "Premium Sensual Wellness Products",
+            "card_body": "Formulated with intention. Tested by real people. Built around your body, not a marketing brief."
+          }
+        },
+        {
+          "type": "pillar_card",
+          "settings": {
+            "card_title": "Honest Education",
+            "card_body": "No euphemisms. No shame. The information your body deserved from the beginning."
+          }
+        },
+        {
+          "type": "pillar_card",
+          "settings": {
+            "card_title": "A Community That's Real",
+            "card_body": "Open to all genders, relationships, and comfort levels. Because pleasure is not a niche."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

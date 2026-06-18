@@ -1,0 +1,452 @@
+{%- comment -%}
+  ============================================================
+  SECTION: Quote Block — Theme-Matched Build
+  ------------------------------------------------------------
+  Fonts     : Aleo (quote + attribution), SF Mono not needed here
+  Colors    : Matched to theme token system
+  Fixes     : quote font-weight (300→italic only, weight→400),
+              line-height matched to theme, letter-spacing updated,
+              attribution letter-spacing matched, old brand colors
+              (#1A1A18, #C4A882, #E8E3DB) replaced with theme tokens,
+              quote mark font-size token added to CSS custom property
+  ============================================================
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+  assign section_id = 'quote-block-' | append: section.id
+-%}
+
+<section
+  id="{{ section_id }}"
+  class="qblock qblock--align-{{ s.text_alignment }}"
+  style="
+    --qb-bg: {{ s.bg_color }};
+    --qb-quote-color: {{ s.quote_color }};
+    --qb-attr-color: {{ s.attribution_color }};
+    --qb-mark-color: {{ s.quote_mark_color }};
+    --qb-heading-font: {{ s.heading_font_family }};
+    --qb-body-font: {{ s.body_font_family }};
+    --qb-quote-size: {{ s.quote_size }}px;
+    --qb-quote-size-mobile: {{ s.quote_size_mobile }}px;
+    --qb-attr-size: {{ s.attribution_size }}px;
+    --qb-pad-top: {{ s.padding_top }}px;
+    --qb-pad-bottom: {{ s.padding_bottom }}px;
+    --qb-pad-top-mobile: {{ s.padding_top_mobile }}px;
+    --qb-pad-bottom-mobile: {{ s.padding_bottom_mobile }}px;
+    --qb-side-pad: {{ s.side_padding }}vw;
+    --qb-max-width: {{ s.quote_max_width }}px;
+    --qb-quote-attr-gap: {{ s.quote_attr_gap }}px;
+    --qb-image-size: {{ s.image_size }}px;
+    --qb-mark-size: {{ s.quote_mark_size }}px;
+  "
+>
+  <div class="qblock__inner">
+
+    {%- if s.image != blank -%}
+      <div class="qblock__image-wrap">
+        {%- assign img_alt = s.image.alt | default: s.attribution | default: 'Portrait' | strip_html -%}
+        <img
+          src="{{ s.image | image_url: width: 400 }}"
+          srcset="{{ s.image | image_url: width: 200 }} 200w,
+                  {{ s.image | image_url: width: 400 }} 400w,
+                  {{ s.image | image_url: width: 600 }} 600w"
+          sizes="{{ s.image_size }}px"
+          alt="{{ img_alt | escape }}"
+          width="{{ s.image.width }}"
+          height="{{ s.image.height }}"
+          loading="lazy"
+          class="qblock__image"
+        />
+      </div>
+    {%- endif -%}
+
+    {%- if s.show_quote_mark -%}
+      <div class="qblock__quote-mark" aria-hidden="true">{{ s.quote_mark_character }}</div>
+    {%- endif -%}
+
+    {%- if s.quote != blank -%}
+      <blockquote class="qblock__quote">
+        {{ s.quote }}
+      </blockquote>
+    {%- endif -%}
+
+    {%- if s.attribution != blank -%}
+      <p class="qblock__attribution">
+        {%- if s.attribution_prefix != blank -%}{{ s.attribution_prefix }} {%- endif -%}
+        {{ s.attribution }}
+      </p>
+    {%- endif -%}
+
+    {%- if s.attribution_role != blank -%}
+      <p class="qblock__attribution-role">{{ s.attribution_role }}</p>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<style>
+  /* ── Section shell ─────────────────────────────────────── */
+  #{{ section_id }}.qblock {
+    background: var(--qb-bg);
+    padding: var(--qb-pad-top) var(--qb-side-pad) var(--qb-pad-bottom);
+    font-family: var(--qb-body-font);
+    font-weight: 300;
+  }
+
+  #{{ section_id }} .qblock__inner {
+    max-width: var(--qb-max-width);
+    margin: 0 auto;
+  }
+
+  #{{ section_id }}.qblock--align-left   .qblock__inner { text-align: left; }
+  #{{ section_id }}.qblock--align-center .qblock__inner { text-align: center; }
+  #{{ section_id }}.qblock--align-right  .qblock__inner { text-align: right; }
+
+  /* ── Portrait image ────────────────────────────────────── */
+  #{{ section_id }} .qblock__image-wrap {
+    width: var(--qb-image-size);
+    height: var(--qb-image-size);
+    margin: 0 auto 32px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+  }
+
+  #{{ section_id }}.qblock--align-left  .qblock__image-wrap { margin-left: 0; }
+  #{{ section_id }}.qblock--align-right .qblock__image-wrap { margin-right: 0; margin-left: auto; }
+
+  #{{ section_id }} .qblock__image {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+    max-width: none !important;
+    max-height: none !important;
+  }
+
+  /* ── Decorative quote mark ─────────────────────────────── */
+  #{{ section_id }} .qblock__quote-mark {
+    font-family: var(--qb-heading-font);
+    font-size: var(--qb-mark-size);   /* now a schema-controlled token */
+    line-height: 1;
+    color: var(--qb-mark-color);
+    margin-bottom: 4px;
+    font-style: italic;
+    font-weight: 400;                  /* theme: Regular (Aleo italic at 400) */
+  }
+
+  /* ── Quote ─────────────────────────────────────────────── */
+  #{{ section_id }} .qblock__quote {
+    font-family: var(--qb-heading-font);
+    font-size: var(--qb-quote-size);
+    font-style: italic;
+    font-weight: 400;                  /* theme heading weight base; italic carries the style */
+    line-height: 1.3;                  /* theme heading line-height */
+    letter-spacing: 0.001em;          /* theme heading letter-spacing: 1 */
+    color: var(--qb-quote-color);
+    margin: 0 0 var(--qb-quote-attr-gap);
+    quotes: none;
+  }
+
+  #{{ section_id }} .qblock__quote::before,
+  #{{ section_id }} .qblock__quote::after { content: none; }
+
+  /* Strip the <p> margin richtext adds inside blockquote */
+  #{{ section_id }} .qblock__quote p { margin: 0; }
+
+  /* ── Attribution ───────────────────────────────────────── */
+  #{{ section_id }} .qblock__attribution {
+    font-family: var(--qb-body-font);
+    font-size: var(--qb-attr-size);   /* theme: 12px default */
+    font-weight: 400;                  /* theme body Regular */
+    letter-spacing: 0.2em;            /* theme body letter-spacing: 2 */
+    text-transform: uppercase;         /* matches eyebrow / breadcrumb pattern */
+    color: var(--qb-attr-color);
+    margin: 0;
+  }
+
+  #{{ section_id }} .qblock__attribution-role {
+    font-family: var(--qb-body-font);
+    font-size: 12px;                   /* theme breadcrumb size */
+    font-weight: 300;
+    letter-spacing: 0.002em;          /* theme body letter-spacing: 2 */
+    line-height: 1.6;                  /* theme body line-height */
+    color: var(--qb-attr-color);
+    opacity: 0.7;
+    margin: 8px 0 0;
+  }
+
+  /* ── Responsive ────────────────────────────────────────── */
+  @media (max-width: 700px) {
+    #{{ section_id }}.qblock {
+      padding: var(--qb-pad-top-mobile) 6vw var(--qb-pad-bottom-mobile);
+    }
+
+    #{{ section_id }} .qblock__quote {
+      font-size: var(--qb-quote-size-mobile);
+      line-height: 1.3;
+    }
+
+    #{{ section_id }} .qblock__quote-mark {
+      font-size: calc(var(--qb-mark-size) * 0.7);
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Quote Block",
+  "tag": "section",
+  "class": "section-quote-block",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "richtext",
+      "id": "quote",
+      "label": "Quote text",
+      "default": "<p>200+ people shaped our first product. Their stories changed our formulas, our language, and our thinking. We don't build for people — we build with them.</p>"
+    },
+    {
+      "type": "text",
+      "id": "attribution_prefix",
+      "label": "Attribution prefix symbol",
+      "default": "—",
+      "info": "e.g. —, –, or leave blank"
+    },
+    {
+      "type": "text",
+      "id": "attribution",
+      "label": "Attribution (name / brand)",
+      "default": "Pillowta Founders"
+    },
+    {
+      "type": "text",
+      "id": "attribution_role",
+      "label": "Role / secondary line (optional)"
+    },
+
+    {
+      "type": "header",
+      "content": "Optional Portrait Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Portrait image (shown above quote as a circle)"
+    },
+    {
+      "type": "range",
+      "id": "image_size",
+      "label": "Image size",
+      "min": 60,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+
+    {
+      "type": "header",
+      "content": "Decorative Quote Mark"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quote_mark",
+      "label": "Show large decorative quote mark",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "quote_mark_character",
+      "label": "Quote mark character",
+      "default": "\u201C"
+    },
+    {
+      "type": "range",
+      "id": "quote_mark_size",
+      "label": "Quote mark size",
+      "min": 60,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 100,
+      "info": "Was hardcoded at 100px — now adjustable."
+    },
+
+    {
+      "type": "header",
+      "content": "Layout & Spacing"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left",   "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right",  "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "quote_max_width",
+      "label": "Max quote width",
+      "min": 500,
+      "max": 1400,
+      "step": 20,
+      "unit": "px",
+      "default": 900
+    },
+    {
+      "type": "range",
+      "id": "side_padding",
+      "label": "Side padding",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "unit": "vw",
+      "default": 7
+    },
+    {
+      "type": "range",
+      "id": "quote_attr_gap",
+      "label": "Gap between quote & attribution",
+      "min": 8,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top (desktop)",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom (desktop)",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding top (mobile)",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding bottom (mobile)",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background",
+      "default": "#222222"
+    },
+    {
+      "type": "color",
+      "id": "quote_color",
+      "label": "Quote text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "attribution_color",
+      "label": "Attribution color",
+      "default": "#B1FF15"
+    },
+    {
+      "type": "color",
+      "id": "quote_mark_color",
+      "label": "Decorative quote mark color",
+      "default": "#B1FF15"
+    },
+
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "text",
+      "id": "heading_font_family",
+      "label": "Quote font-family (CSS)",
+      "default": "'Aleo', serif"
+    },
+    {
+      "type": "text",
+      "id": "body_font_family",
+      "label": "Attribution font-family (CSS)",
+      "default": "'Aleo', serif"
+    },
+    {
+      "type": "range",
+      "id": "quote_size",
+      "label": "Quote size (desktop)",
+      "min": 20,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "quote_size_mobile",
+      "label": "Quote size (mobile)",
+      "min": 18,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "default": 26
+    },
+    {
+      "type": "range",
+      "id": "attribution_size",
+      "label": "Attribution size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    }
+  ],
+  "presets": [
+    {
+      "name": "Quote Block",
+      "category": "Text"
+    }
+  ]
+}
+{% endschema %}

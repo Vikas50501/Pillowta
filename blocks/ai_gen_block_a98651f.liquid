@@ -1,0 +1,626 @@
+{% doc %}
+  @prompt
+    create a section where i add my own html css design , make a section where i add one side content in content give me 1 heading and 2 paragraphs, one learn more button and in other part, keep the image. The size of image should be equal to size of content, keept  the bg black, keep the heading color white and aslo image side bg color black and give me option of change fornt family of text
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% liquid
+  if block.settings.heading_font == 'ft1'
+    if settings.fonts == '1'
+      assign heading_font_family = settings.font1.family | append: ', ' | append: settings.font1.fallback_families
+    else
+      assign heading_font_family = settings.gfont1
+    endif
+  elsif block.settings.heading_font == 'ft2'
+    if settings.fonts == '1'
+      assign heading_font_family = settings.font2.family | append: ', ' | append: settings.font2.fallback_families
+    else
+      assign heading_font_family = settings.gfont2
+    endif
+  else
+    if settings.fonts == '1'
+      assign heading_font_family = settings.font3.family | append: ', ' | append: settings.font3.fallback_families
+    else
+      assign heading_font_family = settings.gfont3
+    endif
+  endif
+
+  if block.settings.text_font == 'ft1'
+    if settings.fonts == '1'
+      assign text_font_family = settings.font1.family | append: ', ' | append: settings.font1.fallback_families
+    else
+      assign text_font_family = settings.gfont1
+    endif
+  elsif block.settings.text_font == 'ft2'
+    if settings.fonts == '1'
+      assign text_font_family = settings.font2.family | append: ', ' | append: settings.font2.fallback_families
+    else
+      assign text_font_family = settings.gfont2
+    endif
+  else
+    if settings.fonts == '1'
+      assign text_font_family = settings.font3.family | append: ', ' | append: settings.font3.fallback_families
+    else
+      assign text_font_family = settings.gfont3
+    endif
+  endif
+%}
+
+{% style %}
+  .ai-content-image-block-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+  }
+
+  .ai-content-image-container-{{ ai_gen_id }} {
+    display: flex;
+    align-items: stretch;
+    gap: {{ block.settings.gap }}px;
+    max-width: 100%;
+  }
+
+  .ai-content-image-container-{{ ai_gen_id }}.reverse {
+    flex-direction: row-reverse;
+  }
+
+  .ai-content-side-{{ ai_gen_id }},
+  .ai-image-side-{{ ai_gen_id }} {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ai-content-side-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: {{ block.settings.content_padding }}px;
+    background-color: {{ block.settings.content_bg_color }};
+  }
+
+  .ai-content-heading-{{ ai_gen_id }} {
+    color: {{ block.settings.heading_color }};
+    font-size: {{ block.settings.heading_size }}px;
+    font-weight: {{ block.settings.heading_weight }};
+    font-family: {{ heading_font_family }};
+    margin: 0 0 {{ block.settings.heading_margin }}px 0;
+    line-height: 1.3;
+  }
+
+  .ai-content-paragraph-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.text_size }}px;
+    font-family: {{ text_font_family }};
+    line-height: 1.6;
+    margin: 0 0 {{ block.settings.paragraph_spacing }}px 0;
+  }
+
+  .ai-content-paragraph-{{ ai_gen_id }}:last-of-type {
+    margin-bottom: {{ block.settings.button_margin_top }}px;
+  }
+
+  .ai-learn-more-button-{{ ai_gen_id }} {
+    display: inline-block;
+    padding: {{ block.settings.button_padding_vertical }}px {{ block.settings.button_padding_horizontal }}px;
+    background-color: {{ block.settings.button_bg_color }};
+    color: {{ block.settings.button_text_color }};
+    text-decoration: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: {{ block.settings.button_font_size }}px;
+    font-weight: {{ block.settings.button_font_weight }};
+    transition: all 0.3s ease;
+    border: {{ block.settings.button_border_width }}px solid {{ block.settings.button_border_color }};
+    text-align: center;
+  }
+
+  .ai-learn-more-button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_bg_hover_color }};
+    color: {{ block.settings.button_text_hover_color }};
+    border-color: {{ block.settings.button_border_hover_color }};
+  }
+
+  .ai-image-side-{{ ai_gen_id }} {
+    position: relative;
+    overflow: hidden;
+    background-color: {{ block.settings.image_bg_color }};
+  }
+
+  .ai-image-wrapper-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .ai-image-wrapper-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .ai-image-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: {{ block.settings.image_bg_color }};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ai-image-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 300px;
+    max-height: 300px;
+  }
+
+  .ai-empty-state-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-content-image-container-{{ ai_gen_id }} {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .ai-content-image-container-{{ ai_gen_id }}.reverse {
+      flex-direction: column;
+    }
+
+    .ai-content-side-{{ ai_gen_id }} {
+      padding: {{ block.settings.content_padding_mobile }}px;
+    }
+
+    .ai-content-heading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_size_mobile }}px;
+    }
+
+    .ai-content-paragraph-{{ ai_gen_id }} {
+      font-size: {{ block.settings.text_size_mobile }}px;
+    }
+
+    .ai-image-side-{{ ai_gen_id }} {
+      min-height: 300px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-content-image-block-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-content-image-container-{{ ai_gen_id }} {% if block.settings.layout == 'image_left' %}reverse{% endif %}">
+    <div class="ai-content-side-{{ ai_gen_id }}">
+      {% if block.settings.heading != blank %}
+        <h2 class="ai-content-heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+      {% endif %}
+
+      {% if block.settings.paragraph_1 != blank %}
+        <div class="ai-content-paragraph-{{ ai_gen_id }}">{{ block.settings.paragraph_1 }}</div>
+      {% endif %}
+
+      {% if block.settings.paragraph_2 != blank %}
+        <div class="ai-content-paragraph-{{ ai_gen_id }}">{{ block.settings.paragraph_2 }}</div>
+      {% endif %}
+
+      {% if block.settings.button_text != blank %}
+        <a href="{{ block.settings.button_link }}" class="ai-learn-more-button-{{ ai_gen_id }}">
+          {{ block.settings.button_text }}
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="ai-image-side-{{ ai_gen_id }}">
+      {% if block.settings.image %}
+        <div class="ai-image-wrapper-{{ ai_gen_id }}">
+          <img
+            src="{{ block.settings.image | image_url: width: 1200 }}"
+            alt="{{ block.settings.image.alt | escape }}"
+            loading="lazy"
+            width="{{ block.settings.image.width }}"
+            height="{{ block.settings.image.height }}"
+          >
+        </div>
+      {% else %}
+        <div class="ai-image-placeholder-{{ ai_gen_id }}">
+          {{ 'image' | placeholder_svg_tag }}
+          <div class="ai-empty-state-{{ ai_gen_id }}">
+            Add an image
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Content with image",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "content_left",
+          "label": "Content left, Image right"
+        },
+        {
+          "value": "image_left",
+          "label": "Image left, Content right"
+        }
+      ],
+      "default": "content_left"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap between content and image",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Discover our story"
+    },
+    {
+      "type": "richtext",
+      "id": "paragraph_1",
+      "label": "Paragraph 1",
+      "default": "<p>We are passionate about creating exceptional products that make a difference in your daily life. Our commitment to quality and innovation drives everything we do.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "paragraph_2",
+      "label": "Paragraph 2",
+      "default": "<p>With years of experience and a dedicated team, we strive to exceed your expectations and deliver products that you'll love for years to come.</p>"
+    },
+    {
+      "type": "color",
+      "id": "content_bg_color",
+      "label": "Background color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "content_padding",
+      "label": "Content padding",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "content_padding_mobile",
+      "label": "Content padding (mobile)",
+      "min": 15,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Heading style"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "select",
+      "id": "heading_font",
+      "label": "Font family",
+      "options": [
+        {
+          "value": "ft1",
+          "label": "Font 1"
+        },
+        {
+          "value": "ft2",
+          "label": "Font 2"
+        },
+        {
+          "value": "ft3",
+          "label": "Font 3"
+        }
+      ],
+      "default": "ft2"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Font size",
+      "min": 16,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "label": "Font size (mobile)",
+      "min": 16,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi Bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "range",
+      "id": "heading_margin",
+      "label": "Margin bottom",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Paragraph style"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Color",
+      "default": "#cccccc"
+    },
+    {
+      "type": "select",
+      "id": "text_font",
+      "label": "Font family",
+      "options": [
+        {
+          "value": "ft1",
+          "label": "Font 1"
+        },
+        {
+          "value": "ft2",
+          "label": "Font 2"
+        },
+        {
+          "value": "ft3",
+          "label": "Font 3"
+        }
+      ],
+      "default": "ft1"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "text_size_mobile",
+      "label": "Font size (mobile)",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "paragraph_spacing",
+      "label": "Spacing between paragraphs",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Learn more"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "range",
+      "id": "button_margin_top",
+      "label": "Margin top",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "default": 25
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_border_color",
+      "label": "Border color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_hover_color",
+      "label": "Hover background color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "button_text_hover_color",
+      "label": "Hover text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_border_hover_color",
+      "label": "Hover border color",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "button_font_weight",
+      "label": "Font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi Bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "500"
+    },
+    {
+      "type": "range",
+      "id": "button_padding_vertical",
+      "label": "Vertical padding",
+      "min": 8,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "button_padding_horizontal",
+      "label": "Horizontal padding",
+      "min": 15,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "button_border_width",
+      "label": "Border width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "color",
+      "id": "image_bg_color",
+      "label": "Background color",
+      "default": "#000000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Content with image"
+    }
+  ]
+}
+{% endschema %}

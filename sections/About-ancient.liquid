@@ -1,0 +1,796 @@
+{% comment %}
+  ============================================================
+  ABOUT — SECTION 04: WHY ANCIENT WISDOM
+  Top: two-column (number + heading left / body paragraphs right)
+  Bottom: full-width parchment manifesto strip — 3 icon+title+text columns
+  Full 100% schema-driven customisation · Matches theme fonts & colors
+  ============================================================
+{% endcomment %}
+
+{%- liquid
+  assign section_bg          = section.settings.section_bg
+  assign section_margin_top    = section.settings.section_margin_top
+  assign section_margin_bottom = section.settings.section_margin_bottom
+  assign section_padding_x     = section.settings.section_padding_x
+  assign max_width             = section.settings.max_width
+  assign top_col_gap           = section.settings.top_column_gap
+
+  assign show_tag              = section.settings.show_section_tag
+  assign tag_text              = section.settings.tag_text
+  assign tag_color             = section.settings.tag_color
+  assign tag_size              = section.settings.tag_size
+
+  assign show_num              = section.settings.show_section_number
+  assign num_text              = section.settings.section_number
+  assign num_color             = section.settings.num_color
+  assign num_size              = section.settings.num_size
+  assign num_overlap           = section.settings.num_overlap
+
+  assign heading_line1         = section.settings.heading_line1
+  assign heading_italic        = section.settings.heading_italic
+  assign heading_color         = section.settings.heading_color
+  assign heading_italic_color  = section.settings.heading_italic_color
+  assign heading_size_max      = section.settings.heading_size_max
+  assign heading_size_min      = section.settings.heading_size_min
+
+  assign para1                 = section.settings.paragraph_1
+  assign para2                 = section.settings.paragraph_2
+  assign para3                 = section.settings.paragraph_3
+  assign body_color            = section.settings.body_color
+  assign body_size             = section.settings.body_font_size
+  assign body_strong_color     = section.settings.body_strong_color
+  assign body_strong_size      = section.settings.body_strong_size
+
+  assign strip_bg              = section.settings.strip_bg
+  assign strip_border_color    = section.settings.strip_border_color
+  assign strip_border_radius   = section.settings.strip_border_radius
+  assign strip_padding_x       = section.settings.strip_padding_x
+  assign strip_padding_y       = section.settings.strip_padding_y
+  assign strip_col_gap         = section.settings.strip_column_gap
+  assign strip_divider_color   = section.settings.strip_divider_color
+  assign strip_margin_top      = section.settings.strip_margin_top
+
+  assign glyph_color           = section.settings.glyph_color
+  assign glyph_size            = section.settings.glyph_size
+  assign item_title_color      = section.settings.item_title_color
+  assign item_title_size       = section.settings.item_title_size
+  assign item_body_color       = section.settings.item_body_color
+  assign item_body_size        = section.settings.item_body_size
+-%}
+
+<style>
+  /* ── Section root variables ── */
+  #shopify-section-{{ section.id }} {
+    --aw-bg:               {{ section_bg }};
+    --aw-px:               {{ section_padding_x }}px;
+    --aw-max-width:        {{ max_width }}px;
+    --aw-mt:               {{ section_margin_top }}rem;
+    --aw-mb:               {{ section_margin_bottom }}rem;
+    --aw-top-gap:          {{ top_col_gap }}rem;
+
+    --aw-tag-color:        {{ tag_color }};
+    --aw-tag-size:         {{ tag_size }}px;
+
+    --aw-num-color:        {{ num_color }};
+    --aw-num-size:         {{ num_size }}rem;
+    --aw-num-overlap:      -{{ num_overlap }}rem;
+
+    --aw-h-color:          {{ heading_color }};
+    --aw-h-italic:         {{ heading_italic_color }};
+    --aw-h-max:            {{ heading_size_max }}px;
+    --aw-h-min:            {{ heading_size_min }}px;
+
+    --aw-body-color:       {{ body_color }};
+    --aw-body-size:        {{ body_size }}px;
+    --aw-body-strong:      {{ body_strong_color }};
+    --aw-body-strong-size: {{ body_strong_size }}px;
+
+    --aw-strip-bg:         {{ strip_bg }};
+    --aw-strip-border:     {{ strip_border_color }};
+    --aw-strip-radius:     {{ strip_border_radius }}px;
+    --aw-strip-px:         {{ strip_padding_x }}rem;
+    --aw-strip-py:         {{ strip_padding_y }}rem;
+    --aw-strip-gap:        {{ strip_col_gap }}rem;
+    --aw-strip-divider:    {{ strip_divider_color }};
+    --aw-strip-mt:         {{ strip_margin_top }}rem;
+
+    --aw-glyph-color:      {{ glyph_color }};
+    --aw-glyph-size:       {{ glyph_size }}rem;
+    --aw-item-title:       {{ item_title_color }};
+    --aw-item-title-size:  {{ item_title_size }}px;
+    --aw-item-body:        {{ item_body_color }};
+    --aw-item-body-size:   {{ item_body_size }}px;
+
+    --font-heading:        {{ settings.type_header_font.family | default: 'Aleo' }}, Georgia, serif;
+    --font-body:           {{ settings.type_base_font.family | default: 'Aleo' }}, sans-serif;
+    --font-mono:           'SF Mono', 'Fira Code', monospace;
+  }
+
+  /* ── Section wrapper ── */
+  .aw-section {
+    background: var(--aw-bg);
+    width: 100%;
+  }
+
+  /* ── Inner container ── */
+  .aw-inner {
+    max-width: var(--aw-max-width);
+    margin: var(--aw-mt) auto var(--aw-mb);
+    padding: 0 var(--aw-px);
+  }
+
+  /* ══════════════════════════
+     TOP: two-column grid
+  ══════════════════════════ */
+  .aw-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--aw-top-gap);
+    margin-bottom: var(--aw-strip-mt);
+    align-items: end;
+  }
+
+  /* ── Left: tag + number + heading ── */
+  .aw-top-left {
+    position: relative;
+  }
+
+  .aw-tag {
+    font-family: var(--font-mono);
+    font-size: var(--aw-tag-size);
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--aw-tag-color);
+    margin-bottom: 1rem;
+    display: {% if show_tag %}block{% else %}none{% endif %};
+  }
+
+  .aw-num {
+    font-family: var(--font-heading);
+    font-size: var(--aw-num-size);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--aw-num-color);
+    display: {% if show_num %}block{% else %}none{% endif %};
+    margin-bottom: var(--aw-num-overlap);
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .aw-heading {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--aw-h-min), 3vw, var(--aw-h-max));
+    font-weight: {{ settings.type_header_font.weight | default: 500 }};
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--aw-h-color);
+    position: relative;
+    z-index: 1;
+    margin: 0;
+  }
+
+  .aw-heading em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--aw-h-italic);
+  }
+
+  /* ── Right: body paragraphs ── */
+  .aw-top-right {
+    padding-top: 0.25rem;
+  }
+
+  .aw-top-right p {
+    font-family: var(--font-body);
+    font-size: var(--aw-body-size);
+    color: var(--aw-body-color);
+    line-height: 1.9;
+    margin-bottom: 1.25rem;
+    letter-spacing: {{ settings.type_base_spacing | default: 0.002 }}em;
+  }
+
+  .aw-top-right p:last-child {
+    margin-bottom: 0;
+  }
+
+  .aw-top-right p strong {
+    font-family: var(--font-heading);
+    font-weight: 500;
+    color: var(--aw-body-strong);
+    font-size: var(--aw-body-strong-size);
+  }
+
+  /* ══════════════════════════
+     BOTTOM: Manifesto strip
+  ══════════════════════════ */
+  .aw-strip {
+    background: var(--aw-strip-bg);
+    border: 0.5px solid var(--aw-strip-border);
+    border-radius: var(--aw-strip-radius);
+    padding: var(--aw-strip-py) var(--aw-strip-px);
+    display: grid;
+    grid-template-columns: repeat({{ section.blocks.size | default: 3 }}, 1fr);
+    gap: 0;
+    overflow: hidden;
+  }
+
+  /* ── Individual manifesto item ── */
+  .aw-item {
+    padding: 0 var(--aw-strip-gap);
+    border-right: 0.5px solid var(--aw-strip-divider);
+    position: relative;
+  }
+
+  .aw-item:first-child {
+    padding-left: 0;
+  }
+
+  .aw-item:last-child {
+    border-right: none;
+    padding-right: 0;
+  }
+
+  .aw-item__glyph {
+    font-family: var(--font-heading);
+    font-size: var(--aw-glyph-size);
+    color: var(--aw-glyph-color);
+    margin-bottom: 0.75rem;
+    display: block;
+    line-height: 1;
+    user-select: none;
+  }
+
+  .aw-item__title {
+    font-family: var(--font-heading);
+    font-size: var(--aw-item-title-size);
+    font-weight: 600;
+    color: var(--aw-item-title);
+    margin-bottom: 0.5rem;
+    margin-top: 0;
+    line-height: 1.3;
+  }
+
+  .aw-item__body {
+    font-family: var(--font-body);
+    font-size: var(--aw-item-body-size);
+    color: var(--aw-item-body);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .aw-inner {
+      padding: 0 1.5rem;
+      margin: 4rem auto;
+    }
+
+    .aw-top {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      margin-bottom: 3rem;
+      align-items: start;
+    }
+
+    .aw-num {
+      font-size: calc(var(--aw-num-size) * 0.75);
+    }
+
+    .aw-heading {
+      font-size: clamp(1.6rem, 7vw, var(--aw-h-max));
+    }
+
+    .aw-strip {
+      grid-template-columns: 1fr;
+      padding: 2rem 1.5rem;
+    }
+
+    .aw-item {
+      border-right: none;
+      padding: 0 0 2rem;
+      border-bottom: 0.5px solid var(--aw-strip-divider);
+    }
+
+    .aw-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .aw-inner {
+      padding: 0 1.25rem;
+      margin: 3rem auto;
+    }
+
+    .aw-strip {
+      padding: 2rem 1.25rem;
+    }
+  }
+</style>
+
+<section
+  class="aw-section"
+  id="about-ancient-{{ section.id }}"
+  aria-labelledby="aw-heading-{{ section.id }}"
+>
+  <div class="aw-inner">
+
+    <!-- TOP: Two-column -->
+    <div class="aw-top">
+
+      <!-- Left: Tag + Number + Heading -->
+      <div class="aw-top-left">
+        {%- if show_tag and tag_text != blank -%}
+          <span class="aw-tag">{{ tag_text }}</span>
+        {%- endif -%}
+
+        {%- if show_num and num_text != blank -%}
+          <span class="aw-num" aria-hidden="true">{{ num_text }}</span>
+        {%- endif -%}
+
+        <h2 class="aw-heading" id="aw-heading-{{ section.id }}">
+          {%- if heading_line1 != blank -%}{{ heading_line1 }}{%- endif -%}
+          {%- if heading_italic != blank -%}<br><em>{{ heading_italic }}</em>{%- endif -%}
+        </h2>
+      </div>
+
+      <!-- Right: Body paragraphs -->
+      <div class="aw-top-right">
+        {%- if para1 != blank -%}<p>{{ para1 }}</p>{%- endif -%}
+        {%- if para2 != blank -%}<p>{{ para2 }}</p>{%- endif -%}
+        {%- if para3 != blank -%}<p>{{ para3 }}</p>{%- endif -%}
+      </div>
+
+    </div>
+
+    <!-- BOTTOM: Manifesto strip (blocks) -->
+    {%- if section.blocks.size > 0 -%}
+      <div class="aw-strip">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'manifesto_item' -%}
+            <div
+              class="aw-item"
+              {{ block.shopify_attributes }}
+            >
+              {%- if block.settings.glyph != blank -%}
+                <span class="aw-item__glyph" aria-hidden="true">{{ block.settings.glyph }}</span>
+              {%- endif -%}
+
+              {%- if block.settings.item_title != blank -%}
+                <h4 class="aw-item__title">{{ block.settings.item_title }}</h4>
+              {%- endif -%}
+
+              {%- if block.settings.item_body != blank -%}
+                <p class="aw-item__body">{{ block.settings.item_body }}</p>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About — Ancient Wisdom",
+  "tag": "div",
+  "class": "about-ancient-wrapper",
+  "max_blocks": 6,
+  "settings": [
+
+    {
+      "type": "header",
+      "content": "── Section Layout ──"
+    },
+    {
+      "type": "color",
+      "id": "section_bg",
+      "label": "Section Background Color",
+      "default": "#FEFCF8"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Content Max Width (px)",
+      "min": 800,
+      "max": 1600,
+      "step": 40,
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "section_padding_x",
+      "label": "Horizontal Padding (px)",
+      "min": 16,
+      "max": 120,
+      "step": 8,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "section_margin_top",
+      "label": "Section Margin Top (rem)",
+      "min": 2,
+      "max": 16,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "section_margin_bottom",
+      "label": "Section Margin Bottom (rem)",
+      "min": 2,
+      "max": 16,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "top_column_gap",
+      "label": "Top Two-Column Gap (rem)",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 5
+    },
+
+    {
+      "type": "header",
+      "content": "── Section Tag ──"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_section_tag",
+      "label": "Show Section Tag",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tag_text",
+      "label": "Tag Text",
+      "default": "02"
+    },
+    {
+      "type": "color",
+      "id": "tag_color",
+      "label": "Tag Color",
+      "default": "#C8593A"
+    },
+    {
+      "type": "range",
+      "id": "tag_size",
+      "label": "Tag Font Size (px)",
+      "min": 8,
+      "max": 16,
+      "step": 1,
+      "default": 10
+    },
+
+    {
+      "type": "header",
+      "content": "── Large Background Number ──"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_section_number",
+      "label": "Show Large Background Number",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "section_number",
+      "label": "Number / Symbol Text",
+      "default": "02"
+    },
+    {
+      "type": "color",
+      "id": "num_color",
+      "label": "Number Color",
+      "default": "#F2EDE4"
+    },
+    {
+      "type": "range",
+      "id": "num_size",
+      "label": "Number Font Size (rem)",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "num_overlap",
+      "label": "Number Overlap Into Heading (rem)",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "default": 2,
+      "info": "Pulls the heading up over the large number for the overlap effect"
+    },
+
+    {
+      "type": "header",
+      "content": "── Heading ──"
+    },
+    {
+      "type": "text",
+      "id": "heading_line1",
+      "label": "Heading Line 1",
+      "default": "Why ancient"
+    },
+    {
+      "type": "text",
+      "id": "heading_italic",
+      "label": "Heading Italic Line",
+      "default": "wisdom."
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#1A1714"
+    },
+    {
+      "type": "color",
+      "id": "heading_italic_color",
+      "label": "Heading Italic Color",
+      "default": "#1A1714"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_max",
+      "label": "Heading Max Size — Desktop (px)",
+      "min": 25,
+      "max": 75,
+      "step": 5,
+      "default": 45
+    },
+    {
+      "type": "range",
+      "id": "heading_size_min",
+      "label": "Heading Min Size — Mobile floor (px)",
+      "min": 18,
+      "max": 40,
+      "step": 1,
+      "default": 28
+    },
+
+    {
+      "type": "header",
+      "content": "── Body Paragraphs ──"
+    },
+    {
+      "type": "richtext",
+      "id": "paragraph_1",
+      "label": "Paragraph 1",
+      "default": "<p>We didn't need to import a framework for sex. Intimacy wasn't always reduced to technique or outcome. There was a time when it was understood as something deeper, something to be explored, not rushed.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "paragraph_2",
+      "label": "Paragraph 2",
+      "default": "<p>Our own tradition, which saw sex as science, poetry, and self-knowledge, was quietly buried. The Kamasutra was not lost. It was colonised out of our consciousness.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "paragraph_3",
+      "label": "Paragraph 3 (optional — supports bold)",
+      "default": "<p><strong>Pillowta exists to bring it back. Not as a museum exhibit, but as living, practical wisdom for the problems of modern intimacy.</strong></p>"
+    },
+    {
+      "type": "color",
+      "id": "body_color",
+      "label": "Body Text Color",
+      "default": "#4A4540"
+    },
+    {
+      "type": "color",
+      "id": "body_strong_color",
+      "label": "Bold / Strong Text Color",
+      "default": "#1A1714"
+    },
+    {
+      "type": "range",
+      "id": "body_font_size",
+      "label": "Body Font Size (px)",
+      "min": 12,
+      "max": 22,
+      "step": 1,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "body_strong_size",
+      "label": "Bold Text Font Size (px)",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "default": 17
+    },
+
+    {
+      "type": "header",
+      "content": "── Manifesto Strip ──"
+    },
+    {
+      "type": "color",
+      "id": "strip_bg",
+      "label": "Strip Background Color",
+      "default": "#F2EDE4"
+    },
+    {
+      "type": "color",
+      "id": "strip_border_color",
+      "label": "Strip Border Color",
+      "default": "rgba(26,23,20,0.10)"
+    },
+    {
+      "type": "range",
+      "id": "strip_border_radius",
+      "label": "Strip Border Radius (px)",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "strip_padding_x",
+      "label": "Strip Horizontal Padding (rem)",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "strip_padding_y",
+      "label": "Strip Vertical Padding (rem)",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "strip_column_gap",
+      "label": "Column Padding Inside Strip (rem)",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "color",
+      "id": "strip_divider_color",
+      "label": "Column Divider Color",
+      "default": "rgba(26,23,20,0.20)"
+    },
+    {
+      "type": "range",
+      "id": "strip_margin_top",
+      "label": "Gap Between Top Content & Strip (rem)",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 5
+    },
+
+    {
+      "type": "header",
+      "content": "── Manifesto Item Styles ──"
+    },
+    {
+      "type": "color",
+      "id": "glyph_color",
+      "label": "Glyph / Symbol Color",
+      "default": "#B8963E"
+    },
+    {
+      "type": "range",
+      "id": "glyph_size",
+      "label": "Glyph Font Size (rem)",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "color",
+      "id": "item_title_color",
+      "label": "Item Title Color",
+      "default": "#1A1714"
+    },
+    {
+      "type": "range",
+      "id": "item_title_size",
+      "label": "Item Title Font Size (px)",
+      "min": 12,
+      "max": 22,
+      "step": 1,
+      "default": 17
+    },
+    {
+      "type": "color",
+      "id": "item_body_color",
+      "label": "Item Body Text Color",
+      "default": "#4A4540"
+    },
+    {
+      "type": "range",
+      "id": "item_body_size",
+      "label": "Item Body Font Size (px)",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "default": 13
+    }
+
+  ],
+
+  "blocks": [
+    {
+      "type": "manifesto_item",
+      "name": "Manifesto Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "glyph",
+          "label": "Symbol / Glyph",
+          "default": "❧",
+          "info": "Any character or emoji. e.g. ❧ ✦ ◈ ❁ ॐ ✿ ⊕"
+        },
+        {
+          "type": "text",
+          "id": "item_title",
+          "label": "Title",
+          "default": "Science of Relationships"
+        },
+        {
+          "type": "textarea",
+          "id": "item_body",
+          "label": "Body Text",
+          "default": "The Kamasutra codified desire, presence, and mutual understanding centuries before modern psychology existed."
+        }
+      ]
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "About — Why Ancient Wisdom",
+      "category": "Text",
+      "blocks": [
+        {
+          "type": "manifesto_item",
+          "settings": {
+            "glyph": "❧",
+            "item_title": "Science of Relationships",
+            "item_body": "The Kamasutra codified desire, presence, and mutual understanding centuries before modern psychology existed."
+          }
+        },
+        {
+          "type": "manifesto_item",
+          "settings": {
+            "glyph": "✦",
+            "item_title": "Colonised, Not Lost",
+            "item_body": "A British colonial editor in 1883 removed entire sections on women's pleasure and emotional intimacy. We're putting them back."
+          }
+        },
+        {
+          "type": "manifesto_item",
+          "settings": {
+            "glyph": "◈",
+            "item_title": "Living, Not Museum",
+            "item_body": "Our ancestors had answers. We're not preserving history. We're translating it into something you can use today."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,904 @@
+{%- comment -%}
+  ============================================================
+  CO-CREATE HERO SECTION — Theme-Matched Build
+  ------------------------------------------------------------
+  Fonts     : Aleo (heading + body), SF Mono (buttons)
+  Colors    : Matched to theme token system
+  Buttons   : Button 4 (lime-green) primary, Button 3 (outline) secondary
+  ============================================================
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+  assign unique = section.id
+-%}
+
+{%- if s.load_fonts -%}
+  <link href="https://fonts.googleapis.com/css2?family=Aleo:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+{%- endif -%}
+
+<style>
+  /* ── Section shell ─────────────────────────────────────── */
+  .cc-hero-{{ unique }} {
+    min-height: {{ s.min_height }}vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: {{ s.content_vertical_align }};
+    align-items: {{ s.content_horizontal_align }};
+    text-align: {{ s.text_align }};
+    padding: {{ s.padding_top }}px {{ s.padding_horizontal }}vw {{ s.padding_bottom }}px;
+    background-color: {{ s.bg_color }};
+    position: relative;
+    overflow: hidden;
+    {%- if s.bg_image != blank -%}
+      background-image: linear-gradient(
+          rgba(0,0,0,{{ s.overlay_opacity | divided_by: 100.0 }}),
+          rgba(0,0,0,{{ s.overlay_opacity | divided_by: 100.0 }})
+        ),
+        url('{{ s.bg_image | image_url: width: 2400 }}');
+      background-size: cover;
+      background-position: {{ s.bg_position }};
+      background-repeat: no-repeat;
+    {%- endif -%}
+  }
+
+  /* ── Watermark ─────────────────────────────────────────── */
+  .cc-hero-{{ unique }} .cc-hero-bg-text {
+    position: absolute;
+    top: {{ s.watermark_top }}%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: {{ s.heading_font_family }};
+    font-size: clamp(100px, {{ s.watermark_size }}vw, 240px);
+    font-weight: 300;
+    color: {{ s.watermark_color }};
+    opacity: {{ s.watermark_opacity | divided_by: 100.0 }};
+    white-space: nowrap;
+    pointer-events: none;
+    letter-spacing: -0.02em;
+    z-index: 1;
+  }
+
+  .cc-hero-{{ unique }} > *:not(.cc-hero-bg-text) {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ── Eyebrow ───────────────────────────────────────────── */
+  .cc-hero-{{ unique }} .cc-hero-eyebrow {
+    font-family: {{ s.body_font_family }};
+    font-size: {{ s.eyebrow_size }}px;
+    letter-spacing: 0.2em;           /* matches theme letter-spacing: 2 */
+    text-transform: uppercase;
+    color: {{ s.eyebrow_color }};
+    margin-bottom: 24px;
+    font-weight: 400;
+  }
+
+  /* ── Heading ───────────────────────────────────────────── */
+  .cc-hero-{{ unique }} .cc-hero-heading {
+    font-family: {{ s.heading_font_family }};
+    font-size: clamp(32px, {{ s.heading_size }}vw, 88px); /* clamp floor = theme H1 32px */
+    font-weight: {{ s.heading_weight }};                  /* theme: Medium (500) */
+    line-height: 1.3;                                      /* theme heading line-height */
+    letter-spacing: 0.001em;                               /* theme heading letter-spacing: 1 */
+    color: {{ s.heading_color }};
+    max-width: {{ s.heading_max_width }}px;
+    margin-bottom: 28px;
+  }
+
+  .cc-hero-{{ unique }} .cc-hero-heading em,
+  .cc-hero-{{ unique }} .cc-hero-heading .cc-accent {
+    font-style: italic;
+    color: {{ s.heading_accent_color }};
+  }
+
+  /* ── Subtext ───────────────────────────────────────────── */
+  .cc-hero-{{ unique }} .cc-hero-sub {
+    font-family: {{ s.body_font_family }};
+    font-size: {{ s.sub_size }}px;    /* theme body: 14px */
+    line-height: 1.6;                  /* theme body line-height */
+    letter-spacing: 0.002em;           /* theme body letter-spacing: 2 */
+    color: {{ s.sub_color }};
+    max-width: {{ s.sub_max_width }}px;
+    font-weight: 300;
+    align-self: {% if s.text_align == 'center' %}center{% elsif s.text_align == 'right' %}flex-end{% else %}flex-start{% endif %};
+    {% if s.text_align == 'center' %}margin-left: auto; margin-right: auto;{% endif %}
+  }
+
+  .cc-hero-{{ unique }} .cc-hero-sub p {
+    margin: 0 0 12px;
+    color: {{ s.sub_color }};
+  }
+
+  .cc-hero-{{ unique }} .cc-hero-sub p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ── Stats block ───────────────────────────────────────── */
+  .cc-hero-{{ unique }} .cc-hero-stat {
+    margin-top: {{ s.stat_margin_top }}px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    {% if s.text_align == 'center' %}justify-content: center;{% endif %}
+  }
+
+  .cc-hero-{{ unique }} .cc-hero-stat-num {
+    font-family: {{ s.heading_font_family }};
+    font-size: {{ s.stat_num_size }}px;
+    font-weight: 500;                  /* theme: Medium */
+    color: {{ s.stat_num_color }};
+    line-height: 1;
+  }
+
+  .cc-hero-{{ unique }} .cc-hero-stat-label {
+    font-family: {{ s.body_font_family }};
+    font-size: 13px;
+    letter-spacing: 0.002em;
+    color: {{ s.stat_label_color }};
+    line-height: 1.6;
+    max-width: 160px;
+  }
+
+  .cc-hero-{{ unique }} .cc-hero-divider {
+    width: 1px;
+    height: 50px;
+    background: {{ s.divider_color }};
+  }
+
+  .cc-hero-{{ unique }} .cc-hero-stat-secondary {
+    font-family: {{ s.body_font_family }};
+    max-width: 180px;
+    color: {{ s.stat_secondary_color }};
+    font-size: 14px;
+    line-height: 1.6;
+    letter-spacing: 0.002em;
+  }
+
+  /* ── Buttons ───────────────────────────────────────────── */
+  .cc-hero-{{ unique }} .cc-hero-buttons {
+    display: flex;
+    gap: 14px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+    {% if s.text_align == 'center' %}justify-content: center;{% endif %}
+  }
+
+  .cc-hero-{{ unique }} .cc-hero-btn {
+    display: inline-block;
+    padding: 14px 32px;
+    font-family: {{ s.button_font_family }};  /* theme: SF Mono */
+    font-size: {{ s.button_font_size }}px;    /* theme: 12px */
+    font-weight: 700;                          /* theme: Bold */
+    letter-spacing: 0.12em;
+    text-transform: uppercase;                 /* theme: Uppercase */
+    text-decoration: none;
+    border-radius: {{ s.button_radius }}px;   /* theme: 5px */
+    border-width: {{ s.button_border_width }}px; /* theme: 2px */
+    border-style: solid;
+    transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+  }
+
+  /* Button 4 style: lime-green — primary */
+  .cc-hero-{{ unique }} .cc-hero-btn--primary {
+    background: {{ s.btn_primary_bg }};      /* #B1FF15 */
+    color: {{ s.btn_primary_text }};         /* #000000 */
+    border-color: {{ s.btn_primary_border }}; /* #B6FF00 */
+  }
+
+  .cc-hero-{{ unique }} .cc-hero-btn--primary:hover {
+    background: {{ s.btn_primary_hover_bg }};      /* #000000 */
+    color: {{ s.btn_primary_hover_text }};          /* #FFFFFF */
+    border-color: {{ s.btn_primary_hover_border }}; /* #000000 */
+  }
+
+  /* Button 3 style: transparent outline — secondary */
+  .cc-hero-{{ unique }} .cc-hero-btn--secondary {
+    background: transparent;
+    color: {{ s.btn_secondary_text }};
+    border-color: {{ s.btn_secondary_border }};
+  }
+
+  .cc-hero-{{ unique }} .cc-hero-btn--secondary:hover {
+    background: {{ s.btn_secondary_hover_bg }};
+    color: {{ s.btn_secondary_hover_text }};
+    border-color: {{ s.btn_secondary_hover_border }};
+  }
+
+  /* ── Mobile ────────────────────────────────────────────── */
+  @media (max-width: 749px) {
+    .cc-hero-{{ unique }} {
+      padding: {{ s.padding_top_mobile }}px 6vw {{ s.padding_bottom_mobile }}px;
+      min-height: {{ s.min_height_mobile }}vh;
+      text-align: {{ s.text_align_mobile }};
+      align-items: {% if s.text_align_mobile == 'center' %}center{% elsif s.text_align_mobile == 'right' %}flex-end{% else %}flex-start{% endif %};
+    }
+
+    .cc-hero-{{ unique }} .cc-hero-heading {
+      font-size: clamp(26px, 9vw, 42px);
+    }
+
+    .cc-hero-{{ unique }} .cc-hero-stat-num {
+      font-size: 42px;
+    }
+
+    .cc-hero-{{ unique }} .cc-hero-stat {
+      gap: 12px;
+    }
+
+    .cc-hero-{{ unique }} .cc-hero-divider {
+      display: {{ s.divider_mobile_display }};
+    }
+  }
+</style>
+
+<section
+  class="cc-hero-{{ unique }}"
+  id="Section-{{ unique }}"
+  {% if s.section_id != blank %}data-section-id="{{ s.section_id }}"{% endif %}
+>
+  {%- if s.show_watermark and s.watermark_text != blank -%}
+    <div class="cc-hero-bg-text" aria-hidden="true">{{ s.watermark_text }}</div>
+  {%- endif -%}
+
+  {%- if s.eyebrow != blank -%}
+    <p class="cc-hero-eyebrow">{{ s.eyebrow }}</p>
+  {%- endif -%}
+
+  {%- if s.heading != blank -%}
+    {{- s.heading | replace: '<p>', '<div class="cc-hero-heading">' | replace: '</p>', '</div>' -}}
+  {%- endif -%}
+
+  {%- if s.sub_text != blank -%}
+    <div class="cc-hero-sub">{{ s.sub_text }}</div>
+  {%- endif -%}
+
+  {%- if s.show_stat -%}
+    <div class="cc-hero-stat">
+      {%- if s.stat_number != blank -%}
+        <div>
+          <div class="cc-hero-stat-num">{{ s.stat_number }}</div>
+          {%- if s.stat_label != blank -%}
+            <div class="cc-hero-stat-label">{{ s.stat_label }}</div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if s.show_divider and s.stat_secondary != blank -%}
+        <div class="cc-hero-divider"></div>
+      {%- endif -%}
+
+      {%- if s.stat_secondary != blank -%}
+        <div class="cc-hero-stat-secondary">{{ s.stat_secondary }}</div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  {%- if s.btn_primary_text_label != blank or s.btn_secondary_text_label != blank -%}
+    <div class="cc-hero-buttons">
+      {%- if s.btn_primary_text_label != blank -%}
+        <button
+          type="button"
+          class="cc-hero-btn cc-hero-btn--primary"
+          onclick="var m=document.querySelector('.coc-modal'); if(m){m.hidden=false;m.classList.add('is-open');document.body.style.overflow='hidden';}"
+        >
+          {{ s.btn_primary_text_label }}
+        </button>
+      {%- endif -%}
+
+      {%- if s.btn_secondary_text_label != blank -%}
+        <a href="{{ s.btn_secondary_link | default: '#' }}" class="cc-hero-btn cc-hero-btn--secondary">
+          {{ s.btn_secondary_text_label }}
+        </a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Co-Create Hero",
+  "tag": "section",
+  "class": "section-co-create-hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "🎨 Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background image",
+      "info": "Leave empty to use solid background color."
+    },
+    {
+      "type": "select",
+      "id": "bg_position",
+      "label": "Background image position",
+      "options": [
+        { "value": "center center", "label": "Center" },
+        { "value": "top center", "label": "Top" },
+        { "value": "bottom center", "label": "Bottom" },
+        { "value": "left center", "label": "Left" },
+        { "value": "right center", "label": "Right" }
+      ],
+      "default": "center center"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Image overlay darkness",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 40
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color (fallback)",
+      "default": "#FFFFFF"
+    },
+
+    {
+      "type": "header",
+      "content": "🔤 Watermark / Background Text"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_watermark",
+      "label": "Show large background text",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "watermark_text",
+      "label": "Watermark text",
+      "default": "CO-CREATE"
+    },
+    {
+      "type": "color",
+      "id": "watermark_color",
+      "label": "Watermark color",
+      "default": "#222222"
+    },
+    {
+      "type": "range",
+      "id": "watermark_opacity",
+      "label": "Watermark opacity",
+      "min": 1,
+      "max": 30,
+      "step": 1,
+      "unit": "%",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "watermark_size",
+      "label": "Watermark size",
+      "min": 8,
+      "max": 25,
+      "step": 1,
+      "unit": "vw",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "watermark_top",
+      "label": "Watermark vertical position",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+
+    {
+      "type": "header",
+      "content": "✍️ Eyebrow (Small Top Label)"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "Co-Create With Us"
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_color",
+      "label": "Eyebrow color",
+      "default": "#386BBF"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size",
+      "label": "Eyebrow font size",
+      "min": 9,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+
+    {
+      "type": "header",
+      "content": "📝 Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Wrap words in <em>italic tags</em> to apply the accent color.",
+      "default": "<p>You helped build <em>the first one.</em> Help us build what's next.</p>"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#222222"
+    },
+    {
+      "type": "color",
+      "id": "heading_accent_color",
+      "label": "Heading accent (italic) color",
+      "default": "#B1FF15"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 3,
+      "max": 10,
+      "step": 0.5,
+      "unit": "vw",
+      "default": 6.5
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading weight",
+      "options": [
+        { "value": "300", "label": "Light" },
+        { "value": "400", "label": "Regular" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi Bold" },
+        { "value": "700", "label": "Bold" }
+      ],
+      "default": "500"
+    },
+    {
+      "type": "range",
+      "id": "heading_max_width",
+      "label": "Heading max width",
+      "min": 400,
+      "max": 1200,
+      "step": 20,
+      "unit": "px",
+      "default": 820
+    },
+
+    {
+      "type": "header",
+      "content": "💬 Subtext"
+    },
+    {
+      "type": "richtext",
+      "id": "sub_text",
+      "label": "Subtext",
+      "default": "<p>Over 200 people shaped our first product — their honesty, their bodies, their feedback. Now we're starting the second one. This time, we want you in the room from day one.</p>"
+    },
+    {
+      "type": "color",
+      "id": "sub_color",
+      "label": "Subtext color",
+      "default": "#222222"
+    },
+    {
+      "type": "range",
+      "id": "sub_size",
+      "label": "Subtext size",
+      "min": 13,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "sub_max_width",
+      "label": "Subtext max width",
+      "min": 100,
+      "max": 900,
+      "step": 20,
+      "unit": "px",
+      "default": 520
+    },
+
+    {
+      "type": "header",
+      "content": "📊 Stats Block"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stat",
+      "label": "Show stats block",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "stat_number",
+      "label": "Stat number",
+      "default": "200+"
+    },
+    {
+      "type": "text",
+      "id": "stat_label",
+      "label": "Stat label",
+      "default": "people shaped our first product"
+    },
+    {
+      "type": "color",
+      "id": "stat_num_color",
+      "label": "Stat number color",
+      "default": "#222222"
+    },
+    {
+      "type": "range",
+      "id": "stat_num_size",
+      "label": "Stat number size",
+      "min": 30,
+      "max": 90,
+      "step": 2,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "color",
+      "id": "stat_label_color",
+      "label": "Stat label color",
+      "default": "#333333"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "label": "Show divider line",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Divider color",
+      "default": "#EEEEEE"
+    },
+    {
+      "type": "select",
+      "id": "divider_mobile_display",
+      "label": "Divider on mobile",
+      "options": [
+        { "value": "block", "label": "Show" },
+        { "value": "none", "label": "Hide" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "stat_secondary",
+      "label": "Secondary stat text",
+      "default": "Product 2 is in the making. Your answers shape it."
+    },
+    {
+      "type": "color",
+      "id": "stat_secondary_color",
+      "label": "Secondary stat color",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "stat_margin_top",
+      "label": "Stats top spacing",
+      "min": 16,
+      "max": 96,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+
+    {
+      "type": "header",
+      "content": "🔘 Buttons"
+    },
+    {
+      "type": "text",
+      "id": "btn_primary_text_label",
+      "label": "Primary button text",
+      "info": "Leave empty to hide."
+    },
+    {
+      "type": "color",
+      "id": "btn_primary_bg",
+      "label": "Primary bg (Button 4 default)",
+      "default": "#B1FF15"
+    },
+    {
+      "type": "color",
+      "id": "btn_primary_text",
+      "label": "Primary text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "btn_primary_border",
+      "label": "Primary border color",
+      "default": "#B6FF00"
+    },
+    {
+      "type": "color",
+      "id": "btn_primary_hover_bg",
+      "label": "Primary hover bg",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "btn_primary_hover_text",
+      "label": "Primary hover text",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "btn_primary_hover_border",
+      "label": "Primary hover border",
+      "default": "#000000"
+    },
+    {
+      "type": "text",
+      "id": "btn_secondary_text_label",
+      "label": "Secondary button text",
+      "info": "Leave empty to hide."
+    },
+    {
+      "type": "url",
+      "id": "btn_secondary_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "color",
+      "id": "btn_secondary_text",
+      "label": "Secondary text color (Button 3 default)",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "btn_secondary_border",
+      "label": "Secondary border color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "btn_secondary_hover_bg",
+      "label": "Secondary hover bg",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "btn_secondary_hover_text",
+      "label": "Secondary hover text",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "btn_secondary_hover_border",
+      "label": "Secondary hover border",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "button_radius",
+      "label": "Button corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "button_border_width",
+      "label": "Button border width",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 2
+    },
+
+    {
+      "type": "header",
+      "content": "🎭 Layout & Alignment"
+    },
+    {
+      "type": "select",
+      "id": "content_vertical_align",
+      "label": "Content vertical position",
+      "options": [
+        { "value": "flex-start", "label": "Top" },
+        { "value": "center", "label": "Middle" },
+        { "value": "flex-end", "label": "Bottom" }
+      ],
+      "default": "flex-end"
+    },
+    {
+      "type": "select",
+      "id": "content_horizontal_align",
+      "label": "Content horizontal position",
+      "options": [
+        { "value": "flex-start", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "flex-end", "label": "Right" }
+      ],
+      "default": "flex-start"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text alignment (desktop)",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "text_align_mobile",
+      "label": "Text alignment (mobile)",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+
+    {
+      "type": "header",
+      "content": "📐 Spacing & Height"
+    },
+    {
+      "type": "range",
+      "id": "min_height",
+      "label": "Minimum height (desktop)",
+      "min": 40,
+      "max": 100,
+      "step": 2,
+      "unit": "vh",
+      "default": 78
+    },
+    {
+      "type": "range",
+      "id": "min_height_mobile",
+      "label": "Minimum height (mobile)",
+      "min": 40,
+      "max": 100,
+      "step": 2,
+      "unit": "vh",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top (desktop)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom (desktop)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "label": "Padding horizontal (desktop)",
+      "min": 0,
+      "max": 15,
+      "step": 0.5,
+      "unit": "vw",
+      "default": 7
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding top (mobile)",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding bottom (mobile)",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+
+    {
+      "type": "header",
+      "content": "🔡 Typography"
+    },
+    {
+      "type": "checkbox",
+      "id": "load_fonts",
+      "label": "Load Aleo from Google Fonts",
+      "info": "Disable if your theme already loads Aleo.",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "heading_font_family",
+      "label": "Heading font family (CSS)",
+      "default": "'Aleo', serif"
+    },
+    {
+      "type": "text",
+      "id": "body_font_family",
+      "label": "Body font family (CSS)",
+      "default": "'Aleo', serif"
+    },
+    {
+      "type": "text",
+      "id": "button_font_family",
+      "label": "Button font family (CSS)",
+      "info": "Theme uses SF Mono for buttons. Loaded by system — no import needed.",
+      "default": "'SF Mono', 'Fira Code', 'Fira Mono', monospace"
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Button font size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+
+    {
+      "type": "header",
+      "content": "🏷️ Advanced"
+    },
+    {
+      "type": "text",
+      "id": "section_id",
+      "label": "Custom section ID (optional)",
+      "info": "For anchor links like #hero"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Co-Create Hero",
+      "category": "Hero"
+    }
+  ]
+}
+{% endschema %}

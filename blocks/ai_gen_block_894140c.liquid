@@ -1,0 +1,552 @@
+{% doc %}
+  @prompt
+    create a section where 3 card in each card give me the option to put paragraph, keep the bg color black, redesgin the section now give me 3 card where i add images and on the images i add some text and keep the bg colur black
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-image-cards-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    padding: {{ block.settings.section_padding }}px 0;
+    background-color: #000000;
+  }
+
+  .ai-image-cards__container-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: {{ block.settings.card_gap }}px;
+  }
+
+  .ai-image-cards__card-{{ ai_gen_id }} {
+    position: relative;
+    overflow: hidden;
+    border-radius: {{ block.settings.card_border_radius }}px;
+    transition: transform 0.3s ease;
+  }
+
+  .ai-image-cards__card-{{ ai_gen_id }}:hover {
+    transform: translateY(-5px);
+  }
+
+  .ai-image-cards__image-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    padding-bottom: {{ block.settings.image_aspect_ratio }}%;
+    overflow: hidden;
+  }
+
+  .ai-image-cards__image-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-image-cards__placeholder-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #1a1a1a;
+  }
+
+  .ai-image-cards__placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-image-cards__overlay-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: {{ block.settings.overlay_color }};
+    opacity: {{ block.settings.overlay_opacity }};
+    transition: opacity 0.3s ease;
+  }
+
+  .ai-image-cards__card-{{ ai_gen_id }}:hover .ai-image-cards__overlay-{{ ai_gen_id }} {
+    opacity: {{ block.settings.overlay_hover_opacity }};
+  }
+
+  .ai-image-cards__content-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: {{ block.settings.content_vertical_align }};
+    align-items: {{ block.settings.content_horizontal_align }};
+    padding: {{ block.settings.content_padding }}px;
+    z-index: 2;
+    text-align: {{ block.settings.text_align }};
+  }
+
+  .ai-image-cards__title-{{ ai_gen_id }} {
+    color: {{ block.settings.title_color }};
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: {{ block.settings.title_weight }};
+    margin: 0 0 {{ block.settings.title_margin }}px 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .ai-image-cards__text-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.text_size }}px;
+    line-height: {{ block.settings.text_line_height }};
+    margin: 0;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+
+  .ai-image-cards__text-{{ ai_gen_id }} p {
+    margin: 0 0 10px 0;
+  }
+
+  .ai-image-cards__text-{{ ai_gen_id }} p:last-child {
+    margin-bottom: 0;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-image-cards__container-{{ ai_gen_id }} {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-image-cards__container-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: {{ block.settings.card_gap | times: 0.7 }}px;
+    }
+
+    .ai-image-cards__content-{{ ai_gen_id }} {
+      padding: {{ block.settings.content_padding | times: 0.7 }}px;
+    }
+
+    .ai-image-cards__title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.85 }}px;
+    }
+
+    .ai-image-cards__text-{{ ai_gen_id }} {
+      font-size: {{ block.settings.text_size | times: 0.9 }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-image-cards-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-image-cards__container-{{ ai_gen_id }}">
+    <div class="ai-image-cards__card-{{ ai_gen_id }}">
+      <div class="ai-image-cards__image-wrapper-{{ ai_gen_id }}">
+        {% if block.settings.card_1_image %}
+          <img
+            src="{{ block.settings.card_1_image | image_url: width: 800 }}"
+            alt="{{ block.settings.card_1_image.alt | escape }}"
+            loading="lazy"
+            width="{{ block.settings.card_1_image.width }}"
+            height="{{ block.settings.card_1_image.height }}"
+            class="ai-image-cards__image-{{ ai_gen_id }}"
+          >
+        {% else %}
+          <div class="ai-image-cards__placeholder-{{ ai_gen_id }}">
+            {{ 'image' | placeholder_svg_tag }}
+          </div>
+        {% endif %}
+        <div class="ai-image-cards__overlay-{{ ai_gen_id }}"></div>
+      </div>
+      <div class="ai-image-cards__content-{{ ai_gen_id }}">
+        {% if block.settings.card_1_title != blank %}
+          <h3 class="ai-image-cards__title-{{ ai_gen_id }}">{{ block.settings.card_1_title }}</h3>
+        {% endif %}
+        {% if block.settings.card_1_text != blank %}
+          <div class="ai-image-cards__text-{{ ai_gen_id }}">
+            {{ block.settings.card_1_text }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="ai-image-cards__card-{{ ai_gen_id }}">
+      <div class="ai-image-cards__image-wrapper-{{ ai_gen_id }}">
+        {% if block.settings.card_2_image %}
+          <img
+            src="{{ block.settings.card_2_image | image_url: width: 800 }}"
+            alt="{{ block.settings.card_2_image.alt | escape }}"
+            loading="lazy"
+            width="{{ block.settings.card_2_image.width }}"
+            height="{{ block.settings.card_2_image.height }}"
+            class="ai-image-cards__image-{{ ai_gen_id }}"
+          >
+        {% else %}
+          <div class="ai-image-cards__placeholder-{{ ai_gen_id }}">
+            {{ 'image' | placeholder_svg_tag }}
+          </div>
+        {% endif %}
+        <div class="ai-image-cards__overlay-{{ ai_gen_id }}"></div>
+      </div>
+      <div class="ai-image-cards__content-{{ ai_gen_id }}">
+        {% if block.settings.card_2_title != blank %}
+          <h3 class="ai-image-cards__title-{{ ai_gen_id }}">{{ block.settings.card_2_title }}</h3>
+        {% endif %}
+        {% if block.settings.card_2_text != blank %}
+          <div class="ai-image-cards__text-{{ ai_gen_id }}">
+            {{ block.settings.card_2_text }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="ai-image-cards__card-{{ ai_gen_id }}">
+      <div class="ai-image-cards__image-wrapper-{{ ai_gen_id }}">
+        {% if block.settings.card_3_image %}
+          <img
+            src="{{ block.settings.card_3_image | image_url: width: 800 }}"
+            alt="{{ block.settings.card_3_image.alt | escape }}"
+            loading="lazy"
+            width="{{ block.settings.card_3_image.width }}"
+            height="{{ block.settings.card_3_image.height }}"
+            class="ai-image-cards__image-{{ ai_gen_id }}"
+          >
+        {% else %}
+          <div class="ai-image-cards__placeholder-{{ ai_gen_id }}">
+            {{ 'image' | placeholder_svg_tag }}
+          </div>
+        {% endif %}
+        <div class="ai-image-cards__overlay-{{ ai_gen_id }}"></div>
+      </div>
+      <div class="ai-image-cards__content-{{ ai_gen_id }}">
+        {% if block.settings.card_3_title != blank %}
+          <h3 class="ai-image-cards__title-{{ ai_gen_id }}">{{ block.settings.card_3_title }}</h3>
+        {% endif %}
+        {% if block.settings.card_3_text != blank %}
+          <div class="ai-image-cards__text-{{ ai_gen_id }}">
+            {{ block.settings.card_3_text }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Image cards with text",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Card 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_1_title",
+      "label": "Title",
+      "default": "Card 1"
+    },
+    {
+      "type": "richtext",
+      "id": "card_1_text",
+      "label": "Text",
+      "default": "<p>Add your text overlay here</p>"
+    },
+    {
+      "type": "header",
+      "content": "Card 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_2_title",
+      "label": "Title",
+      "default": "Card 2"
+    },
+    {
+      "type": "richtext",
+      "id": "card_2_text",
+      "label": "Text",
+      "default": "<p>Add your text overlay here</p>"
+    },
+    {
+      "type": "header",
+      "content": "Card 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_3_title",
+      "label": "Title",
+      "default": "Card 3"
+    },
+    {
+      "type": "richtext",
+      "id": "card_3_text",
+      "label": "Text",
+      "default": "<p>Add your text overlay here</p>"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Section padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Gap between cards",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "image_aspect_ratio",
+      "label": "Image aspect ratio",
+      "min": 50,
+      "max": 150,
+      "step": 5,
+      "unit": "%",
+      "default": 100,
+      "info": "100% = square, 75% = landscape, 125% = portrait"
+    },
+    {
+      "type": "header",
+      "content": "Content position"
+    },
+    {
+      "type": "select",
+      "id": "content_vertical_align",
+      "label": "Vertical alignment",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Top"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "Bottom"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "content_horizontal_align",
+      "label": "Horizontal alignment",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "content_padding",
+      "label": "Content padding",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.4
+    },
+    {
+      "type": "range",
+      "id": "overlay_hover_opacity",
+      "label": "Hover opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.6
+    },
+    {
+      "type": "header",
+      "content": "Title style"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Font size",
+      "min": 14,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "title_weight",
+      "label": "Font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi Bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "range",
+      "id": "title_margin",
+      "label": "Margin bottom",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Text style"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "text_line_height",
+      "label": "Line height",
+      "min": 1.0,
+      "max": 2.0,
+      "step": 0.1,
+      "default": 1.6
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image cards with text"
+    }
+  ]
+}
+{% endschema %}

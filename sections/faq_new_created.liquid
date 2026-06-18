@@ -1,0 +1,660 @@
+{%- comment -%}
+  ============================================================
+  SECTION: FAQ Accordion
+  ------------------------------------------------------------
+  Heading sits top-RIGHT.
+  Full-width accordion rows below — each row:
+    • Question (left) + toggle icon (right)
+    • Answer expands on click (no page reload)
+  Each FAQ is a block — add, remove, reorder freely.
+  Pure CSS + vanilla JS, no dependencies.
+  ============================================================
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+  assign section_id = 'faq-' | append: section.id
+-%}
+
+<section
+  id="{{ section_id }}"
+  class="faq"
+  style="
+    --faq-bg: {{ s.bg_color }};
+    --faq-heading: {{ s.heading_color }};
+    --faq-accent: {{ s.accent_color }};
+    --faq-q-color: {{ s.question_color }};
+    --faq-a-color: {{ s.answer_color }};
+    --faq-border: {{ s.border_color }};
+    --faq-icon: {{ s.icon_color }};
+    --faq-heading-font: {{ s.heading_font_family }};
+    --faq-body-font: {{ s.body_font_family }};
+    --faq-heading-size: {{ s.heading_size }}px;
+    --faq-heading-size-mobile: {{ s.heading_size_mobile }}px;
+    --faq-q-size: {{ s.question_size }}px;
+    --faq-a-size: {{ s.answer_size }}px;
+    --faq-icon-size: {{ s.icon_size }}px;
+    --faq-row-pad-y: {{ s.row_padding_y }}px;
+    --faq-answer-pad-bottom: {{ s.answer_padding_bottom }}px;
+    --faq-pad-top: {{ s.padding_top }}px;
+    --faq-pad-bottom: {{ s.padding_bottom }}px;
+    --faq-pad-top-mobile: {{ s.padding_top_mobile }}px;
+    --faq-pad-bottom-mobile: {{ s.padding_bottom_mobile }}px;
+    --faq-side-pad: {{ s.side_padding }}vw;
+    --faq-max-width: {{ s.container_max_width }}px;
+    --faq-heading-gap: {{ s.heading_gap }}px;
+    --faq-answer-max-width: {{ s.answer_max_width }}px;
+  "
+>
+  <div class="faq__inner">
+
+    {%- comment -%} ── HEADING (right-aligned) ── {%- endcomment -%}
+    {%- if s.heading != blank -%}
+      <div class="faq__heading-wrap">
+        <{{ s.heading_tag }} class="faq__heading">
+          {{ s.heading }}
+        </{{ s.heading_tag }}>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ── ACCORDION ── {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="faq__list" role="list">
+        {%- for block in section.blocks -%}
+          {%- assign b = block.settings -%}
+          {%- assign item_id = section_id | append: '-item-' | append: forloop.index -%}
+
+          <div
+            class="faq__item{% if forloop.first and s.first_open %} faq__item--open{% endif %}"
+            role="listitem"
+            {{ block.shopify_attributes }}
+          >
+            <button
+              class="faq__question"
+              aria-expanded="{% if forloop.first and s.first_open %}true{% else %}false{% endif %}"
+              aria-controls="{{ item_id }}"
+              type="button"
+            >
+              <span class="faq__question-text">{{ b.question }}</span>
+              <span class="faq__icon" aria-hidden="true">
+                {%- if s.icon_style == 'plus' -%}
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <line class="faq__icon-h" x1="0" y1="8" x2="16" y2="8" stroke="currentColor" stroke-width="1.5"/>
+                    <line class="faq__icon-v" x1="8" y1="0" x2="8" y2="16" stroke="currentColor" stroke-width="1.5"/>
+                  </svg>
+                {%- elsif s.icon_style == 'x' -%}
+                  <span class="faq__icon-x">×</span>
+                {%- else -%}
+                  <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path class="faq__icon-chevron" d="M1 1L8 8L15 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                {%- endif -%}
+              </span>
+            </button>
+
+            <div
+              class="faq__answer-wrap"
+              id="{{ item_id }}"
+              role="region"
+            >
+              <div class="faq__answer rte">
+                {{ b.answer }}
+              </div>
+            </div>
+          </div>
+
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<style>
+  #{{ section_id }}.faq {
+    background: var(--faq-bg);
+    padding: var(--faq-pad-top) var(--faq-side-pad) var(--faq-pad-bottom);
+    font-family: var(--faq-body-font);
+    font-weight: 300;
+  }
+
+  #{{ section_id }} .faq__inner {
+    max-width: var(--faq-max-width);
+    margin: 0 auto;
+  }
+
+  /* ── HEADING (right aligned) ── */
+  #{{ section_id }} .faq__heading-wrap {
+    text-align: right;
+    margin-bottom: var(--faq-heading-gap);
+  }
+  #{{ section_id }} .faq__heading {
+    font-family: var(--faq-heading-font);
+    font-size: var(--faq-heading-size);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--faq-heading);
+    margin: 0;
+    letter-spacing: -0.01em;
+    display: inline;
+  }
+  #{{ section_id }} .faq__heading em,
+  #{{ section_id }} .faq__heading i {
+    font-style: italic;
+    color: var(--faq-accent);
+  }
+
+  /* ── LIST ── */
+  #{{ section_id }} .faq__list {
+    border-top: 1px solid var(--faq-border);
+  }
+
+  /* ── ITEM ── */
+  #{{ section_id }} .faq__item {
+    border-bottom: 1px solid var(--faq-border);
+  }
+
+  /* ── QUESTION BUTTON ── */
+  #{{ section_id }} .faq__question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    width: 100%;
+    padding: var(--faq-row-pad-y) 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-family: var(--faq-heading-font);
+    font-size: var(--faq-q-size);
+    font-weight: 400;
+    color: var(--faq-q-color);
+    line-height: 1.3;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  #{{ section_id }} .faq__question:focus-visible {
+    outline: 2px solid var(--faq-accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  #{{ section_id }} .faq__question-text {
+    flex: 1;
+  }
+
+  /* ── ICON ── */
+  #{{ section_id }} .faq__icon {
+    flex-shrink: 0;
+    width: var(--faq-icon-size);
+    height: var(--faq-icon-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--faq-icon);
+    transition: transform 0.3s ease;
+  }
+  #{{ section_id }} .faq__icon svg {
+    display: block;
+    overflow: visible;
+  }
+  #{{ section_id }} .faq__icon-x {
+    font-size: calc(var(--faq-icon-size) * 1.2);
+    line-height: 1;
+    font-weight: 300;
+    font-family: var(--faq-body-font);
+  }
+
+  /* Plus icon — hide vertical line when open */
+  #{{ section_id }} .faq__icon-v {
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    transform-origin: center;
+  }
+  #{{ section_id }} .faq__item--open .faq__icon-v {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+
+  /* Chevron — rotate when open */
+  #{{ section_id }} .faq__item--open .faq__icon {
+    transform: rotate(180deg);
+  }
+  /* But not for plus/x styles */
+  #{{ section_id }}.faq--plus .faq__item--open .faq__icon,
+  #{{ section_id }}.faq--x .faq__item--open .faq__icon {
+    transform: none;
+  }
+
+  /* ── ANSWER ── */
+  #{{ section_id }} .faq__answer-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.35s ease;
+    overflow: hidden;
+  }
+  #{{ section_id }} .faq__item--open .faq__answer-wrap {
+    grid-template-rows: 1fr;
+  }
+  #{{ section_id }} .faq__answer {
+    min-height: 0;
+    overflow: hidden;
+    padding-bottom: 0;
+    transition: padding-bottom 0.35s ease;
+  }
+  #{{ section_id }} .faq__item--open .faq__answer {
+    padding-bottom: var(--faq-answer-pad-bottom);
+  }
+  #{{ section_id }} .faq__answer,
+  #{{ section_id }} .faq__answer p {
+    font-family: var(--faq-body-font);
+    font-size: var(--faq-a-size);
+    line-height: 1.8;
+    color: var(--faq-a-color);
+    font-weight: 300;
+    max-width: var(--faq-answer-max-width);
+  }
+  #{{ section_id }} .faq__answer p { margin: 0 0 12px; }
+  #{{ section_id }} .faq__answer p:last-child { margin-bottom: 0; }
+  #{{ section_id }} .faq__answer a {
+    color: var(--faq-accent);
+    text-decoration: underline;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 700px) {
+    #{{ section_id }}.faq {
+      padding: var(--faq-pad-top-mobile) 6vw var(--faq-pad-bottom-mobile);
+    }
+    #{{ section_id }} .faq__heading {
+      font-size: var(--faq-heading-size-mobile);
+    }
+    #{{ section_id }} .faq__heading-wrap {
+      text-align: left;
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    var section = document.getElementById('{{ section_id }}');
+    if (!section) return;
+
+    var items = section.querySelectorAll('.faq__item');
+
+    items.forEach(function(item) {
+      var btn = item.querySelector('.faq__question');
+      if (!btn) return;
+
+      btn.addEventListener('click', function() {
+        var isOpen = item.classList.contains('faq__item--open');
+
+        {% if s.close_others %}
+        // Close all other items
+        items.forEach(function(other) {
+          if (other !== item) {
+            other.classList.remove('faq__item--open');
+            var otherBtn = other.querySelector('.faq__question');
+            if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
+          }
+        });
+        {% endif %}
+
+        item.classList.toggle('faq__item--open', !isOpen);
+        btn.setAttribute('aria-expanded', String(!isOpen));
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "FAQ Accordion",
+  "tag": "section",
+  "class": "section-faq",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading tag (SEO)",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Wrap words in <em> for italic accent.",
+      "default": "<p>Frequently asked <em>questions</em></p>"
+    },
+    {
+      "type": "range",
+      "id": "heading_gap",
+      "label": "Space between heading and first row",
+      "min": 12,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+
+    {
+      "type": "header",
+      "content": "Accordion behaviour"
+    },
+    {
+      "type": "checkbox",
+      "id": "first_open",
+      "label": "Show first item expanded on load",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "close_others",
+      "label": "Close other items when one opens",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "icon_style",
+      "label": "Toggle icon style",
+      "options": [
+        { "value": "plus",    "label": "+ / − (plus/minus)" },
+        { "value": "x",       "label": "× (times / cross)" },
+        { "value": "chevron", "label": "∨ (chevron arrow)" }
+      ],
+      "default": "x"
+    },
+
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "label": "Max content width",
+      "min": 800,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "default": 1440
+    },
+    {
+      "type": "range",
+      "id": "side_padding",
+      "label": "Side padding",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "unit": "vw",
+      "default": 7
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top (desktop)",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom (desktop)",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding top (mobile)",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding bottom (mobile)",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "row_padding_y",
+      "label": "Row top/bottom padding",
+      "min": 12,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "answer_padding_bottom",
+      "label": "Answer bottom padding (when open)",
+      "min": 8,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "answer_max_width",
+      "label": "Answer max width",
+      "min": 300,
+      "max": 900,
+      "step": 20,
+      "unit": "px",
+      "default": 560
+    },
+
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background",
+      "default": "#FAF8F5"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#1A1A18"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Italic accent color",
+      "default": "#1A1A18"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Row divider lines",
+      "default": "#E2DDD6"
+    },
+    {
+      "type": "color",
+      "id": "question_color",
+      "label": "Question text color",
+      "default": "#1A1A18"
+    },
+    {
+      "type": "color",
+      "id": "answer_color",
+      "label": "Answer text color",
+      "default": "#6B6860"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Toggle icon color",
+      "default": "#6B6860"
+    },
+
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "text",
+      "id": "heading_font_family",
+      "label": "Heading font-family (CSS)",
+      "default": "'Cormorant Garamond', Georgia, serif"
+    },
+    {
+      "type": "text",
+      "id": "body_font_family",
+      "label": "Body font-family (CSS)",
+      "default": "'DM Sans', system-ui, -apple-system, sans-serif"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Section heading size (desktop)",
+      "min": 24,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "label": "Section heading size (mobile)",
+      "min": 20,
+      "max": 52,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "question_size",
+      "label": "Question text size",
+      "min": 14,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "answer_size",
+      "label": "Answer text size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Toggle icon size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    }
+  ],
+
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "FAQ item",
+      "limit": 30,
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "What happened with the first 200 co-creators?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Over 200 people joined, shared their experiences, and gave us feedback that shaped every part of our first product — the formula, the scent, the ritual around it. Now we're doing it again for Product 2.</p>"
+        }
+      ]
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "FAQ Accordion",
+      "category": "Text",
+      "blocks": [
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "What happened with the first 200 co-creators?",
+            "answer": "<p>Over 200 people joined, shared their experiences, and gave us feedback that shaped every part of our first product — the formula, the scent, the ritual around it. Now we're doing it again for Product 2.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is the survey about?",
+            "answer": "<p>Your intimate life — desires, routines, what's working, what isn't, and what nobody is making yet. It takes under 10 minutes and there are no wrong answers.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "When do I get the 20% off?",
+            "answer": "<p>The discount is sent to your email once you complete the survey. It's valid at the launch of the new product — no expiry before then.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Who can participate?",
+            "answer": "<p>Anyone. All genders, relationship statuses, comfort levels. If you have an opinion on intimacy, we want to hear it.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Do I have to buy anything to fill the survey?",
+            "answer": "<p>No. The survey is free. The 20% off discount is your reward for completing it — it's applied when you choose to purchase the new product at launch.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Will my answers be shared publicly?",
+            "answer": "<p>Never without your explicit permission. Your answers are used internally to guide product decisions only.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

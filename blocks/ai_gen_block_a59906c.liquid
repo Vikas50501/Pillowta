@@ -1,0 +1,144 @@
+{% doc %}
+  @prompt
+    create a section where i add my code desgin , liquid code
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-liquid-code-{{ ai_gen_id }} {
+    width: 100%;
+    display: block;
+  }
+
+  .ai-liquid-code__container-{{ ai_gen_id }} {
+    width: {{ block.settings.desktop_width_percent }}%;
+    margin: 0 auto;
+    padding: {{ block.settings.padding_top }}px {{ block.settings.padding_horizontal }}px {{ block.settings.padding_bottom }}px;
+  }
+
+  .ai-liquid-code__content-{{ ai_gen_id }} {
+    width: 100%;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-liquid-code__container-{{ ai_gen_id }} {
+      width: 100%;
+      padding: {{ block.settings.padding_top_mobile }}px {{ block.settings.padding_horizontal_mobile }}px {{ block.settings.padding_bottom_mobile }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-liquid-code-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-liquid-code__container-{{ ai_gen_id }}">
+    {% if block.settings.liquid_code != blank %}
+      <div class="ai-liquid-code__content-{{ ai_gen_id }}">
+        {{ block.settings.liquid_code }}
+      </div>
+    {% else %}
+      <div style="padding: 40px; text-align: center; background-color: #f9f9f9; border: 2px dashed #ddd; border-radius: 8px;">
+        <p style="margin: 0; color: #666; font-size: 14px;">Add your custom Liquid code in the block settings</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Liquid code",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Liquid code"
+    },
+    {
+      "type": "liquid",
+      "id": "liquid_code",
+      "label": "Custom Liquid"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "label": "Horizontal padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Mobile layout"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal_mobile",
+      "label": "Horizontal padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    }
+  ],
+  "presets": [
+    {
+      "name": "Liquid code"
+    }
+  ]
+}
+{% endschema %}

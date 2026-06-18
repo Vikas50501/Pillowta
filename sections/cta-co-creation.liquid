@@ -1,0 +1,1207 @@
+  {%- comment -%}
+    ============================================================
+    SECTION: CTA Block + Co-Creation Popup Form
+    - Split layout: LEFT (pill + buttons) | RIGHT (heading)
+    - Primary button opens popup form
+    - Form posts to /contact — emails store owner
+    - ALL selection controls are square (no circles anywhere)
+    ============================================================
+  {%- endcomment -%}
+
+  {%- liquid
+    assign s          = section.settings
+    assign section_id = 'cta-block-' | append: section.id
+    assign modal_id   = 'cocreate-modal-' | append: section.id
+  -%}
+
+  {%- comment -%} ══════════════════════════════════════════
+    MODAL
+  ══════════════════════════════════════════ {%- endcomment -%}
+  <div
+    id="{{ modal_id }}"
+    class="coc-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="{{ modal_id }}-title"
+    hidden
+  >
+    <div class="coc-modal__backdrop" data-close-modal></div>
+
+    <div class="coc-modal__panel">
+
+      <button class="coc-modal__close" data-close-modal aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <line x1="1" y1="1" x2="15" y2="15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="15" y1="1" x2="1" y2="15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <p class="coc-modal__eyebrow">Co-Creation Form</p>
+      <h2 class="coc-modal__title" id="{{ modal_id }}-title">
+        Tell us what you need<br><em>from this oil.</em>
+      </h2>
+      <p class="coc-modal__subtitle">Every field here feeds directly into our formulation brief. Nothing is decorative. <span class="coc-required-legend"><span class="coc-required">*</span> Required</span></p>
+
+    <form id="{{ modal_id }}-form" class="coc-form" action="/contact#{{ modal_id }}-form" method="POST" accept-charset="UTF-8" novalidate>
+    <input type="hidden" name="form_type" value="contact" />
+    <input type="hidden" name="utf8" value="✓" />
+
+  <!-- 1. About You -->
+  <div class="coc-section">
+    <p class="coc-section__title">About You</p>
+    
+    <div class="coc-field">
+      <label class="coc-label" for="{{ modal_id }}-name">Your name <span class="coc-required">*</span></label>
+      <input class="coc-input" type="text" id="{{ modal_id }}-name" name="contact[name]" placeholder="What to call you" required autocomplete="name" />
+    </div>
+    
+    <div class="coc-field">
+      <label class="coc-label" for="{{ modal_id }}-email">Email <span class="coc-required">*</span></label>
+      <input class="coc-input" type="email" id="{{ modal_id }}-email" name="contact[email]" placeholder="We'll reach out here" required autocomplete="email" />
+    </div>
+  </div>
+
+  <!-- 2. Skin Type -->
+  <div class="coc-section">
+    <p class="coc-section__title">Skin Type</p>
+    <div class="coc-field">
+      <p class="coc-label">Skin type <span class="coc-required">*</span></p>
+      <div class="coc-options" data-required-group="skin-type" data-required-msg="Please select at least one skin type.">
+        <label class="coc-option">
+          <input type="checkbox" name="contact[Skin type][]" value="Dry" class="coc-option__input" required />
+          <span class="coc-option__box"></span>
+          <span class="coc-option__text">Dry</span>
+        </label>
+        <label class="coc-option">
+          <input type="checkbox" name="contact[Skin type][]" value="Normal" class="coc-option__input" required />
+          <span class="coc-option__box"></span>
+          <span class="coc-option__text">Normal</span>
+        </label>
+        <label class="coc-option">
+          <input type="checkbox" name="contact[Skin type][]" value="Oily" class="coc-option__input" required />
+          <span class="coc-option__box"></span>
+          <span class="coc-option__text">Oily</span>
+        </label>
+        <label class="coc-option">
+          <input type="checkbox" name="contact[Skin type][]" value="Combination" class="coc-option__input" required />
+          <span class="coc-option__box"></span>
+          <span class="coc-option__text">Combination</span>
+        </label>
+        <label class="coc-option">
+          <input type="checkbox" name="contact[Skin type][]" value="Sensitive" class="coc-option__input" required />
+          <span class="coc-option__box"></span>
+          <span class="coc-option__text">Sensitive</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Have you used massage or sensual oils before? -->
+  <div class="coc-section">
+    <p class="coc-section__title">Have you used massage or sensual oils before?<span class="coc-required">*</span></p>
+    <div class="coc-field">
+      <label class="coc-option">
+        <input type="radio" name="contact[Used oils before]" value="Yes" class="coc-option__input" required />
+        <span class="coc-option__box"></span>
+        <span class="coc-option__text">Yes</span>
+      </label>
+      <label class="coc-option">
+        <input type="radio" name="contact[Used oils before]" value="No" class="coc-option__input" required />
+        <span class="coc-option__box"></span>
+        <span class="coc-option__text">No</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- 4. If Yes: Missing Features -->
+  <div class="coc-section">
+    <div class="coc-field">
+      <label class="coc-label" for="{{ modal_id }}-missing">
+        If yes — what's been missing in what you've tried?<span class="coc-label__note">(optional)</span>
+      </label>
+      <textarea class="coc-textarea" id="{{ modal_id }}-missing" name="contact[What has been missing]" rows="3" placeholder="Texture, scent, how it made you feel, the ritual around it, anything."></textarea>
+    </div>
+  </div>
+
+  <!-- 5. If No: What's Held You Back -->
+  <div class="coc-section">
+    <div class="coc-field">
+      <label class="coc-label" for="{{ modal_id }}-held-back">
+        If not — what's held you back from trying?<span class="coc-label__note">(optional)</span>
+      </label>
+      <textarea class="coc-textarea" id="{{ modal_id }}-held-back" name="contact[Held back by]" rows="3" placeholder="Price, not knowing where to start, no trusted brand, something else?"></textarea>
+    </div>
+  </div>
+
+  <!-- 6. Oil Preferences -->
+  <div class="coc-section">
+    <p class="coc-section__title">What do you mainly want this oil to do for you?<span class="coc-required">*</span></p>
+    <div class="coc-field">
+      <label class="coc-option">
+        <input type="checkbox" name="contact[Oil goals][]" value="Relieve physical tension" class="coc-option__input" required />
+        <span class="coc-option__box"></span>
+        <span class="coc-option__text">Relieve physical tension</span>
+      </label>
+      <label class="coc-option">
+        <input type="checkbox" name="contact[Oil goals][]" value="Create ritual / help me slow down" class="coc-option__input" required />
+        <span class="coc-option__box"></span>
+        <span class="coc-option__text">Create ritual / help me slow down</span>
+      </label>
+      <label class="coc-option">
+        <input type="checkbox" name="contact[Oil goals][]" value="Deeply relax" class="coc-option__input" required />
+        <span class="coc-option__box"></span>
+        <span class="coc-option__text">Deeply relax</span>
+      </label>
+      <label class="coc-option">
+        <input type="checkbox" name="contact[Oil goals][]" value="Build Sensual Connection" class="coc-option__input" required />
+        <span class="coc-option__box"></span>
+        <span class="coc-option__text">Build Sensual Connection</span>
+      </label>
+      <label class="coc-option">
+        <input type="checkbox" name="contact[Oil goals][]" value="Help me Reconnect with my Body" class="coc-option__input" required />
+        <span class="coc-option__box"></span>
+        <span class="coc-option__text">Help me Reconnect with my Body</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- 7. Scent Preferences -->
+  <div class="coc-section">
+    <p class="coc-section__title">Scent Preferences<span class="coc-required">*</span></p>
+    <div class="coc-field">
+      <label class="coc-option">
+        <input type="checkbox" name="contact[Scent family][]" value="Floral" class="coc-option__input" required />
+        <span class="coc-option__box"></span>
+        <span class="coc-option__text">Floral</span>
+      </label>
+      <label class="coc-option">
+        <input type="checkbox" name="contact[Scent family][]" value="Earthy / grounding" class="coc-option__input" required />
+        <span class="coc-option__box"></span>
+        <span class="coc-option__text">Earthy / grounding</span>
+      </label>
+      <label class="coc-option">
+        <input type="checkbox" name="contact[Scent family][]" value="Woody / warm" class="coc-option__input" required />
+        <span class="coc-option__box"></span>
+        <span class="coc-option__text">Woody / warm</span>
+      </label>
+      <label class="coc-option">
+        <input type="checkbox" name="contact[Scent family][]" value="Citrus / fresh" class="coc-option__input" required />
+        <span class="coc-option__box"></span>
+        <span class="coc-option__text">Citrus / fresh</span>
+      </label>
+      <label class="coc-option">
+        <input type="checkbox" name="contact[Scent family][]" value="Musky / intimate" class="coc-option__input" required />
+        <span class="coc-option__box"></span>
+        <span class="coc-option__text">Musky / intimate</span>
+      </label>
+      <label class="coc-option">
+        <input type="checkbox" name="contact[Scent family][]" value="Unscented only" class="coc-option__input" required />
+        <span class="coc-option__box"></span>
+        <span class="coc-option__text">Unscented only</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Allergies -->
+  <div class="coc-section">
+    <label class="coc-label" for="{{ modal_id }}-allergies">Any ingredient allergies or sensitivities? <span class="coc-label__note">(optional)</span></label>
+    <input class="coc-input" type="text" id="{{ modal_id }}-allergies" name="contact[Allergies]" placeholder="e.g. nuts, synthetic vanilla, heavy rose, essential oils, strong fragrance." />
+  </div>
+
+  <!-- Submit Button -->
+  <div class="coc-footer">
+    <button type="submit" class="coc-submit">
+      Submit &amp; Lock In 20% Off
+    </button>
+  </div>
+
+  </form>
+
+
+    </div>
+  </div>
+
+  {%- comment -%} ══════════════════════════════════════════
+    MAIN CTA SECTION
+  ══════════════════════════════════════════ {%- endcomment -%}
+  <section
+    id="{{ section_id }}"
+    class="ctablk ctablk--img-{{ s.column_order }} ctablk--left-{{ s.left_vertical_align }} ctablk--right-{{ s.right_vertical_align }}"
+    style="
+      --cta-bg: {{ s.bg_color }};
+      --cta-heading: {{ s.heading_color }};
+      --cta-accent: {{ s.accent_color }};
+      --cta-body: {{ s.body_color }};
+      --cta-heading-font: {{ s.heading_font_family }};
+      --cta-body-font: {{ s.body_font_family }};
+      --cta-heading-size: {{ s.heading_size }}px;
+      --cta-heading-size-mobile: {{ s.heading_size_mobile }}px;
+      --cta-body-size: {{ s.body_size }}px;
+      --cta-pad-top: {{ s.padding_top }}px;
+      --cta-pad-bottom: {{ s.padding_bottom }}px;
+      --cta-pad-top-mobile: {{ s.padding_top_mobile }}px;
+      --cta-pad-bottom-mobile: {{ s.padding_bottom_mobile }}px;
+      --cta-side-pad: {{ s.side_padding }}vw;
+      --cta-max-width: {{ s.container_max_width }}px;
+      --cta-col-gap: {{ s.column_gap }}px;
+      --cta-pill-bg: {{ s.pill_bg }};
+      --cta-pill-border: {{ s.pill_border }};
+      --cta-pill-text: {{ s.pill_text_color }};
+      --cta-pill-strong: {{ s.pill_strong_color }};
+      --cta-btn1-bg: {{ s.button1_bg }};
+      --cta-btn1-text: {{ s.button1_text_color }};
+      --cta-btn1-bg-hover: {{ s.button1_bg_hover }};
+      --cta-btn1-text-hover: {{ s.button1_text_hover }};
+      --cta-btn2-bg: {{ s.button2_bg }};
+      --cta-btn2-text: {{ s.button2_text_color }};
+      --cta-btn2-border: {{ s.button2_border }};
+      --cta-btn2-bg-hover: {{ s.button2_bg_hover }};
+      --cta-btn2-text-hover: {{ s.button2_text_hover }};
+      --cta-left-image-ratio: {{ s.left_image_ratio }};
+      --cta-left-image-radius: {{ s.left_image_radius }}px;
+    "
+  >
+    <div class="ctablk__inner">
+
+      <div class="ctablk__left">
+        {%- if s.left_image != blank -%}
+          <div class="ctablk__left-image-wrap">
+            {%- assign left_img_alt = s.left_image.alt | default: 'Section image' -%}
+            <img
+              src="{{ s.left_image | image_url: width: 1200 }}"
+              srcset="{{ s.left_image | image_url: width: 400 }} 400w,
+                      {{ s.left_image | image_url: width: 600 }} 600w,
+                      {{ s.left_image | image_url: width: 800 }} 800w,
+                      {{ s.left_image | image_url: width: 1200 }} 1200w"
+              sizes="(max-width: 900px) 100vw, 50vw"
+              alt="{{ left_img_alt | escape }}"
+              width="{{ s.left_image.width }}"
+              height="{{ s.left_image.height }}"
+              loading="lazy"
+              class="ctablk__left-image"
+            />
+          </div>
+        {%- endif -%}
+
+        {%- if s.pill_text != blank -%}
+          <div class="ctablk__pill">
+            {%- if s.pill_emoji != blank -%}<span class="ctablk__pill-emoji">{{ s.pill_emoji }}</span>{%- endif -%}
+            <span class="ctablk__pill-strong">{{ s.pill_strong }}</span>
+            <span class="ctablk__pill-rest">{{ s.pill_text }}</span>
+          </div>
+        {%- endif -%}
+
+        {%- if s.button1_label != blank -%}
+          <button
+            type="button"
+            class="ctablk__btn ctablk__btn--1"
+            data-open-modal="{{ modal_id }}"
+            aria-haspopup="dialog"
+            onclick="var fn=window['openModal_{{ modal_id }}']; if(fn){fn();} else { var m=document.getElementById('{{ modal_id }}'); if(m){m.hidden=false; m.classList.add('is-open'); document.body.style.overflow='hidden';} }"
+          >
+            {{ s.button1_label }}
+          </button>
+        {%- endif -%}
+
+        {%- if s.button2_label != blank -%}
+          <a href="{{ s.button2_link | default: '#' }}" class="ctablk__btn ctablk__btn--2" {% if s.button2_open_new_tab %}target="_blank" rel="noopener"{% endif %}>
+            {{ s.button2_label }}
+          </a>
+        {%- endif -%}
+      </div>
+
+      <div class="ctablk__right">
+        {%- if s.heading != blank -%}
+          <{{ s.heading_tag }} class="ctablk__heading">{{ s.heading }}</{{ s.heading_tag }}>
+        {%- endif -%}
+        {%- if s.description != blank -%}
+          <div class="ctablk__description rte">{{ s.description }}</div>
+        {%- endif -%}
+      </div>
+
+    </div>
+  </section>
+
+  <style>
+  /* ══════════════════════════════════════════
+    SECTION
+  ══════════════════════════════════════════ */
+  #{{ section_id }}.ctablk {
+    background: var(--cta-bg);
+    padding: var(--cta-pad-top) var(--cta-side-pad) var(--cta-pad-bottom);
+    font-family: var(--cta-body-font);
+    font-weight: 300;
+  }
+  #{{ section_id }} .ctablk__inner {
+    max-width: var(--cta-max-width);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--cta-col-gap);
+    align-items: stretch;
+  }
+  #{{ section_id }}.ctablk--img-right .ctablk__left  { order: 1; }
+  #{{ section_id }}.ctablk--img-right .ctablk__right { order: 2; }
+  #{{ section_id }}.ctablk--img-left  .ctablk__left  { order: 1; }
+  #{{ section_id }}.ctablk--img-left  .ctablk__right { order: 2; }
+  #{{ section_id }}.ctablk--img-swap  .ctablk__left  { order: 2; }
+  #{{ section_id }}.ctablk--img-swap  .ctablk__right { order: 1; }
+  #{{ section_id }} .ctablk__left,
+  #{{ section_id }} .ctablk__right { display: flex; flex-direction: column; }
+  #{{ section_id }}.ctablk--left-top    .ctablk__left  { justify-content: flex-start; }
+  #{{ section_id }}.ctablk--left-center .ctablk__left  { justify-content: center; }
+  #{{ section_id }}.ctablk--left-bottom .ctablk__left  { justify-content: flex-end; }
+  #{{ section_id }}.ctablk--right-top    .ctablk__right { justify-content: flex-start; }
+  #{{ section_id }}.ctablk--right-center .ctablk__right { justify-content: center; }
+  #{{ section_id }}.ctablk--right-bottom .ctablk__right { justify-content: flex-end; }
+  #{{ section_id }} .ctablk__heading {
+    font-family: var(--cta-heading-font);
+    font-size: var(--cta-heading-size);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--cta-heading);
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  #{{ section_id }} .ctablk__heading em,
+  #{{ section_id }} .ctablk__heading i  { font-style: italic; color: var(--cta-accent); }
+  #{{ section_id }} .ctablk__heading p  { margin: 0 0 6px; }
+  #{{ section_id }} .ctablk__heading p:last-child { margin-bottom: 0; }
+  #{{ section_id }} .ctablk__description {
+    font-family: var(--cta-body-font);
+    font-size: var(--cta-body-size);
+    line-height: 1.75;
+    color: var(--cta-body);
+    margin-top: 20px;
+    max-width: 400px;
+    font-weight: 300;
+  }
+  #{{ section_id }} .ctablk__description p { margin: 0 0 10px; }
+  #{{ section_id }} .ctablk__description p:last-child { margin-bottom: 0; }
+  #{{ section_id }} .ctablk__left-image-wrap {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--cta-left-image-radius);
+    aspect-ratio: var(--cta-left-image-ratio);
+    background: rgba(0,0,0,0.04);
+  }
+  #{{ section_id }} .ctablk__left-image {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+    max-width: none !important;
+  }
+  #{{ section_id }} .ctablk__left > * + * { margin-top: 14px; }
+  #{{ section_id }} .ctablk__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--cta-pill-bg);
+    border: 1px solid var(--cta-pill-border);
+    padding: 11px 22px;
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--cta-pill-text);
+    width: fit-content;
+    font-family: var(--cta-body-font);
+    font-weight: 300;
+  }
+  #{{ section_id }} .ctablk__pill-strong { color: var(--cta-pill-strong); font-weight: 500; }
+  #{{ section_id }} .ctablk__pill-emoji  { font-size: 15px; line-height: 1; }
+  #{{ section_id }} .ctablk__btn {
+    display: block;
+    width: 100%;
+    font-family: var(--cta-body-font);
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 20px 28px;
+    text-decoration: none;
+    text-align: center;
+    transition: background 0.25s, color 0.25s, border-color 0.25s;
+    cursor: pointer;
+    font-weight: 500;
+    box-sizing: border-box;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  #{{ section_id }} .ctablk__btn--1 {
+    background: var(--cta-btn1-bg);
+    color: var(--cta-btn1-text);
+    border: 1px solid var(--cta-btn1-bg);
+  }
+  #{{ section_id }} .ctablk__btn--1:hover {
+    background: var(--cta-btn1-bg-hover);
+    color: var(--cta-btn1-text-hover);
+    border-color: var(--cta-btn1-bg-hover);
+  }
+  #{{ section_id }} .ctablk__btn--2 {
+    background: var(--cta-btn2-bg);
+    color: var(--cta-btn2-text);
+    border: 1px solid var(--cta-btn2-border);
+    font-weight: 400;
+  }
+  #{{ section_id }} .ctablk__btn--2:hover {
+    background: var(--cta-btn2-bg-hover);
+    color: var(--cta-btn2-text-hover);
+    border-color: var(--cta-btn2-bg-hover);
+  }
+  @media (max-width: 900px) {
+    #{{ section_id }} .ctablk__inner { grid-template-columns: 1fr; gap: 48px; }
+    #{{ section_id }} .ctablk__right,
+    #{{ section_id }}.ctablk--img-right .ctablk__right,
+    #{{ section_id }}.ctablk--img-left  .ctablk__right,
+    #{{ section_id }}.ctablk--img-swap  .ctablk__right { order: 1; }
+    #{{ section_id }} .ctablk__left,
+    #{{ section_id }}.ctablk--img-right .ctablk__left,
+    #{{ section_id }}.ctablk--img-left  .ctablk__left,
+    #{{ section_id }}.ctablk--img-swap  .ctablk__left  { order: 2; }
+  }
+  @media (max-width: 600px) {
+    #{{ section_id }}.ctablk { padding: var(--cta-pad-top-mobile) 6vw var(--cta-pad-bottom-mobile); }
+    #{{ section_id }} .ctablk__heading { font-size: var(--cta-heading-size-mobile); }
+    #{{ section_id }} .ctablk__btn { padding: 17px 20px; }
+  }
+
+  /* ══════════════════════════════════════════
+    MODAL
+  ══════════════════════════════════════════ */
+  .coc-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 32px 16px 48px;
+    overflow-y: auto;
+  }
+  .coc-modal[hidden]  { display: none !important; }
+  .coc-modal.is-open  { display: flex !important; }
+
+  .coc-modal__backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,26,24,0.6);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    cursor: pointer;
+    z-index: 0;
+  }
+  .coc-modal__panel {
+    position: relative;
+    z-index: 1;
+    background: #FAF8F5;
+    width: 100%;
+    max-width: 680px;
+    margin: auto;
+    padding: 56px 52px 60px;
+    box-sizing: border-box;
+    animation: cocIn 0.35s cubic-bezier(0.22,1,0.36,1) both;
+  }
+  @keyframes cocIn {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .coc-modal__close {
+    position: absolute;
+    top: 22px; right: 22px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #9B9890;
+    padding: 6px;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+  .coc-modal__close:hover { color: #1A1A18; }
+
+  .coc-modal__eyebrow {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #C4A882;
+    margin: 0 0 14px;
+    font-weight: 500;
+  }
+  .coc-modal__title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 42px;
+    font-weight: 300;
+    line-height: 1.12;
+    color: #1A1A18;
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+  }
+  .coc-modal__title em { font-style: italic; color: #C4622A; }
+  .coc-modal__subtitle {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 13px;
+    color: #6B6860;
+    margin: 0 0 40px;
+    line-height: 1.6;
+    font-weight: 300;
+    padding-bottom: 28px;
+    border-bottom: 1px solid #E2DDD6;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .coc-required-legend {
+    font-size: 11px;
+    color: #9B9890;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* ══════════════════════════════════════════
+    FORM — BASE
+  ══════════════════════════════════════════ */
+  .coc-form {
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  /* Section blocks */
+  .coc-section {
+    margin-bottom: 32px;
+    {% comment %} border-bottom: 1px solid #E2DDD6; {% endcomment %}
+  }
+  .coc-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  .coc-section__title {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #C4A882;
+    font-weight: 500;
+    margin: 0 0 24px;
+  }
+
+  /* Fields */
+  .coc-field {
+    margin-bottom: 20px;
+  }
+  .coc-field:last-child { margin-bottom: 0; }
+
+  /* Labels */
+  .coc-label {
+    display: block;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #1A1A18;
+    font-weight: 400;
+    margin: 0 0 10px;
+  }
+  .coc-label__note {
+    font-size: 11px;
+    color: #9B9890;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 300;
+  }
+
+  /* Required asterisk */
+  .coc-required {
+    color: #C4622A;
+    font-weight: 500;
+    margin-left: 2px;
+  }
+  /* Conditional asterisk — hidden by default, shown via JS */
+  .coc-required--conditional {
+    opacity: 0.35;
+    transition: opacity 0.2s;
+  }
+  .coc-required--conditional.is-active {
+    opacity: 1;
+  }
+
+  /* Field-level error messages */
+  .coc-field-error {
+    font-size: 11px;
+    color: #C4622A;
+    margin: 6px 0 0;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .coc-field-error::before {
+    content: '';
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none'%3E%3Ccircle cx='6' cy='6' r='5.25' stroke='%23C4622A' stroke-width='1.2'/%3E%3Cline x1='6' y1='3.5' x2='6' y2='6.5' stroke='%23C4622A' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='6' cy='8.5' r='0.6' fill='%23C4622A'/%3E%3C/svg%3E") center/contain no-repeat;
+    flex-shrink: 0;
+  }
+
+  /* Error state on inputs */
+  .coc-input.has-error,
+  .coc-textarea.has-error {
+    border-color: #C4622A;
+  }
+  .coc-options.has-error .coc-option__box {
+    border-color: #C4622A;
+  }
+
+  /* Text inputs */
+  .coc-input,
+  .coc-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    background: #FFFFFF;
+    border: 1px solid #D8D4CC;
+    padding: 13px 15px;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 14px;
+    color: #1A1A18;
+    font-weight: 300;
+    outline: none;
+    transition: border-color 0.2s;
+    border-radius: 0;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .coc-input::placeholder,
+  .coc-textarea::placeholder { color: #B8B4AD; }
+  .coc-input:focus,
+  .coc-textarea:focus { border-color: #C4A882; }
+  .coc-input.has-error:focus,
+  .coc-textarea.has-error:focus { border-color: #C4622A; }
+  .coc-textarea { resize: vertical; min-height: 88px; line-height: 1.6; }
+
+  /* ══════════════════════════════════════════
+    OPTIONS — SQUARE for BOTH checkbox & radio
+  ══════════════════════════════════════════ */
+  .coc-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+  .coc-options--col1 {
+    grid-template-columns: 1fr;
+  }
+
+  .coc-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    cursor: pointer;
+    padding: 9px 10px;
+    transition: background 0.15s;
+    user-select: none;
+  }
+  .coc-option:hover { background: rgba(196,168,130,0.08); }
+
+  /* Hide native input completely */
+  .coc-option__input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  /* Square box — used for BOTH checkbox and radio */
+  .coc-option__box {
+    flex-shrink: 0;
+    width: 17px;
+    height: 17px;
+    border: 1.5px solid #C4A882;
+    background: #FFFFFF;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    transition: background 0.15s, border-color 0.15s;
+    position: relative;
+    border-radius: 0; /* ← SQUARE, no rounding at all */
+  }
+
+  /* Checked state */
+  .coc-option__input:checked ~ .coc-option__box {
+    background: #1A1A18;
+    border-color: #1A1A18;
+  }
+
+  /* Tick mark inside the square */
+  .coc-option__input:checked ~ .coc-option__box::after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 4px;
+    width: 5px;
+    height: 9px;
+    border: 1.5px solid #FFFFFF;
+    border-top: none;
+    border-left: none;
+    transform: rotate(42deg);
+  }
+
+  .coc-option__text {
+    font-size: 13px;
+    color: #3E3D39;
+    font-weight: 300;
+    line-height: 1.45;
+  }
+
+  /* ══════════════════════════════════════════
+    FOOTER & SUBMIT
+  ══════════════════════════════════════════ */
+  .coc-footer {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid #E2DDD6;
+  }
+  .coc-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    background: #1A1A18;
+    color: #FFFFFF;
+    border: 1px solid #1A1A18;
+    padding: 19px 28px;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.25s, color 0.25s, border-color 0.25s;
+    box-sizing: border-box;
+    border-radius: 0;
+  }
+  .coc-submit:hover {
+    background: #C4A882;
+    border-color: #C4A882;
+    color: #1A1A18;
+  }
+  .coc-disclaimer {
+    font-size: 12px;
+    color: #9B9890;
+    margin: 12px 0 0;
+    line-height: 1.6;
+    font-weight: 300;
+    text-align: center;
+  }
+
+  /* Success */
+  .coc-success {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: #F0EBE3;
+    border: 1px solid #C4A882;
+    padding: 20px 22px;
+    margin-top: 24px;
+    color: #1A1A18;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .coc-success strong { display: block; font-weight: 500; margin-bottom: 3px; }
+  .coc-success span   { font-size: 13px; color: #6B6860; font-weight: 300; }
+  .coc-success svg    { flex-shrink: 0; margin-top: 2px; }
+
+  /* ══════════════════════════════════════════
+    RESPONSIVE
+  ══════════════════════════════════════════ */
+  @media (max-width: 680px) {
+    .coc-modal__panel { padding: 40px 22px 48px; }
+    .coc-modal__title { font-size: 32px; }
+    .coc-options { grid-template-columns: 1fr; }
+  }
+
+  /* ══════════════════════════════════════════
+    TOAST NOTIFICATION
+  ══════════════════════════════════════════ */
+  .coc-toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    z-index: 11000;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    min-width: 320px;
+    max-width: 480px;
+    padding: 20px 24px;
+    box-shadow: 0 8px 40px rgba(26,26,24,0.18);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22,1,0.36,1);
+    font-family: 'DM Sans', system-ui, sans-serif;
+    box-sizing: border-box;
+  }
+  .coc-toast.coc-toast--show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+  }
+  .coc-toast--success {
+    background: #1A1A18;
+    border-left: 3px solid #C4A882;
+    color: #FAF8F5;
+  }
+  .coc-toast--error {
+    background: #1A1A18;
+    border-left: 3px solid #C4622A;
+    color: #FAF8F5;
+  }
+  .coc-toast__icon { flex-shrink: 0; margin-top: 1px; }
+  .coc-toast__icon svg { display: block; }
+  .coc-toast__body { flex: 1; }
+  .coc-toast__title {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    margin: 0 0 4px;
+    color: #FAF8F5;
+  }
+  .coc-toast__msg {
+    font-size: 12px;
+    font-weight: 300;
+    line-height: 1.55;
+    margin: 0;
+    color: #B8B4AD;
+  }
+  .coc-toast__close {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #6B6860;
+    padding: 2px;
+    line-height: 1;
+    transition: color 0.2s;
+    margin-top: 1px;
+  }
+  .coc-toast__close:hover { color: #FAF8F5; }
+
+  /* Submit loading state */
+  .coc-submit.is-loading {
+    opacity: 0.65;
+    pointer-events: none;
+    cursor: default;
+  }
+
+  @media (max-width: 520px) {
+    .coc-toast { min-width: calc(100vw - 32px); max-width: calc(100vw - 32px); bottom: 20px; }
+  }
+
+  .coc-field-error[hidden] { display: none !important; }
+  </style>
+
+  <!-- Toast notification (outside modal) -->
+  <div class="coc-toast coc-toast--success" id="{{ modal_id }}-toast" role="alert" aria-live="polite">
+    <span class="coc-toast__icon" id="{{ modal_id }}-toast-icon">
+      <!-- icon swapped by JS -->
+    </span>
+    <div class="coc-toast__body">
+      <p class="coc-toast__title" id="{{ modal_id }}-toast-title"></p>
+      <p class="coc-toast__msg"   id="{{ modal_id }}-toast-msg"></p>
+    </div>
+    <button class="coc-toast__close" id="{{ modal_id }}-toast-close" aria-label="Dismiss">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <line x1="1" y1="1" x2="11" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="11" y1="1" x2="1" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <script>
+(function () {
+  function init() {
+    var modalId = '{{ modal_id }}';
+    var modal   = document.getElementById(modalId);
+    if (!modal) return;
+
+    var form       = document.getElementById(modalId + '-form');
+    var submitBtn  = form ? form.querySelector('.coc-submit') : null;
+    var toast      = document.getElementById(modalId + '-toast');
+    var toastTitle = document.getElementById(modalId + '-toast-title');
+    var toastMsg   = document.getElementById(modalId + '-toast-msg');
+    var toastIcon  = document.getElementById(modalId + '-toast-icon');
+    var toastClose = document.getElementById(modalId + '-toast-close');
+    var toastTimer = null;
+
+    var iconSuccess = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#C4A882" stroke-width="1.5"/><path d="M5.5 10l3 3 6-6" stroke="#C4A882" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var iconError   = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#C4622A" stroke-width="1.5"/><line x1="10" y1="6" x2="10" y2="11" stroke="#C4622A" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="14" r="0.8" fill="#C4622A"/></svg>';
+
+    function showToast(type, title, msg) {
+      toast.classList.remove('coc-toast--success', 'coc-toast--error', 'coc-toast--show');
+      toast.classList.add('coc-toast--' + type);
+      toastIcon.innerHTML    = type === 'success' ? iconSuccess : iconError;
+      toastTitle.textContent = title;
+      toastMsg.textContent   = msg;
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { toast.classList.add('coc-toast--show'); });
+      });
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(hideToast, 6000);
+    }
+
+    function hideToast() { toast.classList.remove('coc-toast--show'); }
+    if (toastClose) toastClose.addEventListener('click', hideToast);
+
+    window['openModal_' + modalId] = function () {
+      modal.hidden = false;
+      modal.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    };
+    document.querySelectorAll('[data-open-modal]').forEach(function (btn) {
+      if (btn.getAttribute('data-open-modal') === modalId) {
+        btn.addEventListener('click', window['openModal_' + modalId]);
+      }
+    });
+
+    function closeModal() {
+      modal.hidden = true;
+      modal.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+    modal.querySelectorAll('[data-close-modal]').forEach(function (el) {
+      el.addEventListener('click', closeModal);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (!modal.hidden && e.key === 'Escape') closeModal();
+    });
+
+    var missingEl   = form ? form.querySelector('[data-conditional-required="used-oils-yes"]') : null;
+    var heldBackEl  = form ? form.querySelector('[data-conditional-required="used-oils-no"]') : null;
+    var asteriskYes = form ? form.querySelector('.coc-required--conditional[data-conditional-for="used-oils-yes"]') : null;
+    var asteriskNo  = form ? form.querySelector('.coc-required--conditional[data-conditional-for="used-oils-no"]') : null;
+
+    if (form) {
+      form.querySelectorAll('.coc-input, .coc-textarea').forEach(function(el) {
+        el.addEventListener('input', function() {
+          el.classList.remove('has-error');
+          var fieldEl = el.closest('.coc-field');
+          if (fieldEl) {
+            var errEl = fieldEl.querySelector('.coc-field-error');
+            if (errEl) { errEl.textContent = ''; errEl.hidden = true; }
+          }
+        });
+      });
+      form.querySelectorAll('.coc-option__input').forEach(function(el) {
+        el.addEventListener('change', function() {
+          var group = el.closest('[data-required-group]');
+          if (group) {
+            group.classList.remove('has-error');
+            var fieldEl = group.closest('.coc-field');
+            if (fieldEl) {
+              var errEl = fieldEl.querySelector('.coc-field-error');
+              if (errEl) { errEl.textContent = ''; errEl.hidden = true; }
+            }
+          }
+        });
+      });
+    }
+
+    function showFieldError(el, msg) {
+      el.classList.add('has-error');
+      var fieldEl = el.closest ? el.closest('.coc-field') : null;
+      if (fieldEl) {
+        var errEl = fieldEl.querySelector('.coc-field-error');
+        if (errEl) { errEl.textContent = msg; errEl.hidden = false; }
+      }
+    }
+
+    function showGroupError(groupEl, msg) {
+      groupEl.classList.add('has-error');
+      var fieldEl = groupEl.closest('.coc-field');
+      if (fieldEl) {
+        var errEl = fieldEl.querySelector('.coc-field-error');
+        if (errEl) { errEl.textContent = msg; errEl.hidden = false; }
+      }
+    }
+
+    function validateForm() {
+      var errors = [];
+      var firstErrorEl = null;
+      function markFirst(el) { if (!firstErrorEl) firstErrorEl = el; }
+
+      form.querySelectorAll('input[required], textarea[required]').forEach(function(el) {
+        if (el.type === 'checkbox' || el.type === 'radio') return;
+        if (!el.value.trim()) {
+          var label = form.querySelector('label[for="' + el.id + '"]');
+          var labelText = label ? label.textContent.replace('*','').trim() : 'This field';
+          showFieldError(el, labelText + ' is required.');
+          errors.push(el.id);
+          markFirst(el);
+        }
+      });
+
+      form.querySelectorAll('[data-required-group]').forEach(function(groupEl) {
+        var msg = groupEl.dataset.requiredMsg || 'Please make a selection.';
+        if (!groupEl.querySelector('input:checked')) {
+          showGroupError(groupEl, msg);
+          errors.push(groupEl.dataset.requiredGroup);
+          markFirst(groupEl);
+        }
+      });
+
+      return { valid: errors.length === 0, firstErrorEl: firstErrorEl };
+    }
+
+    /* ── FIXED: use fetch() instead of iframe + form.submit() ── */
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        var result = validateForm();
+        if (!result.valid) {
+          if (result.firstErrorEl) result.firstErrorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          showToast('error', 'Please complete all required fields.', 'Scroll up to see the highlighted fields.');
+          return;
+        }
+
+        if (submitBtn) submitBtn.classList.add('is-loading');
+
+        fetch('/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Accept': 'application/json'
+          },
+          body: new URLSearchParams(new FormData(form)).toString()
+        })
+        .then(function(res) {
+          if (submitBtn) submitBtn.classList.remove('is-loading');
+          if (res.ok) {
+            closeModal();
+            form.reset();
+            if (missingEl)   missingEl.dataset.conditionalActive = '';
+            if (heldBackEl)  heldBackEl.dataset.conditionalActive = '';
+            if (asteriskYes) asteriskYes.classList.remove('is-active');
+            if (asteriskNo)  asteriskNo.classList.remove('is-active');
+            showToast('success', 'We received it — thank you.', 'Your 20% discount will be waiting in your inbox when the product launches.');
+          } else {
+            showToast('error', 'Something went wrong.', 'Your response was not sent. Please try again.');
+          }
+        })
+        .catch(function() {
+          if (submitBtn) submitBtn.classList.remove('is-loading');
+          showToast('error', 'Network error.', 'Check your connection and try again.');
+        });
+      });
+    }
+
+  } // end init
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+  {% schema %}
+  {
+    "name": "CTA Block",
+    "tag": "section",
+    "class": "section-cta-block",
+    "settings": [
+      { "type": "header", "content": "Heading (right column)" },
+      {
+        "type": "select", "id": "heading_tag", "label": "Heading tag (SEO)",
+        "options": [{ "value": "h1", "label": "H1" },{ "value": "h2", "label": "H2" },{ "value": "h3", "label": "H3" }],
+        "default": "h2"
+      },
+      {
+        "type": "richtext", "id": "heading", "label": "Heading",
+        "info": "Use separate paragraphs for each line. Wrap words in <em> for italic.",
+        "default": "<p>10 minutes.</p><p><em>20% off.</em></p><p>A product shaped by you.</p>"
+      },
+      {
+        "type": "richtext", "id": "description", "label": "Description under heading",
+        "default": "<p>Fill the survey, tell us what you want, and lock in your discount before the second product launches.</p>"
+      },
+      { "type": "header", "content": "Image (left column)" },
+      { "type": "image_picker", "id": "left_image", "label": "Image", "info": "Leave blank to hide." },
+      {
+        "type": "select", "id": "left_image_ratio", "label": "Image aspect ratio",
+        "options": [
+          { "value": "1 / 1", "label": "Square (1:1)" },{ "value": "4 / 5", "label": "Portrait (4:5)" },
+          { "value": "3 / 4", "label": "Portrait (3:4)" },{ "value": "4 / 3", "label": "Landscape (4:3)" },
+          { "value": "3 / 2", "label": "Landscape (3:2)" },{ "value": "16 / 9", "label": "Widescreen (16:9)" }
+        ],
+        "default": "4 / 3"
+      },
+      { "type": "range", "id": "left_image_radius", "label": "Image corner radius", "min": 0, "max": 40, "step": 1, "unit": "px", "default": 2 },
+      { "type": "header", "content": "Discount pill" },
+      { "type": "text", "id": "pill_emoji", "label": "Emoji / icon", "default": "🎁" },
+      { "type": "text", "id": "pill_strong", "label": "Highlighted text", "default": "20% off" },
+      { "type": "text", "id": "pill_text", "label": "Rest of pill text", "default": "locked in when you complete the survey" },
+      { "type": "color", "id": "pill_bg", "label": "Pill background", "default": "#F5EDE0" },
+      { "type": "color", "id": "pill_border", "label": "Pill border", "default": "#C4A882" },
+      { "type": "color", "id": "pill_text_color", "label": "Pill text", "default": "#1A1A18" },
+      { "type": "color", "id": "pill_strong_color", "label": "Highlighted text color", "default": "#C4622A" },
+      { "type": "header", "content": "Primary button" },
+      { "type": "text", "id": "button1_label", "label": "Button label", "default": "Take the Survey → Get 20% Off" },
+      { "type": "color", "id": "button1_bg", "label": "Background", "default": "#1A1A18" },
+      { "type": "color", "id": "button1_text_color", "label": "Text", "default": "#FFFFFF" },
+      { "type": "color", "id": "button1_bg_hover", "label": "Background (hover)", "default": "#C4A882" },
+      { "type": "color", "id": "button1_text_hover", "label": "Text (hover)", "default": "#1A1A18" },
+      { "type": "header", "content": "Secondary button" },
+      { "type": "text", "id": "button2_label", "label": "Button label", "default": "Read the FAQs first" },
+      { "type": "url", "id": "button2_link", "label": "Button link" },
+      { "type": "checkbox", "id": "button2_open_new_tab", "label": "Open in new tab", "default": false },
+      { "type": "color", "id": "button2_bg", "label": "Background", "default": "#FFFFFF00" },
+      { "type": "color", "id": "button2_text_color", "label": "Text", "default": "#6B6860" },
+      { "type": "color", "id": "button2_border", "label": "Border", "default": "#E2DDD6" },
+      { "type": "color", "id": "button2_bg_hover", "label": "Background (hover)", "default": "#1A1A18" },
+      { "type": "color", "id": "button2_text_hover", "label": "Text (hover)", "default": "#FFFFFF" },
+      { "type": "header", "content": "Layout & alignment" },
+      {
+        "type": "select", "id": "column_order", "label": "Column order",
+        "options": [{ "value": "left", "label": "CTA left · Heading right" },{ "value": "swap", "label": "Heading left · CTA right" }],
+        "default": "left"
+      },
+      {
+        "type": "select", "id": "left_vertical_align", "label": "LEFT column vertical alignment",
+        "options": [{ "value": "top", "label": "Top" },{ "value": "center", "label": "Center" },{ "value": "bottom", "label": "Bottom" }],
+        "default": "bottom"
+      },
+      {
+        "type": "select", "id": "right_vertical_align", "label": "RIGHT column vertical alignment",
+        "options": [{ "value": "top", "label": "Top" },{ "value": "center", "label": "Center" },{ "value": "bottom", "label": "Bottom" }],
+        "default": "center"
+      },
+      { "type": "header", "content": "Section spacing" },
+      { "type": "range", "id": "container_max_width", "label": "Max content width", "min": 1000, "max": 1800, "step": 20, "unit": "px", "default": 1440 },
+      { "type": "range", "id": "side_padding", "label": "Side padding", "min": 2, "max": 12, "step": 1, "unit": "vw", "default": 7 },
+      { "type": "range", "id": "column_gap", "label": "Gap between columns", "min": 20, "max": 200, "step": 4, "unit": "px", "default": 80 },
+      { "type": "range", "id": "padding_top", "label": "Padding top (desktop)", "min": 0, "max": 300, "step": 4, "unit": "px", "default": 120 },
+      { "type": "range", "id": "padding_bottom", "label": "Padding bottom (desktop)", "min": 0, "max": 300, "step": 4, "unit": "px", "default": 120 },
+      { "type": "range", "id": "padding_top_mobile", "label": "Padding top (mobile)", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 64 },
+      { "type": "range", "id": "padding_bottom_mobile", "label": "Padding bottom (mobile)", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 64 },
+      { "type": "header", "content": "Section colors" },
+      { "type": "color", "id": "bg_color", "label": "Background", "default": "#FAF8F5" },
+      { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#1A1A18" },
+      { "type": "color", "id": "accent_color", "label": "Italic accent color", "default": "#1A1A18" },
+      { "type": "color", "id": "body_color", "label": "Description text color", "default": "#6B6860" },
+      { "type": "header", "content": "Typography" },
+      { "type": "text", "id": "heading_font_family", "label": "Heading font-family (CSS)", "default": "'Cormorant Garamond', Georgia, serif" },
+      { "type": "text", "id": "body_font_family", "label": "Body font-family (CSS)", "default": "'DM Sans', system-ui, -apple-system, sans-serif" },
+      { "type": "range", "id": "heading_size", "label": "Heading size (desktop)", "min": 28, "max": 100, "step": 2, "unit": "px", "default": 60 },
+      { "type": "range", "id": "heading_size_mobile", "label": "Heading size (mobile)", "min": 22, "max": 60, "step": 1, "unit": "px", "default": 36 },
+      { "type": "range", "id": "body_size", "label": "Description text size", "min": 13, "max": 22, "step": 1, "unit": "px", "default": 14 }
+    ],
+    "presets": [{ "name": "CTA Block", "category": "Text" }]
+  }
+  {% endschema %}
+  }

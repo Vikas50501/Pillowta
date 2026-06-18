@@ -1,0 +1,477 @@
+{% comment %}
+  ============================================================
+  ABOUT — SECTION 05: FOUNDER CLOSING
+  Centered layout · Cream background · Gold rule
+  Large italic blockquote · Attribution · CTA button
+  Full 100% schema-driven customisation · Matches theme fonts & colors
+  ============================================================
+{% endcomment %}
+
+{%- liquid
+  assign section_bg          = section.settings.section_bg
+  assign section_border_top  = section.settings.section_border_top
+  assign section_border_color = section.settings.section_border_color
+  assign section_padding_top    = section.settings.section_padding_top
+  assign section_padding_bottom = section.settings.section_padding_bottom
+  assign section_padding_x      = section.settings.section_padding_x
+  assign inner_max_width     = section.settings.inner_max_width
+
+  assign show_rule           = section.settings.show_rule
+  assign rule_color          = section.settings.rule_color
+  assign rule_width          = section.settings.rule_width
+  assign rule_margin_bottom  = section.settings.rule_margin_bottom
+
+  assign quote_line1         = section.settings.quote_line1
+  assign quote_line2         = section.settings.quote_line2
+  assign quote_italic        = section.settings.quote_italic_word
+  assign quote_color         = section.settings.quote_color
+  assign quote_italic_color  = section.settings.quote_italic_color
+  assign quote_size_max      = section.settings.quote_size_max
+  assign quote_size_min      = section.settings.quote_size_min
+
+  assign attr_text           = section.settings.attribution_text
+  assign attr_color          = section.settings.attribution_color
+  assign attr_size           = section.settings.attribution_size
+
+  assign show_btn            = section.settings.show_button
+  assign btn_text            = section.settings.button_text
+  assign btn_url             = section.settings.button_url
+  assign btn_style           = section.settings.button_style
+  assign btn_new_tab         = section.settings.button_new_tab
+-%}
+
+<style>
+  /* ── Section root variables ── */
+  #shopify-section-{{ section.id }} {
+    --fc-bg:            {{ section_bg }};
+    --fc-border:        {{ section_border_color }};
+    --fc-pt:            {{ section_padding_top }}rem;
+    --fc-pb:            {{ section_padding_bottom }}rem;
+    --fc-px:            {{ section_padding_x }}px;
+    --fc-max-width:     {{ inner_max_width }}px;
+
+    --fc-rule-color:    {{ rule_color }};
+    --fc-rule-width:    {{ rule_width }}px;
+    --fc-rule-mb:       {{ rule_margin_bottom }}rem;
+
+    --fc-quote-color:   {{ quote_color }};
+    --fc-quote-italic:  {{ quote_italic_color }};
+    --fc-quote-max:     {{ quote_size_max }}px;
+    --fc-quote-min:     {{ quote_size_min }}px;
+
+    --fc-attr-color:    {{ attr_color }};
+    --fc-attr-size:     {{ attr_size }}px;
+
+    --font-heading:     {{ settings.type_header_font.family | default: 'Aleo' }}, Georgia, serif;
+    --font-body:        {{ settings.type_base_font.family | default: 'Aleo' }}, sans-serif;
+    --font-mono:        'SF Mono', 'Fira Code', monospace;
+  }
+
+  /* ── Section wrapper ── */
+  .fc-section {
+    background: var(--fc-bg);
+    {% if section_border_top %}
+    border-top: 0.5px solid var(--fc-border);
+    {% endif %}
+    padding: var(--fc-pt) var(--fc-px) var(--fc-pb);
+    text-align: center;
+    width: 100%;
+  }
+
+  /* ── Inner container ── */
+  .fc-inner {
+    max-width: var(--fc-max-width);
+    margin: 0 auto;
+  }
+
+  /* ── Gold rule ── */
+  .fc-rule {
+    width: var(--fc-rule-width);
+    height: 1px;
+    background: var(--fc-rule-color);
+    margin: 0 auto var(--fc-rule-mb);
+    display: {% if show_rule %}block{% else %}none{% endif %};
+  }
+
+  /* ── Blockquote ── */
+  .fc-blockquote {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--fc-quote-min), 2.5vw, var(--fc-quote-max));
+    font-style: italic;
+    font-weight: 400;
+    color: var(--fc-quote-color);
+    line-height: 1.55;
+    letter-spacing: -0.015em;
+    margin: 0 0 2rem;
+    padding: 0;
+    border: none;
+  }
+
+  .fc-blockquote em {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--fc-quote-italic);
+    font-size: 1.05em;
+  }
+
+  /* ── Attribution ── */
+  .fc-attr {
+    font-family: var(--font-mono);
+    font-size: var(--fc-attr-size);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--fc-attr-color);
+    display: block;
+    margin-bottom: 3rem;
+  }
+
+  /* ── CTA Button ── */
+  .fc-cta {
+    display: {% if show_btn %}inline-block{% else %}none{% endif %};
+  }
+
+  .fc-btn {
+    font-family: var(--font-mono);
+    font-size: {{ settings.buttons_font_size | default: 12 }}px;
+    font-weight: {{ settings.buttons_font_weight | default: 700 }};
+    letter-spacing: 0.15em;
+    text-transform: {{ settings.buttons_text_case | default: 'uppercase' }};
+    text-decoration: none;
+    padding: 1rem 2.75rem;
+    border-radius: {{ settings.buttons_border_radius | default: 5 }}px;
+    border-width: {{ settings.buttons_border_width | default: 2 }}px;
+    border-style: solid;
+    cursor: pointer;
+    display: inline-block;
+    transition: background 0.25s, color 0.25s, border-color 0.25s, transform 0.15s;
+  }
+
+  {% case btn_style %}
+    {% when 'button_1' %}
+      .fc-btn { color: {{ settings.color_button_1_text | default: '#000' }}; background: {{ settings.color_button_1_bg | default: '#F7F7F7' }}; border-color: {{ settings.color_button_1_border | default: '#FFF' }}; }
+      .fc-btn:hover { color: {{ settings.color_button_1_hover_text | default: '#000' }}; background: {{ settings.color_button_1_hover_bg | default: '#D3F187' }}; border-color: {{ settings.color_button_1_hover_border | default: '#B6FF00' }}; }
+    {% when 'button_2' %}
+      .fc-btn { color: {{ settings.color_button_2_text | default: '#000' }}; background: {{ settings.color_button_2_bg | default: '#FFF' }}; border-color: {{ settings.color_button_2_border | default: '#EEE' }}; }
+      .fc-btn:hover { color: {{ settings.color_button_2_hover_text | default: '#FFF' }}; background: {{ settings.color_button_2_hover_bg | default: '#000' }}; border-color: {{ settings.color_button_2_hover_border | default: '#000' }}; }
+    {% when 'button_3' %}
+      .fc-btn { color: {{ settings.color_button_3_text | default: '#000' }}; background: transparent; border-color: {{ settings.color_button_3_border | default: '#000' }}; }
+      .fc-btn:hover { color: {{ settings.color_button_3_hover_text | default: '#FFF' }}; background: {{ settings.color_button_3_hover_bg | default: '#000' }}; border-color: {{ settings.color_button_3_hover_border | default: '#000' }}; }
+    {% when 'button_4' %}
+      .fc-btn { color: {{ settings.color_button_4_text | default: '#000' }}; background: {{ settings.color_button_4_bg | default: '#B1FF15' }}; border-color: {{ settings.color_button_4_border | default: '#B6FF00' }}; }
+      .fc-btn:hover { color: {{ settings.color_button_4_hover_text | default: '#FFF' }}; background: {{ settings.color_button_4_hover_bg | default: '#000' }}; border-color: {{ settings.color_button_4_hover_border | default: '#000' }}; }
+    {% when 'button_5' %}
+      .fc-btn { color: #FFF; background: transparent; border-color: #FFF; }
+      .fc-btn:hover { color: #222; background: #FFF; border-color: #FFF; }
+    {% when 'button_6' %}
+      .fc-btn { color: #000; background: #C7FD41; border-color: #666E53; }
+      .fc-btn:hover { color: #FFF; background: #111; border-color: #111; }
+    {% else %}
+      .fc-btn { color: {{ settings.color_button_1_text | default: '#000' }}; background: {{ settings.color_button_1_bg | default: '#F7F7F7' }}; border-color: {{ settings.color_button_1_border | default: '#FFF' }}; }
+      .fc-btn:hover { color: {{ settings.color_button_1_hover_text | default: '#000' }}; background: {{ settings.color_button_1_hover_bg | default: '#D3F187' }}; border-color: {{ settings.color_button_1_hover_border | default: '#B6FF00' }}; }
+  {% endcase %}
+
+  .fc-btn:hover {
+    transform: translateY(-1px);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .fc-section {
+      padding: 5rem 1.5rem;
+    }
+
+    .fc-blockquote {
+      font-size: clamp(1.3rem, 5vw, var(--fc-quote-max));
+    }
+  }
+
+  @media (max-width: 480px) {
+    .fc-section {
+      padding: 4rem 1.25rem;
+    }
+
+    .fc-attr {
+      margin-bottom: 2.5rem;
+    }
+  }
+</style>
+
+<section
+  class="fc-section"
+  id="about-founder-{{ section.id }}"
+  aria-label="{{ attr_text }}"
+>
+  <div class="fc-inner">
+
+    <!-- Gold rule -->
+    <span class="fc-rule" aria-hidden="true"></span>
+
+    <!-- Blockquote -->
+    {%- if quote_line1 != blank or quote_line2 != blank -%}
+      <blockquote class="fc-blockquote">
+        {%- if quote_line1 != blank -%}
+          "{{ quote_line1 }}<br>
+        {%- endif -%}
+        {%- if quote_line2 != blank and quote_italic != blank -%}
+          {{ quote_line2 }} <em>{{ quote_italic }}</em>"
+        {%- elsif quote_line2 != blank -%}
+          {{ quote_line2 }}"
+        {%- endif -%}
+      </blockquote>
+    {%- endif -%}
+
+    <!-- Attribution -->
+    {%- if attr_text != blank -%}
+      <span class="fc-attr">{{ attr_text }}</span>
+    {%- endif -%}
+
+    <!-- CTA Button -->
+    {%- if show_btn and btn_text != blank -%}
+      <div class="fc-cta">
+        <a
+          href="{{ btn_url | default: '#' }}"
+          class="fc-btn"
+          {% if btn_new_tab %}target="_blank" rel="noopener"{% endif %}
+        >
+          {{ btn_text }}
+        </a>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About — Founder Closing",
+  "tag": "div",
+  "class": "about-founder-wrapper",
+  "settings": [
+
+    {
+      "type": "header",
+      "content": "── Section Layout ──"
+    },
+    {
+      "type": "color",
+      "id": "section_bg",
+      "label": "Section Background Color",
+      "default": "#FAF7F2"
+    },
+    {
+      "type": "checkbox",
+      "id": "section_border_top",
+      "label": "Show Top Border Line",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "section_border_color",
+      "label": "Top Border Color",
+      "default": "rgba(26,23,20,0.10)"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Section Padding Top (rem)",
+      "min": 2,
+      "max": 16,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Section Padding Bottom (rem)",
+      "min": 2,
+      "max": 16,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "section_padding_x",
+      "label": "Horizontal Padding (px)",
+      "min": 16,
+      "max": 120,
+      "step": 8,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "inner_max_width",
+      "label": "Inner Content Max Width (px)",
+      "min": 400,
+      "max": 1000,
+      "step": 20,
+      "default": 740
+    },
+
+    {
+      "type": "header",
+      "content": "── Decorative Rule ──"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rule",
+      "label": "Show Gold Rule",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "rule_color",
+      "label": "Rule Color",
+      "default": "#B8963E"
+    },
+    {
+      "type": "range",
+      "id": "rule_width",
+      "label": "Rule Width (px)",
+      "min": 20,
+      "max": 120,
+      "step": 4,
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "rule_margin_bottom",
+      "label": "Rule Bottom Spacing (rem)",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+
+    {
+      "type": "header",
+      "content": "── Blockquote ──"
+    },
+    {
+      "type": "text",
+      "id": "quote_line1",
+      "label": "Quote Line 1",
+      "default": "Our ancestors had answers."
+    },
+    {
+      "type": "text",
+      "id": "quote_line2",
+      "label": "Quote Line 2 (before italic word)",
+      "default": "We're just"
+    },
+    {
+      "type": "text",
+      "id": "quote_italic_word",
+      "label": "Quote Italic / Accent Word(s)",
+      "default": "translating them.",
+      "info": "This word or phrase renders bold + colored inside the quote"
+    },
+    {
+      "type": "color",
+      "id": "quote_color",
+      "label": "Quote Text Color",
+      "default": "#1A1714"
+    },
+    {
+      "type": "color",
+      "id": "quote_italic_color",
+      "label": "Quote Italic Accent Color",
+      "default": "#C8593A"
+    },
+    {
+      "type": "range",
+      "id": "quote_size_max",
+      "label": "Quote Max Size — Desktop (px)",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "quote_size_min",
+      "label": "Quote Min Size — Mobile floor (px)",
+      "min": 16,
+      "max": 36,
+      "step": 1,
+      "default": 22
+    },
+
+    {
+      "type": "header",
+      "content": "── Attribution ──"
+    },
+    {
+      "type": "text",
+      "id": "attribution_text",
+      "label": "Attribution Text",
+      "default": "Pillowta Founders"
+    },
+    {
+      "type": "color",
+      "id": "attribution_color",
+      "label": "Attribution Color",
+      "default": "#7A736B"
+    },
+    {
+      "type": "range",
+      "id": "attribution_size",
+      "label": "Attribution Font Size (px)",
+      "min": 8,
+      "max": 16,
+      "step": 1,
+      "default": 11
+    },
+
+    {
+      "type": "header",
+      "content": "── CTA Button ──"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button",
+      "label": "Show CTA Button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Join the Community →"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button Link URL"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_new_tab",
+      "label": "Open link in new tab",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button Style (matches theme buttons)",
+      "options": [
+        { "value": "button_1", "label": "Button 1 — Light / Lime hover" },
+        { "value": "button_2", "label": "Button 2 — White / Dark hover" },
+        { "value": "button_3", "label": "Button 3 — Outline / Fill hover" },
+        { "value": "button_4", "label": "Button 4 — Lime / Dark hover" },
+        { "value": "button_5", "label": "Button 5 — White outline / Inverse" },
+        { "value": "button_6", "label": "Button 6 — Green / Dark hover" }
+      ],
+      "default": "button_1"
+    }
+
+  ],
+
+  "presets": [
+    {
+      "name": "About — Founder Closing",
+      "category": "Text"
+    }
+  ]
+}
+{% endschema %}

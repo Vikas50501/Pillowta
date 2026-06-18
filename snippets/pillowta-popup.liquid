@@ -1,0 +1,510 @@
+{% comment %}
+============================================================
+  PILLOWTA — Popup Form Snippet
+  File: snippets/pillowta-popup.liquid
+
+  HOW TO USE:
+  1. Add once in theme.liquid just before </body>:
+       {%- render 'pillowta-popup' -%}
+  2. Set any button link to:  #pillowta-popup
+     OR add attribute:        data-pll-popup
+     OR inline:               onclick="window.pllOpen()"
+
+  Uses Shopify native /contact — NO EmailJS, NO API keys.
+  Unlimited submissions. 100% free.
+  Submissions land in your store owner email inbox.
+============================================================
+{% endcomment %}
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+<!-- Hidden iframe — form submits into this so page never reloads -->
+<iframe name="pll_iframe" id="pll_iframe" style="display:none;" aria-hidden="true"></iframe>
+
+<style>
+  .pll-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 999999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+  }
+  .pll-overlay.pll-active {
+    display: flex;
+    animation: pllFadeIn 0.35s ease forwards;
+  }
+  @keyframes pllFadeIn { from{opacity:0} to{opacity:1} }
+
+  .pll-modal {
+    background: #fafafa;
+    width: 100%;
+    max-width: 520px;
+    max-height: 92vh;
+    overflow-y: auto;
+    position: relative;
+    animation: pllSlideUp 0.42s cubic-bezier(0.16,1,0.3,1) forwards;
+    scrollbar-width: thin;
+    scrollbar-color: #e0e0e0 transparent;
+  }
+  @keyframes pllSlideUp {
+    from { transform:translateY(28px); opacity:0 }
+    to   { transform:translateY(0);    opacity:1 }
+  }
+  .pll-modal::-webkit-scrollbar { width:4px }
+  .pll-modal::-webkit-scrollbar-thumb { background:#e0e0e0 }
+
+  .pll-header {
+    background: #0a0a0a;
+    padding: 38px 38px 30px;
+    position: relative;
+  }
+  .pll-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #fafafa;
+    line-height: 1.2;
+    margin: 0 0 8px;
+  }
+  .pll-header p {
+    font-size: 13px;
+    color: #999;
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    line-height: 1.55;
+    margin: 0;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .pll-header-deco {
+    position: absolute;
+    bottom: 0; right: 38px;
+    width: 60px; height: 3px;
+    background: #fff;
+    opacity: 0.12;
+  }
+  .pll-close {
+    position: absolute;
+    top: 20px; right: 20px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #fafafa;
+    width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 17px;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.2s;
+    line-height: 1;
+    padding: 0;
+  }
+  .pll-close:hover { background: rgba(255,255,255,0.2) }
+
+  .pll-req-note {
+    background: #f4f4f4;
+    border-left: 3px solid #0a0a0a;
+    padding: 10px 38px;
+    font-size: 11px;
+    color: #555;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .pll-form {
+    padding: 28px 38px 38px;
+    display: flex;
+    flex-direction: column;
+  }
+  .pll-field {
+    padding: 22px 0;
+    border-bottom: 1px solid #e8e8e8;
+  }
+  .pll-field:last-of-type { border-bottom: none }
+  .pll-label {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #0a0a0a;
+    margin-bottom: 10px;
+    letter-spacing: 0.01em;
+  }
+  .pll-req { color: #c0392b; margin-left: 3px; font-size: 11px }
+
+  .pll-field input[type="text"],
+  .pll-field input[type="email"],
+  .pll-field textarea {
+    width: 100%;
+    border: none !important;
+    border-bottom: 1.5px solid #d0d0d0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: #0a0a0a;
+    padding: 8px 0 !important;
+    outline: none !important;
+    box-shadow: none !important;
+    transition: border-color 0.25s;
+    -webkit-appearance: none;
+  }
+  .pll-field input:focus,
+  .pll-field textarea:focus {
+    border-bottom-color: #0a0a0a !important;
+    box-shadow: none !important;
+  }
+  .pll-field input::placeholder,
+  .pll-field textarea::placeholder { color:#b0b0b0; font-size:13px }
+  .pll-field textarea { resize:none; height:64px }
+
+  /* CHECKBOX */
+  .pll-check-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    margin-top: 14px;
+    user-select: none;
+  }
+  .pll-check-row input[type="checkbox"] {
+    position: absolute !important;
+    opacity: 0 !important;
+    width: 0 !important; height: 0 !important;
+    pointer-events: none !important;
+  }
+  .pll-cb {
+    display: block;
+    flex-shrink: 0;
+    width: 16px; height: 16px;
+    border: 1.5px solid #555;
+    background: #fff;
+    margin-top: 2px;
+    position: relative;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .pll-check-row input[type="checkbox"]:checked + .pll-cb {
+    background: #0a0a0a;
+    border-color: #0a0a0a;
+  }
+  .pll-check-row input[type="checkbox"]:checked + .pll-cb::after {
+    content: '';
+    position: absolute;
+    left: 50%; top: 45%;
+    width: 4px; height: 7px;
+    border: 2px solid #fff;
+    border-top: none; border-left: none;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+  .pll-check-row span:not(.pll-cb) {
+    font-family:'DM Sans',sans-serif;
+    font-size:12px; color:#555;
+    line-height:1.55; font-weight:300;
+  }
+
+  /* RADIO */
+  .pll-radio-group { display:flex; flex-direction:column; gap:10px }
+  .pll-radio-row {
+    display:flex; align-items:center; gap:12px;
+    cursor:pointer; padding:11px 14px;
+    border:1.5px solid #e8e8e8;
+    transition:border-color 0.2s, background 0.2s;
+    margin:0; user-select:none;
+  }
+  .pll-radio-row:hover { border-color:#555; background:#f8f8f8 }
+  .pll-radio-row input[type="radio"] {
+    position: absolute !important;
+    opacity: 0 !important;
+    width: 0 !important; height: 0 !important;
+    pointer-events: none !important;
+  }
+  .pll-rb {
+    display: block; flex-shrink: 0;
+    width: 16px; height: 16px;
+    min-width: 16px; max-width: 16px;
+    min-height: 16px; max-height: 16px;
+    border: 1.5px solid #555;
+    border-radius: 50%;
+    background: #fff;
+    position: relative;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .pll-rb::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #fff;
+    transition: transform 0.18s;
+  }
+  .pll-radio-row input[type="radio"]:checked + .pll-rb {
+    border-color: #0a0a0a; background: #0a0a0a;
+  }
+  .pll-radio-row input[type="radio"]:checked + .pll-rb::after {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .pll-radio-row.pll-selected { border-color:#0a0a0a; background:#0a0a0a }
+  .pll-radio-row.pll-selected span:not(.pll-rb) { color:#fafafa }
+  .pll-radio-row.pll-selected .pll-rb { border-color:rgba(255,255,255,0.4); background:transparent; }
+  .pll-radio-row.pll-selected input[type="radio"]:checked + .pll-rb { border-color:#fff; background:#fff; }
+  .pll-radio-row.pll-selected input[type="radio"]:checked + .pll-rb::after { background:#0a0a0a; }
+  .pll-radio-row span:not(.pll-rb) {
+    font-family:'DM Sans',sans-serif;
+    font-size:13px; font-weight:400; color:#0a0a0a; transition:color 0.2s;
+  }
+
+  .pll-submit-row {
+    padding-top:28px;
+    display:flex; align-items:center;
+    justify-content:space-between;
+    gap:16px; flex-wrap:wrap;
+  }
+  .pll-submit {
+    font-family:'DM Sans',sans-serif !important;
+    font-size:13px !important; font-weight:500 !important;
+    letter-spacing:0.1em !important; text-transform:uppercase !important;
+    color:#fafafa !important; background:#0a0a0a !important;
+    border:none !important; border-radius:0 !important;
+    padding:15px 38px !important; cursor:pointer !important;
+    transition:opacity 0.2s, transform 0.2s !important;
+    min-width:140px;
+  }
+  .pll-submit:hover { opacity:0.82 !important; transform:translateY(-1px) !important }
+  .pll-submit:disabled { opacity:0.5 !important; cursor:not-allowed !important; transform:none !important }
+  .pll-spinner {
+    display:none; width:14px; height:14px;
+    border:2px solid rgba(255,255,255,0.3); border-top-color:#fff;
+    border-radius:50%; animation:pllSpin 0.7s linear infinite; margin:0 auto;
+  }
+  .pll-submit.pll-loading .pll-btn-text { display:none }
+  .pll-submit.pll-loading .pll-spinner { display:block }
+  @keyframes pllSpin { to { transform:rotate(360deg) } }
+
+  .pll-clear {
+    font-size:12px; color:#b0b0b0;
+    background:none !important; border:none !important;
+    cursor:pointer; letter-spacing:0.04em;
+    text-decoration:underline; text-underline-offset:3px;
+    font-family:'DM Sans',sans-serif;
+    transition:color 0.2s; padding:0 !important;
+  }
+  .pll-clear:hover { color:#0a0a0a !important }
+
+  .pll-success { display:none; text-align:center; padding:70px 38px }
+  .pll-success .pll-check { font-size:44px; display:block; margin-bottom:18px }
+  .pll-success h3 {
+    font-family:'Playfair Display',serif;
+    font-size:26px; margin-bottom:10px; color:#0a0a0a;
+  }
+  .pll-success p {
+    font-size:13px; color:#999; font-weight:300;
+    font-family:'DM Sans',sans-serif; line-height:1.6;
+  }
+
+  @media (max-width:480px) {
+    .pll-header   { padding:28px 24px 22px }
+    .pll-form     { padding:20px 24px 28px }
+    .pll-req-note { padding:10px 24px }
+    .pll-header h2 { font-size:22px }
+  }
+</style>
+
+<!-- ── MODAL ── -->
+<div class="pll-overlay" id="pllOverlay">
+  <div class="pll-modal" role="dialog" aria-modal="true" aria-labelledby="pllTitle">
+
+    <div class="pll-header">
+      <button class="pll-close" id="pllClose" aria-label="Close">✕</button>
+      <h2 id="pllTitle">Experience Pillowta First</h2>
+      <p>Join the circle that feels our rituals before anyone else.</p>
+      <div class="pll-header-deco"></div>
+    </div>
+
+    <div class="pll-req-note" id="pllReqNote">* Indicates required question</div>
+
+    <!--
+      target="pll_iframe" → submits into the hidden iframe above.
+      Page never reloads. iframe load event = success.
+    -->
+    <form
+      class="pll-form"
+      id="pllForm"
+      method="POST"
+      action="/contact"
+      target="pll_iframe"
+      novalidate
+    >
+      <!-- Shopify required hidden fields -->
+      <input type="hidden" name="form_type" value="contact" />
+      <input type="hidden" name="utf8"      value="✓" />
+
+      <div class="pll-field">
+        <label class="pll-label">Email <span class="pll-req">*</span></label>
+        <input type="email" name="contact[email]" placeholder="your@email.com" required />
+        <label class="pll-check-row">
+          <input type="checkbox" name="contact[record_email]" value="Yes" />
+          <span class="pll-cb"></span>
+          <span>Record this email as the one to be included with my response</span>
+        </label>
+      </div>
+
+      <div class="pll-field">
+        <label class="pll-label">Your name <span class="pll-req">*</span></label>
+        <input type="text" name="contact[name]" placeholder="Your answer" required />
+      </div>
+
+      <div class="pll-field">
+        <label class="pll-label">Where may we reach you softly? <span class="pll-req">*</span></label>
+        <input type="text" name="contact[reach]" placeholder="Your answer" required />
+      </div>
+
+      <div class="pll-field">
+        <label class="pll-label">Where are you based? <span class="pll-req">*</span></label>
+        <input type="text" name="contact[location]" placeholder="Your answer" required />
+      </div>
+
+      <div class="pll-field">
+        <label class="pll-label">What brings you to the Tester Circle? <span class="pll-req">*</span></label>
+        <textarea name="contact[body]" placeholder="Your answer" required></textarea>
+      </div>
+
+      <div class="pll-field">
+        <label class="pll-label">Are you open to sharing your experience with us? <span class="pll-req">*</span></label>
+        <div class="pll-radio-group">
+          <label class="pll-radio-row">
+            <input type="radio" name="contact[sharing]" value="Yes" required />
+            <span class="pll-rb"></span>
+            <span>Yes</span>
+          </label>
+          <label class="pll-radio-row">
+            <input type="radio" name="contact[sharing]" value="Yes, anonymously" />
+            <span class="pll-rb"></span>
+            <span>Yes, anonymously</span>
+          </label>
+          <label class="pll-radio-row">
+            <input type="radio" name="contact[sharing]" value="Yes, with a short review" />
+            <span class="pll-rb"></span>
+            <span>Yes, with a short review</span>
+          </label>
+          <label class="pll-radio-row">
+            <input type="radio" name="contact[sharing]" value="Yes, with audio/video feedback" />
+            <span class="pll-rb"></span>
+            <span>Yes, with audio/video feedback</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="pll-submit-row">
+        <button type="submit" class="pll-submit" id="pllSubmitBtn">
+          <span class="pll-btn-text">Submit</span>
+          <span class="pll-spinner"></span>
+        </button>
+        <button type="button" class="pll-clear" id="pllClear">Clear form</button>
+      </div>
+
+    </form>
+
+    <div class="pll-success" id="pllSuccess">
+      <span class="pll-check">✦</span>
+      <h3>You're in the circle.</h3>
+      <p>We'll reach out softly when it's your turn<br>to experience Pillowta first.</p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function(){
+
+  var overlay   = document.getElementById('pllOverlay');
+  var closeBtn  = document.getElementById('pllClose');
+  var form      = document.getElementById('pllForm');
+  var clearBtn  = document.getElementById('pllClear');
+  var success   = document.getElementById('pllSuccess');
+  var reqNote   = document.getElementById('pllReqNote');
+  var submitBtn = document.getElementById('pllSubmitBtn');
+  var iframe    = document.getElementById('pll_iframe');
+  var submitted = false;
+
+  function openModal() {
+    overlay.classList.add('pll-active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    overlay.classList.remove('pll-active');
+    document.body.style.overflow = '';
+    setTimeout(function(){
+      success.style.display  = 'none';
+      form.style.display     = '';
+      reqNote.style.display  = '';
+      submitted = false;
+    }, 350);
+  }
+
+  /* Triggers */
+  function hookTriggers() {
+    document.querySelectorAll('a[href="#pillowta-popup"], [data-pll-popup]').forEach(function(el){
+      el.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); openModal(); });
+    });
+    document.querySelectorAll('a, button').forEach(function(el){
+      var txt = (el.textContent || '').trim().toUpperCase();
+      if (txt.indexOf('I AM READY') !== -1 || txt.indexOf('LET ME IN') !== -1) {
+        el.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); openModal(); });
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', hookTriggers);
+  } else {
+    hookTriggers();
+  }
+
+  window.pllOpen = openModal;
+
+  closeBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', function(e){ if(e.target===overlay) closeModal(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
+
+  /* Radio highlight */
+  form.querySelectorAll('.pll-radio-row').forEach(function(row){
+    var radio = row.querySelector('input[type="radio"]');
+    radio.addEventListener('change', function(){
+      form.querySelectorAll('.pll-radio-row').forEach(function(r){ r.classList.remove('pll-selected'); });
+      if(radio.checked) row.classList.add('pll-selected');
+    });
+  });
+
+  /* Clear */
+  clearBtn.addEventListener('click', function(){
+    form.reset();
+    form.querySelectorAll('.pll-radio-row').forEach(function(r){ r.classList.remove('pll-selected'); });
+  });
+
+  /* Submit → targets hidden iframe, no page reload */
+  form.addEventListener('submit', function(){
+    if(!form.checkValidity()){ form.reportValidity(); return; }
+    submitted = true;
+    submitBtn.disabled = true;
+    submitBtn.classList.add('pll-loading');
+  });
+
+  /* iframe load = Shopify responded = success */
+  iframe.addEventListener('load', function(){
+    if(!submitted) return;
+    submitBtn.disabled = false;
+    submitBtn.classList.remove('pll-loading');
+    form.style.display    = 'none';
+    reqNote.style.display = 'none';
+    success.style.display = 'block';
+  });
+
+})();
+</script>

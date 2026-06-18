@@ -1,0 +1,874 @@
+{% comment %}
+  ============================================================
+  ABOUT PAGE HERO SECTION — Theme-Matched Build
+  ------------------------------------------------------------
+  Fonts     : Reads from settings.type_header_font / type_base_font
+              (Aleo as fallback for both), SF Mono for button
+  Colors    : Schema defaults updated to theme tokens
+              (#222222 text, #FFFFFF bg, #B1FF15 accent,
+               #386BBF eyebrow/rule, #EEEEEE borders)
+  Fixes     : heading line-height → 1.3 (was 1.1);
+              heading letter-spacing → 0.001em (was -0.02em);
+              sub line-height pulls from settings correctly;
+              quote line-height → 1.3 (was 1.7 — heading font
+              should use heading line-height);
+              eyebrow letter-spacing → 0.2em (theme: 2);
+              eyebrow font-weight → 400 (theme: Regular);
+              bg_color default → #FFFFFF;
+              eyebrow default color → #386BBF (link blue);
+              heading defaults → #222222;
+              rule color → #EEEEEE;
+              sub/quote defaults → #333333 / rgba(34,34,34,0.5);
+              button default → button_4 (lime-green)
+  ============================================================
+{% endcomment %}
+
+{%- liquid
+  assign bg_color        = section.settings.bg_color
+  assign eyebrow_text    = section.settings.eyebrow_text
+  assign eyebrow_color   = section.settings.eyebrow_color
+  assign heading_line1   = section.settings.heading_line1
+  assign heading_italic  = section.settings.heading_italic
+  assign heading_line3   = section.settings.heading_line3
+  assign heading_color   = section.settings.heading_color
+  assign heading_italic_color = section.settings.heading_italic_color
+  assign rule_color      = section.settings.rule_color
+  assign rule_show       = section.settings.show_rule
+  assign sub_text        = section.settings.sub_text
+  assign sub_color       = section.settings.sub_color
+  assign quote_text      = section.settings.quote_text
+  assign quote_color     = section.settings.quote_color
+  assign quote_border_color = section.settings.quote_border_color
+  assign image           = section.settings.hero_image
+  assign img_overlay     = section.settings.image_overlay_opacity
+  assign img_gradient    = section.settings.image_gradient_overlay
+  assign img_filter_brightness = section.settings.image_brightness
+  assign img_filter_sepia = section.settings.image_sepia
+  assign deco_symbol     = section.settings.decorative_symbol
+  assign deco_show       = section.settings.show_decorative_symbol
+  assign deco_color      = section.settings.deco_symbol_color
+  assign layout          = section.settings.layout_reverse
+  assign heading_size_desktop = section.settings.heading_size_desktop
+  assign heading_size_mobile  = section.settings.heading_size_mobile
+  assign heading_size_min     = section.settings.heading_size_min
+  assign sub_size        = section.settings.sub_font_size
+  assign quote_size      = section.settings.quote_font_size
+  assign eyebrow_size    = section.settings.eyebrow_font_size
+  assign left_padding_top    = section.settings.left_padding_top
+  assign left_padding_bottom = section.settings.left_padding_bottom
+  assign left_padding_x      = section.settings.left_padding_x
+  assign btn_show        = section.settings.show_cta_button
+  assign btn_text        = section.settings.cta_button_text
+  assign btn_url         = section.settings.cta_button_url
+  assign btn_style       = section.settings.cta_button_style
+  assign mobile_img_height = section.settings.mobile_image_height
+  assign content_max_width = section.settings.content_max_width
+  assign sub_max_width   = section.settings.sub_max_width
+  assign quote_max_width = section.settings.quote_max_width
+
+  assign bg_hex = bg_color | remove: '#'
+  assign bg_r = bg_hex | slice: 0, 2 | prepend: '0x' | times: 1
+  assign bg_g = bg_hex | slice: 2, 2 | prepend: '0x' | times: 1
+  assign bg_b = bg_hex | slice: 4, 2 | prepend: '0x' | times: 1
+-%}
+
+<style>
+  /* ── Section root ── */
+  #shopify-section-{{ section.id }} {
+    --hero-bg:               {{ bg_color }};
+    --hero-eyebrow-color:    {{ eyebrow_color }};
+    --hero-heading-color:    {{ heading_color }};
+    --hero-heading-italic:   {{ heading_italic_color }};
+    --hero-rule-color:       {{ rule_color }};
+    --hero-sub-color:        {{ sub_color }};
+    --hero-quote-color:      {{ quote_color }};
+    --hero-quote-border:     {{ quote_border_color }};
+    --hero-deco-color:       {{ deco_color }};
+    --hero-heading-desktop:  {{ heading_size_desktop }}px;
+    --hero-heading-mobile:   {{ heading_size_mobile }}px;
+    --hero-heading-min:      {{ heading_size_min }}px;
+    --hero-sub-size:         {{ sub_size }}px;
+    --hero-quote-size:       {{ quote_size }}px;
+    --hero-eyebrow-size:     {{ eyebrow_size }}px;
+    --hero-left-pt:          {{ left_padding_top }}px;
+    --hero-left-pb:          {{ left_padding_bottom }}px;
+    --hero-left-px:          {{ left_padding_x }}px;
+    --hero-mobile-img:       {{ mobile_img_height }}px;
+    --hero-content-mw:       {{ content_max_width }}px;
+    --hero-sub-mw:           {{ sub_max_width }}px;
+    --hero-quote-mw:         {{ quote_max_width }}px;
+    --hero-img-brightness:   {{ img_filter_brightness | divided_by: 100.0 }};
+    --hero-img-sepia:        {{ img_filter_sepia | divided_by: 100.0 }};
+    --hero-bg-rgb:           {{ bg_r }}, {{ bg_g }}, {{ bg_b }};
+    /* Theme font variables — resolved from theme settings */
+    --font-heading:          {{ settings.type_header_font.family | default: 'Aleo' }}, Georgia, serif;
+    --font-body:             {{ settings.type_base_font.family   | default: 'Aleo' }}, sans-serif;
+    --font-mono:             'SF Mono', 'Fira Code', monospace;
+  }
+
+  /* ── Layout ── */
+  .ah-hero {
+    background: var(--hero-bg);
+    width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+    position: relative;
+    margin-left: calc(-1 * (100vw - 100%) / 2);
+  }
+
+  {% if layout %}
+  .ah-hero { direction: rtl; }
+  .ah-hero > * { direction: ltr; }
+  {% endif %}
+
+  /* ── Content panel ── */
+  .ah-hero__content {
+    padding: var(--hero-left-pt) var(--hero-left-px) var(--hero-left-pb);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    max-width: var(--hero-content-mw);
+    width: 100%;
+  }
+
+  /* Decorative symbol */
+  .ah-hero__content::before {
+    content: '{{ deco_symbol }}';
+    position: absolute;
+    top: 3rem;
+    left: 3rem;
+    font-family: var(--font-heading);
+    font-size: 8rem;
+    color: var(--hero-deco-color);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    display: {% if deco_show %}block{% else %}none{% endif %};
+  }
+
+  /* ── Eyebrow ── */
+  .ah-hero__eyebrow {
+    font-family: var(--font-body);
+    font-size: var(--hero-eyebrow-size);
+    font-weight: 400;              /* theme body: Regular */
+    letter-spacing: 0.2em;         /* theme body letter-spacing: 2 */
+    text-transform: uppercase;
+    color: var(--hero-eyebrow-color);
+    margin-bottom: 2rem;
+    display: block;
+  }
+
+  /* ── Heading ── */
+  .ah-hero__heading {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--hero-heading-min), 4.5vw, var(--hero-heading-desktop));
+    font-weight: {{ settings.type_header_font.weight | default: 500 }};
+    line-height: 1.3;              /* theme heading line-height */
+    letter-spacing: 0.001em;       /* theme heading letter-spacing: 1 */
+    color: var(--hero-heading-color);
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .ah-hero__heading em {
+    font-style: italic;
+    font-weight: {{ settings.type_header_font.weight | default: 500 }};
+    color: var(--hero-heading-italic);
+  }
+
+  /* ── Rule ── */
+  .ah-hero__rule {
+    width: 48px;
+    height: 1px;
+    background: var(--hero-rule-color);
+    margin-bottom: 2rem;
+    display: {% if rule_show %}block{% else %}none{% endif %};
+    flex-shrink: 0;
+  }
+
+  /* ── Subtext ── */
+  .ah-hero__sub {
+    font-family: var(--font-body);
+    font-size: var(--hero-sub-size);
+    font-weight: 300;
+    color: var(--hero-sub-color);
+    max-width: var(--hero-sub-mw);
+    line-height: 1.6;              /* theme body line-height */
+    letter-spacing: 0.002em;       /* theme body letter-spacing: 2 */
+    margin-bottom: 3rem;
+  }
+
+  /* ── Quote ── */
+  .ah-hero__quote {
+  font-family: var(--font-heading);
+  font-size: var(--hero-quote-size);
+  font-style: {% if section.settings.quote_italic_enable %}italic{% else %}normal{% endif %};
+  font-weight: {{ section.settings.quote_font_weight }};
+  color: #FEFCF88C;
+
+  line-height: {{ section.settings.quote_line_height | divided_by: 10.0 }};
+  letter-spacing: {{ section.settings.quote_letter_spacing | divided_by: 100.0 }}em;
+
+  border-left: 1px solid #B8963E;
+
+  padding: {{ section.settings.quote_padding }}px;
+
+  border-radius: {{ section.settings.quote_radius }}px;
+
+  background: {{ section.settings.quote_bg }};
+
+  text-align: {{ section.settings.quote_align }};
+
+  max-width: var(--hero-quote-mw);
+
+
+  margin: 0;
+}
+
+  /* ── CTA Button ── */
+  .ah-hero__cta {
+    margin-top: 2.5rem;
+    display: {% if btn_show %}inline-flex{% else %}none{% endif %};
+    align-items: center;
+    gap: 0.5rem;
+    width: fit-content;
+  }
+
+  .ah-hero__btn {
+    font-family: var(--font-mono);                                      /* theme: SF Mono */
+    font-size: {{ settings.buttons_font_size | default: 12 }}px;        /* theme: 12px */
+    font-weight: {{ settings.buttons_font_weight | default: 700 }};     /* theme: Bold */
+    letter-spacing: 0.12em;
+    text-transform: {{ settings.buttons_text_case | default: 'uppercase' }};
+    text-decoration: none;
+    padding: 14px 32px;
+    border-radius: {{ settings.buttons_border_radius | default: 5 }}px; /* theme: 5px */
+    border-width: {{ settings.buttons_border_width | default: 2 }}px;   /* theme: 2px */
+    border-style: solid;
+    cursor: pointer;
+    transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease, transform 0.15s ease;
+    display: inline-block;
+  }
+
+  /* Button style variants — all colors pulled from theme settings */
+  {% case btn_style %}
+    {% when 'button_1' %}
+      .ah-hero__btn { color: {{ settings.color_button_1_text | default: '#000000' }}; background: {{ settings.color_button_1_bg | default: '#F7F7F7' }}; border-color: {{ settings.color_button_1_border | default: '#FFFFFF' }}; }
+      .ah-hero__btn:hover { color: {{ settings.color_button_1_hover_text | default: '#000000' }}; background: {{ settings.color_button_1_hover_bg | default: '#D3F187' }}; border-color: {{ settings.color_button_1_hover_border | default: '#B6FF00' }}; }
+    {% when 'button_2' %}
+      .ah-hero__btn { color: {{ settings.color_button_2_text | default: '#000000' }}; background: {{ settings.color_button_2_bg | default: '#FFFFFF' }}; border-color: {{ settings.color_button_2_border | default: '#EEEEEE' }}; }
+      .ah-hero__btn:hover { color: {{ settings.color_button_2_hover_text | default: '#FFFFFF' }}; background: {{ settings.color_button_2_hover_bg | default: '#000000' }}; border-color: {{ settings.color_button_2_hover_border | default: '#000000' }}; }
+    {% when 'button_3' %}
+      .ah-hero__btn { color: {{ settings.color_button_3_text | default: '#000000' }}; background: transparent; border-color: {{ settings.color_button_3_border | default: '#000000' }}; }
+      .ah-hero__btn:hover { color: {{ settings.color_button_3_hover_text | default: '#FFFFFF' }}; background: {{ settings.color_button_3_hover_bg | default: '#000000' }}; border-color: {{ settings.color_button_3_hover_border | default: '#000000' }}; }
+    {% when 'button_4' %}
+      .ah-hero__btn { color: {{ settings.color_button_4_text | default: '#000000' }}; background: {{ settings.color_button_4_bg | default: '#B1FF15' }}; border-color: {{ settings.color_button_4_border | default: '#B6FF00' }}; }
+      .ah-hero__btn:hover { color: {{ settings.color_button_4_hover_text | default: '#FFFFFF' }}; background: {{ settings.color_button_4_hover_bg | default: '#000000' }}; border-color: {{ settings.color_button_4_hover_border | default: '#000000' }}; }
+    {% when 'button_5' %}
+      .ah-hero__btn { color: {{ settings.color_button_5_text | default: '#FFFFFF' }}; background: transparent; border-color: {{ settings.color_button_5_border | default: '#FFFFFF' }}; }
+      .ah-hero__btn:hover { color: {{ settings.color_button_5_hover_text | default: '#222222' }}; background: {{ settings.color_button_5_hover_bg | default: '#FFFFFF' }}; border-color: {{ settings.color_button_5_hover_border | default: '#FFFFFF' }}; }
+    {% when 'button_6' %}
+      .ah-hero__btn { color: {{ settings.color_button_6_text | default: '#000000' }}; background: {{ settings.color_button_6_bg | default: '#C7FD41' }}; border-color: {{ settings.color_button_6_border | default: '#666E53' }}; }
+      .ah-hero__btn:hover { color: {{ settings.color_button_6_hover_text | default: '#FFFFFF' }}; background: {{ settings.color_button_6_hover_bg | default: '#111111' }}; border-color: {{ settings.color_button_6_hover_border | default: '#111111' }}; }
+    {% else %}
+      .ah-hero__btn { color: {{ settings.color_button_4_text | default: '#000000' }}; background: {{ settings.color_button_4_bg | default: '#B1FF15' }}; border-color: {{ settings.color_button_4_border | default: '#B6FF00' }}; }
+      .ah-hero__btn:hover { color: {{ settings.color_button_4_hover_text | default: '#FFFFFF' }}; background: {{ settings.color_button_4_hover_bg | default: '#000000' }}; border-color: {{ settings.color_button_4_hover_border | default: '#000000' }}; }
+  {% endcase %}
+
+  .ah-hero__btn:hover { transform: translateY(-1px); }
+
+  /* ── Image panel ── */
+  .ah-hero__image-wrap {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+  }
+
+  .ah-hero__image-wrap img,
+  .ah-hero__image-wrap .ah-hero__img-placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: brightness(var(--hero-img-brightness)) sepia(var(--hero-img-sepia));
+  }
+
+  .ah-hero__img-placeholder {
+    background: #F5F5F5;           /* theme table header tone */
+  }
+
+  /* Gradient blend */
+  .ah-hero__image-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: {% if img_gradient %}linear-gradient(
+      to right,
+      rgba({{ bg_r }}, {{ bg_g }}, {{ bg_b }}, 1)    0%,
+      rgba({{ bg_r }}, {{ bg_g }}, {{ bg_b }}, 0.85) 15%,
+      rgba({{ bg_r }}, {{ bg_g }}, {{ bg_b }}, 0.55) 30%,
+      rgba({{ bg_r }}, {{ bg_g }}, {{ bg_b }}, 0.25) 45%,
+      rgba({{ bg_r }}, {{ bg_g }}, {{ bg_b }}, 0.08) 60%,
+      rgba({{ bg_r }}, {{ bg_g }}, {{ bg_b }}, 0)    75%
+    ){% else %}none{% endif %};
+    pointer-events: none;
+  }
+
+  /* Solid overlay tint */
+  .ah-hero__image-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,{{ img_overlay | divided_by: 100.0 }});
+    pointer-events: none;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .ah-hero {
+      grid-template-columns: 1fr;
+      height: auto;
+      min-height: 100svh;
+      {% if layout %}direction: ltr;{% endif %}
+    }
+
+    .ah-hero__content {
+      padding: 4rem 1.5rem 3rem;
+      order: 2;
+      max-width: 100%;
+    }
+
+    .ah-hero__content::before {
+      display: none;
+    }
+
+    .ah-hero__image-wrap {
+      order: 1;
+      height: var(--hero-mobile-img);
+      min-height: var(--hero-mobile-img);
+    }
+
+    .ah-hero__image-wrap::after {
+      background: {% if img_gradient %}linear-gradient(
+        to bottom,
+        rgba({{ bg_r }}, {{ bg_g }}, {{ bg_b }}, 0)    0%,
+        rgba({{ bg_r }}, {{ bg_g }}, {{ bg_b }}, 0.08) 40%,
+        rgba({{ bg_r }}, {{ bg_g }}, {{ bg_b }}, 0.35) 65%,
+        rgba({{ bg_r }}, {{ bg_g }}, {{ bg_b }}, 0.75) 85%,
+        rgba({{ bg_r }}, {{ bg_g }}, {{ bg_b }}, 1)    100%
+      ){% else %}none{% endif %};
+    }
+
+    .ah-hero__heading { font-size: var(--hero-heading-mobile); }
+
+    .ah-hero__sub,
+    .ah-hero__quote { max-width: 100%; }
+  }
+
+  @media (max-width: 480px) {
+    .ah-hero__content { padding: 3rem 1.25rem 2.5rem; }
+  }
+</style>
+
+<section
+  class="ah-hero"
+  id="about-hero-{{ section.id }}"
+  aria-label="{{ eyebrow_text }} — Hero"
+>
+  <!-- Content panel -->
+  <div class="ah-hero__content">
+    {%- if eyebrow_text != blank -%}
+      <span class="ah-hero__eyebrow">{{ eyebrow_text }}</span>
+    {%- endif -%}
+
+    <h1 class="ah-hero__heading">
+      {%- if heading_line1 != blank -%}{{ heading_line1 }}{%- endif -%}
+      {%- if heading_italic != blank -%}<br><em>{{ heading_italic }}</em>{%- endif -%}
+      {%- if heading_line3 != blank -%}<br>{{ heading_line3 }}{%- endif -%}
+    </h1>
+
+    <span class="ah-hero__rule"></span>
+
+    {%- if sub_text != blank -%}
+      <p class="ah-hero__sub">{{ sub_text }}</p>
+    {%- endif -%}
+
+    {%- if quote_text != blank -%}
+      <blockquote class="ah-hero__quote">{{ quote_text }}</blockquote>
+    {%- endif -%}
+
+    {%- if btn_show and btn_text != blank -%}
+      <div class="ah-hero__cta">
+        <a
+          href="{{ btn_url | default: '#' }}"
+          class="ah-hero__btn"
+          {% if btn_url contains 'http' %}target="_blank" rel="noopener"{% endif %}
+        >
+          {{ btn_text }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <!-- Image panel -->
+  <div class="ah-hero__image-wrap">
+    {%- if image != blank -%}
+      {{
+        image
+        | image_url: width: 1400
+        | image_tag:
+          loading: 'eager',
+          fetchpriority: 'high',
+          alt: image.alt | default: section.settings.image_alt,
+          sizes: '(max-width: 900px) 100vw, 50vw',
+          widths: '600, 800, 1000, 1200, 1400'
+      }}
+    {%- elsif section.settings.image_url != blank -%}
+      <img
+        src="{{ section.settings.image_url }}"
+        alt="{{ section.settings.image_alt | default: eyebrow_text }}"
+        loading="eager"
+        fetchpriority="high"
+      >
+    {%- else -%}
+      <div class="ah-hero__img-placeholder"></div>
+    {%- endif -%}
+    <div class="ah-hero__image-overlay"></div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About Hero",
+  "tag": "div",
+  "class": "about-hero-wrapper",
+  "settings": [
+
+    {
+      "type": "header",
+      "content": "── Layout & Background ──"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "checkbox",
+      "id": "layout_reverse",
+      "label": "Reverse layout (image left, text right)",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "content_max_width",
+      "label": "Content panel max-width (px)",
+      "min": 400,
+      "max": 900,
+      "step": 20,
+      "default": 700
+    },
+
+    {
+      "type": "header",
+      "content": "── Eyebrow Label ──"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow_text",
+      "label": "Eyebrow / Label Text",
+      "default": "Our Story"
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_color",
+      "label": "Eyebrow Color",
+      "default": "#386BBF"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_font_size",
+      "label": "Eyebrow Font Size (px)",
+      "min": 9,
+      "max": 18,
+      "step": 1,
+      "default": 12
+    },
+
+    {
+      "type": "header",
+      "content": "── Heading ──"
+    },
+    {
+      "type": "text",
+      "id": "heading_line1",
+      "label": "Heading Line 1",
+      "default": "We inherited something"
+    },
+    {
+      "type": "text",
+      "id": "heading_italic",
+      "label": "Heading Italic / Accent Line",
+      "default": "extraordinary."
+    },
+    {
+      "type": "text",
+      "id": "heading_line3",
+      "label": "Heading Line 3 (optional)",
+      "default": "And forgot it."
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#222222"
+    },
+    {
+      "type": "color",
+      "id": "heading_italic_color",
+      "label": "Heading Italic / Accent Color",
+      "default": "#B1FF15"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_desktop",
+      "label": "Heading Max Size — Desktop (px)",
+      "min": 28,
+      "max": 96,
+      "step": 2,
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "heading_size_min",
+      "label": "Heading Min Size — Clamp floor (px)",
+      "min": 22,
+      "max": 48,
+      "step": 1,
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "label": "Heading Size — Mobile (px)",
+      "min": 22,
+      "max": 56,
+      "step": 2,
+      "default": 32
+    },
+
+    {
+      "type": "header",
+      "content": "── Decorative Rule ──"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rule",
+      "label": "Show horizontal rule",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "rule_color",
+      "label": "Rule Color",
+      "default": "#EEEEEE"
+    },
+
+    {
+      "type": "header",
+      "content": "── Sub Text ──"
+    },
+    {
+      "type": "textarea",
+      "id": "sub_text",
+      "label": "Sub-heading / Body Text",
+      "default": "India gave the world the Kamasutra. A philosophy of desire, presence, and intimacy as art. Somewhere along the way, we decided to be ashamed of it."
+    },
+    {
+      "type": "color",
+      "id": "sub_color",
+      "label": "Sub Text Color",
+      "default": "#333333",
+      "info": "Use rgba() for transparency, e.g. rgba(34,34,34,0.6)"
+    },
+    {
+      "type": "range",
+      "id": "sub_font_size",
+      "label": "Sub Text Font Size (px)",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "sub_max_width",
+      "label": "Sub Text Max Width (px)",
+      "min": 200,
+      "max": 700,
+      "step": 10,
+      "default": 420
+    },
+
+    {
+      "type": "header",
+      "content": "── Pull Quote ──"
+    },
+    {
+      "type": "textarea",
+      "id": "quote_text",
+      "label": "Pull Quote Text",
+      "default": "Our ancestors built that knowledge deliberately, and treated it with reverence."
+    },
+    {
+  "type": "color",
+  "id": "quote_bg",
+  "label": "Quote Background",
+  "default": "#ffffff"
+},
+{
+  "type": "select",
+  "id": "quote_align",
+  "label": "Quote Text Align",
+  "options": [
+    { "value": "left", "label": "Left" },
+    { "value": "center", "label": "Center" },
+    { "value": "right", "label": "Right" }
+  ],
+  "default": "left"
+},
+{
+  "type": "checkbox",
+  "id": "quote_italic_enable",
+  "label": "Enable Italic",
+  "default": true
+},
+{
+  "type": "range",
+  "id": "quote_padding",
+  "label": "Quote Padding",
+  "min": 0,
+  "max": 80,
+  "step": 2,
+  "default": 20
+},
+{
+  "type": "range",
+  "id": "quote_radius",
+  "label": "Quote Border Radius",
+  "min": 0,
+  "max": 40,
+  "step": 1,
+  "default": 0
+},
+{
+  "type": "range",
+  "id": "quote_line_height",
+  "label": "Quote Line Height",
+  "min": 10,
+  "max": 30,
+  "step": 1,
+  "default": 13
+},
+{
+  "type": "range",
+  "id": "quote_letter_spacing",
+  "label": "Quote Letter Spacing",
+  "min": -5,
+  "max": 10,
+  "step": 1,
+  "default": 0
+},
+{
+  "type": "select",
+  "id": "quote_font_weight",
+  "label": "Quote Font Weight",
+  "options": [
+    { "value": "300", "label": "Light" },
+    { "value": "400", "label": "Regular" },
+    { "value": "500", "label": "Medium" },
+    { "value": "600", "label": "Semi Bold" },
+    { "value": "700", "label": "Bold" }
+  ],
+  "default": "500"
+},
+
+    {
+      "type": "header",
+      "content": "── CTA Button ──"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta_button",
+      "label": "Show CTA Button",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "cta_button_text",
+      "label": "Button Text",
+      "default": "Explore Our Story"
+    },
+    {
+      "type": "url",
+      "id": "cta_button_url",
+      "label": "Button Link URL"
+    },
+    {
+      "type": "select",
+      "id": "cta_button_style",
+      "label": "Button Style (matches theme buttons)",
+      "options": [
+        { "value": "button_1", "label": "Button 1 — Light / Lime hover" },
+        { "value": "button_2", "label": "Button 2 — White / Dark hover" },
+        { "value": "button_3", "label": "Button 3 — Outline / Fill hover" },
+        { "value": "button_4", "label": "Button 4 — Lime / Dark hover" },
+        { "value": "button_5", "label": "Button 5 — White outline / Inverse" },
+        { "value": "button_6", "label": "Button 6 — Green / Dark hover" }
+      ],
+      "default": "button_4"
+    },
+
+    {
+      "type": "header",
+      "content": "── Decorative Symbol ──"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_decorative_symbol",
+      "label": "Show decorative background symbol",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "decorative_symbol",
+      "label": "Decorative Symbol / Glyph",
+      "default": "❧",
+      "info": "Any character, emoji, or symbol. E.g. ❧ ✦ ◈ ❁ ॐ"
+    },
+    {
+      "type": "color",
+      "id": "deco_symbol_color",
+      "label": "Decorative Symbol Color",
+      "default": "rgba(0,0,0,0.04)",
+      "info": "Use rgba() for a very subtle effect"
+    },
+
+    {
+      "type": "header",
+      "content": "── Hero Image ──"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Image",
+      "info": "Recommended: 1200×1600px portrait or larger"
+    },
+    {
+      "type": "text",
+      "id": "image_url",
+      "label": "Image URL (fallback if no image uploaded)",
+      "info": "Paste a full image URL as fallback"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image Alt Text",
+      "default": "About hero image"
+    },
+    {
+      "type": "range",
+      "id": "image_brightness",
+      "label": "Image Brightness (%)",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "image_sepia",
+      "label": "Image Sepia Tone (%)",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "image_overlay_opacity",
+      "label": "Dark Overlay Opacity (%)",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "image_gradient_overlay",
+      "label": "Gradient blend from content into image",
+      "default": true,
+      "info": "Blends background color into the image edge for a seamless look"
+    },
+
+    {
+      "type": "header",
+      "content": "── Content Padding ──"
+    },
+    {
+      "type": "range",
+      "id": "left_padding_top",
+      "label": "Content Padding Top (px)",
+      "min": 40,
+      "max": 200,
+      "step": 8,
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "left_padding_bottom",
+      "label": "Content Padding Bottom (px)",
+      "min": 40,
+      "max": 200,
+      "step": 8,
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "left_padding_x",
+      "label": "Content Horizontal Padding (px)",
+      "min": 16,
+      "max": 120,
+      "step": 8,
+      "default": 64
+    },
+
+    {
+      "type": "header",
+      "content": "── Mobile ──"
+    },
+    {
+      "type": "range",
+      "id": "mobile_image_height",
+      "label": "Mobile Image Height (px)",
+      "min": 180,
+      "max": 600,
+      "step": 20,
+      "default": 320
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "About Hero",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}

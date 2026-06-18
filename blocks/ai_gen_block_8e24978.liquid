@@ -1,0 +1,176 @@
+{% doc %}
+  @prompt
+    make a liquid code section where i add my custom desgin , all in code like html css and js in one edit dont separate the editor 
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-custom-code-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    padding: {{ block.settings.padding_top }}px {{ block.settings.padding_horizontal }}px {{ block.settings.padding_bottom }}px {{ block.settings.padding_horizontal }}px;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-custom-code-wrapper-{{ ai_gen_id }} {
+    width: 100%;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-custom-code-{{ ai_gen_id }} {
+      padding: {{ block.settings.padding_top_mobile }}px {{ block.settings.padding_horizontal_mobile }}px {{ block.settings.padding_bottom_mobile }}px {{ block.settings.padding_horizontal_mobile }}px;
+    }
+  }
+{% endstyle %}
+
+<custom-code-block-{{ ai_gen_id }}
+  class="ai-custom-code-{{ ai_gen_id }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-custom-code-wrapper-{{ ai_gen_id }}">
+    {{ block.settings.custom_code }}
+  </div>
+</custom-code-block-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class CustomCodeBlock{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.initializeCustomCode();
+      }
+
+      initializeCustomCode() {
+        const wrapper = this.querySelector('.ai-custom-code-wrapper-{{ ai_gen_id }}');
+        if (!wrapper) return;
+
+        const scripts = wrapper.querySelectorAll('script');
+        scripts.forEach((oldScript) => {
+          const newScript = document.createElement('script');
+          Array.from(oldScript.attributes).forEach((attr) => {
+            newScript.setAttribute(attr.name, attr.value);
+          });
+          newScript.textContent = oldScript.textContent;
+          oldScript.parentNode.replaceChild(newScript, oldScript);
+        });
+      }
+    }
+
+    customElements.define('custom-code-block-{{ ai_gen_id }}', CustomCodeBlock{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Custom code",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "label": "Horizontal padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Top padding (mobile)",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Bottom padding (mobile)",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal_mobile",
+      "label": "Horizontal padding (mobile)",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Custom code"
+    },
+    {
+      "type": "paragraph",
+      "content": "Add your HTML, CSS, and JavaScript code below. Wrap CSS in <style> tags and JavaScript in <script> tags."
+    },
+    {
+      "type": "html",
+      "id": "custom_code",
+      "label": "Code editor"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom code"
+    }
+  ]
+}
+{% endschema %}

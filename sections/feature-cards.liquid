@@ -1,0 +1,801 @@
+{%- comment -%}
+  ============================================================
+  SECTION: Feature Cards Grid — Theme-Matched Build
+  ------------------------------------------------------------
+  Fonts     : Aleo (heading + body), SF Mono (button)
+  Colors    : Matched to theme token system
+  Button    : Button 4 (lime-green) default
+  Fixes     : Missing <a opening tag on CTA link button;
+              heading font-weight/line-height/letter-spacing;
+              card title font-weight/line-height/letter-spacing;
+              body line-height; button font/size/weight/border;
+              button border token (was using bg as border color);
+              added cta_border + cta_border_hover schema fields;
+              all old-brand color defaults replaced;
+              card description line-height matched
+  ============================================================
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+  assign section_id = 'feat-cards-' | append: section.id
+-%}
+
+<section
+  id="{{ section_id }}"
+  class="fc fc--cols-{{ s.columns }} fc--align-{{ s.heading_alignment }}"
+  style="
+    --fc-bg: {{ s.bg_color }};
+    --fc-card-bg: {{ s.card_bg_color }};
+    --fc-divider: {{ s.divider_color }};
+    --fc-heading: {{ s.heading_color }};
+    --fc-accent: {{ s.accent_color }};
+    --fc-subheading: {{ s.subheading_color }};
+    --fc-card-title: {{ s.card_title_color }};
+    --fc-card-text: {{ s.card_text_color }};
+    --fc-heading-font: {{ s.heading_font_family }};
+    --fc-body-font: {{ s.body_font_family }};
+    --fc-btn-font: {{ s.button_font_family }};
+    --fc-heading-size: {{ s.heading_size }}px;
+    --fc-heading-size-mobile: {{ s.heading_size_mobile }}px;
+    --fc-subheading-size: {{ s.subheading_size }}px;
+    --fc-card-title-size: {{ s.card_title_size }}px;
+    --fc-card-text-size: {{ s.card_text_size }}px;
+    --fc-icon-size: {{ s.icon_size }}px;
+    --fc-card-pad-x: {{ s.card_padding_x }}px;
+    --fc-card-pad-y: {{ s.card_padding_y }}px;
+    --fc-icon-gap: {{ s.icon_gap }}px;
+    --fc-title-desc-gap: {{ s.title_desc_gap }}px;
+    --fc-pad-top: {{ s.padding_top }}px;
+    --fc-pad-bottom: {{ s.padding_bottom }}px;
+    --fc-pad-top-mobile: {{ s.padding_top_mobile }}px;
+    --fc-pad-bottom-mobile: {{ s.padding_bottom_mobile }}px;
+    --fc-side-pad: {{ s.side_padding }}vw;
+    --fc-max-width: {{ s.container_max_width }}px;
+    --fc-heading-margin: {{ s.heading_margin_bottom }}px;
+    --fc-card-radius: {{ s.card_radius }}px;
+    --fc-btn-radius: {{ s.button_radius }}px;
+  "
+>
+  <div class="fc__inner">
+
+    {%- comment -%} ── HEADING ── {%- endcomment -%}
+    {%- if s.heading != blank or s.subheading != blank -%}
+      <div class="fc__heading-wrap">
+        {%- if s.heading != blank -%}
+          <{{ s.heading_tag }} class="fc__heading">{{ s.heading }}</{{ s.heading_tag }}>
+        {%- endif -%}
+        {%- if s.subheading != blank -%}
+          <p class="fc__subheading">{{ s.subheading }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ── CARDS GRID ── {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="fc__grid">
+        {%- for block in section.blocks -%}
+          {%- assign b = block.settings -%}
+          <div class="fc__card" {{ block.shopify_attributes }}>
+
+            {%- if b.icon != blank or b.image != blank -%}
+              <div class="fc__card-icon">
+                {%- if b.image != blank -%}
+                  <img
+                    src="{{ b.image | image_url: width: 120 }}"
+                    alt="{{ b.image.alt | default: b.title | escape }}"
+                    width="{{ s.icon_size }}"
+                    height="{{ s.icon_size }}"
+                    loading="lazy"
+                    class="fc__card-icon-img"
+                  />
+                {%- else -%}
+                  <span class="fc__card-icon-emoji" aria-hidden="true">{{ b.icon }}</span>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+
+            {%- if b.title != blank -%}
+              <h3 class="fc__card-title">{{ b.title }}</h3>
+            {%- endif -%}
+
+            {%- if b.description != blank -%}
+              <div class="fc__card-desc rte">{{ b.description }}</div>
+            {%- endif -%}
+
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ── CTA BUTTON ── {%- endcomment -%}
+    {%- if s.cta_label != blank -%}
+      <div class="fc__cta-wrap fc__cta-wrap--{{ s.cta_alignment }}">
+        {%- if s.cta_opens_modal -%}
+          <button
+            type="button"
+            class="fc__cta-btn"
+            onclick="var m=document.querySelector('.coc-modal'); if(m){m.hidden=false;m.classList.add('is-open');document.body.style.overflow='hidden';}"
+          >
+            {{ s.cta_label }}
+          </button>
+        {%- else -%}
+          <a
+            href="{{ s.cta_link | default: '#' }}"
+            class="fc__cta-btn"
+            {% if s.cta_open_new_tab %}target="_blank" rel="noopener"{% endif %}
+          >
+            {{ s.cta_label }}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<style>
+  /* ── Section shell ─────────────────────────────────────── */
+  #{{ section_id }}.fc {
+    background: var(--fc-bg);
+    padding: var(--fc-pad-top) var(--fc-side-pad) var(--fc-pad-bottom);
+    font-family: var(--fc-body-font);
+    font-weight: 300;
+  }
+
+  #{{ section_id }} .fc__inner {
+    max-width: var(--fc-max-width);
+    margin: 0 auto;
+  }
+
+  /* ── Heading block ─────────────────────────────────────── */
+  #{{ section_id }}.fc--align-left   .fc__heading-wrap { text-align: left; }
+  #{{ section_id }}.fc--align-center .fc__heading-wrap { text-align: center; }
+  #{{ section_id }}.fc--align-right  .fc__heading-wrap { text-align: right; }
+
+  #{{ section_id }} .fc__heading-wrap {
+    margin-bottom: var(--fc-heading-margin);
+  }
+
+  #{{ section_id }} .fc__heading {
+    font-family: var(--fc-heading-font);
+    font-size: var(--fc-heading-size);
+    font-weight: 500;          /* theme: Medium */
+    line-height: 1.3;          /* theme heading line-height */
+    letter-spacing: 0.001em;   /* theme heading letter-spacing: 1 */
+    color: var(--fc-heading);
+    margin: 0 0 10px;
+  }
+
+  #{{ section_id }} .fc__heading em,
+  #{{ section_id }} .fc__heading i {
+    font-style: italic;
+    color: var(--fc-accent);
+  }
+
+  #{{ section_id }} .fc__subheading {
+    font-family: var(--fc-body-font);
+    font-size: var(--fc-subheading-size);
+    line-height: 1.6;          /* theme body line-height */
+    letter-spacing: 0.002em;   /* theme body letter-spacing: 2 */
+    color: var(--fc-subheading);
+    margin: 0;
+    font-weight: 300;
+  }
+
+  /* ── Grid ──────────────────────────────────────────────── */
+  #{{ section_id }} .fc__grid {
+    display: grid;
+    gap: 1px;
+    background: var(--fc-divider);
+    border: 1px solid var(--fc-divider);
+    border-radius: var(--fc-card-radius);
+    overflow: hidden;
+  }
+
+  #{{ section_id }}.fc--cols-1 .fc__grid { grid-template-columns: 1fr; }
+  #{{ section_id }}.fc--cols-2 .fc__grid { grid-template-columns: repeat(2, 1fr); }
+  #{{ section_id }}.fc--cols-3 .fc__grid { grid-template-columns: repeat(3, 1fr); }
+  #{{ section_id }}.fc--cols-4 .fc__grid { grid-template-columns: repeat(4, 1fr); }
+
+  /* ── Card ──────────────────────────────────────────────── */
+  #{{ section_id }} .fc__card {
+    background: var(--fc-card-bg);
+    padding: var(--fc-card-pad-y) var(--fc-card-pad-x);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Icon ──────────────────────────────────────────────── */
+  #{{ section_id }} .fc__card-icon {
+    margin-bottom: var(--fc-icon-gap);
+    line-height: 1;
+  }
+
+  #{{ section_id }} .fc__card-icon-emoji {
+    font-size: var(--fc-icon-size);
+    display: block;
+    line-height: 1;
+  }
+
+  #{{ section_id }} .fc__card-icon-img {
+    width: var(--fc-icon-size);
+    height: var(--fc-icon-size);
+    object-fit: contain;
+    display: block;
+  }
+
+  /* ── Card title ────────────────────────────────────────── */
+  #{{ section_id }} .fc__card-title {
+    font-family: var(--fc-heading-font);
+    font-size: var(--fc-card-title-size);
+    font-weight: 500;          /* theme: Medium */
+    line-height: 1.3;          /* theme heading line-height */
+    letter-spacing: 0.001em;   /* theme heading letter-spacing: 1 */
+    color: var(--fc-card-title);
+    margin: 0 0 var(--fc-title-desc-gap);
+  }
+
+  /* ── Card description ──────────────────────────────────── */
+  #{{ section_id }} .fc__card-desc {
+    font-family: var(--fc-body-font);
+    font-size: var(--fc-card-text-size);
+    line-height: 1.6;          /* theme body line-height */
+    letter-spacing: 0.002em;   /* theme body letter-spacing: 2 */
+    color: var(--fc-card-text);
+    font-weight: 300;
+    margin: 0;
+  }
+
+  #{{ section_id }} .fc__card-desc p { margin: 0 0 8px; }
+  #{{ section_id }} .fc__card-desc p:last-child { margin-bottom: 0; }
+
+  /* ── CTA button — Button 4 (lime-green) default ────────── */
+  #{{ section_id }} .fc__cta-wrap {
+    display: flex;
+    margin-top: 40px;
+  }
+
+  #{{ section_id }} .fc__cta-wrap--left   { justify-content: flex-start; }
+  #{{ section_id }} .fc__cta-wrap--center { justify-content: center; }
+  #{{ section_id }} .fc__cta-wrap--right  { justify-content: flex-end; }
+
+  #{{ section_id }} .fc__cta-btn {
+    display: inline-block;
+    appearance: none;
+    -webkit-appearance: none;
+    background: {{ s.cta_bg }};
+    color: {{ s.cta_text_color }};
+    border: 2px solid {{ s.cta_border }};    /* theme border-width: 2 */
+    border-radius: var(--fc-btn-radius);     /* theme: 5px */
+    padding: 14px 40px;
+    font-family: var(--fc-btn-font);         /* theme: SF Mono */
+    font-size: 12px;                          /* theme button font-size: 12 */
+    font-weight: 700;                         /* theme: Bold */
+    letter-spacing: 0.12em;
+    text-transform: uppercase;               /* theme: Uppercase */
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease;
+  }
+
+  #{{ section_id }} .fc__cta-btn:hover {
+    background: {{ s.cta_bg_hover }};
+    color: {{ s.cta_text_hover }};
+    border-color: {{ s.cta_border_hover }};
+  }
+
+  /* ── Responsive ────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    #{{ section_id }}.fc--cols-4 .fc__grid,
+    #{{ section_id }}.fc--cols-3 .fc__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 600px) {
+    #{{ section_id }}.fc {
+      padding: var(--fc-pad-top-mobile) 6vw var(--fc-pad-bottom-mobile);
+    }
+
+    #{{ section_id }} .fc__grid,
+    #{{ section_id }}.fc--cols-2 .fc__grid,
+    #{{ section_id }}.fc--cols-3 .fc__grid,
+    #{{ section_id }}.fc--cols-4 .fc__grid { grid-template-columns: 1fr; }
+
+    #{{ section_id }} .fc__heading { font-size: var(--fc-heading-size-mobile); }
+    #{{ section_id }} .fc__heading-wrap { text-align: left !important; }
+    #{{ section_id }} .fc__cta-wrap { margin-top: 28px; }
+    #{{ section_id }} .fc__cta-btn { width: 100%; text-align: center; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Feature Cards",
+  "tag": "section",
+  "class": "section-feature-cards",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading tag (SEO)",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Wrap words in <em> tags for italic accent.",
+      "default": "<p>Privacy, <em>safety</em> & boundaries</p>"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading (optional)",
+      "default": "Your privacy is non-negotiable."
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "options": [
+        { "value": "left",   "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right",  "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "label": "Space below heading",
+      "min": 16,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+
+    {
+      "type": "header",
+      "content": "Grid"
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns (desktop)",
+      "options": [
+        { "value": "1", "label": "1 column" },
+        { "value": "2", "label": "2 columns" },
+        { "value": "3", "label": "3 columns" },
+        { "value": "4", "label": "4 columns" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "range",
+      "id": "card_padding_x",
+      "label": "Card horizontal padding",
+      "min": 16,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "card_padding_y",
+      "label": "Card vertical padding",
+      "min": 16,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Grid corner radius",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "icon_gap",
+      "label": "Gap between icon and title",
+      "min": 8,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "title_desc_gap",
+      "label": "Gap between title and description",
+      "min": 4,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "label": "Max content width",
+      "min": 800,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "default": 1440
+    },
+    {
+      "type": "range",
+      "id": "side_padding",
+      "label": "Side padding",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "unit": "vw",
+      "default": 7
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top (desktop)",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom (desktop)",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding top (mobile)",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding bottom (mobile)",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card background",
+      "default": "#F5F5F5"
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Divider / border between cards",
+      "default": "#EEEEEE"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Section heading color",
+      "default": "#222222"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Italic accent color",
+      "default": "#B1FF15"
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Subheading color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "label": "Card title color",
+      "default": "#222222"
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Card description color",
+      "default": "#333333"
+    },
+
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "text",
+      "id": "heading_font_family",
+      "label": "Heading font-family (CSS)",
+      "default": "'Aleo', serif"
+    },
+    {
+      "type": "text",
+      "id": "body_font_family",
+      "label": "Body font-family (CSS)",
+      "default": "'Aleo', serif"
+    },
+    {
+      "type": "text",
+      "id": "button_font_family",
+      "label": "Button font-family (CSS)",
+      "info": "Theme uses SF Mono for buttons. System font — no import needed.",
+      "default": "'SF Mono', 'Fira Code', 'Fira Mono', monospace"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Section heading size (desktop)",
+      "min": 28,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "label": "Section heading size (mobile)",
+      "min": 22,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "subheading_size",
+      "label": "Subheading size",
+      "min": 12,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "card_title_size",
+      "label": "Card title size",
+      "min": 14,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "card_text_size",
+      "label": "Card description size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon / emoji size",
+      "min": 16,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 26
+    },
+
+    {
+      "type": "header",
+      "content": "CTA Button"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button label",
+      "default": "Take the Survey → Get 20% Off",
+      "info": "Leave blank to hide the button."
+    },
+    {
+      "type": "checkbox",
+      "id": "cta_opens_modal",
+      "label": "Opens survey form (modal)",
+      "default": true,
+      "info": "When enabled, triggers the co-creation popup instead of a link."
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button link",
+      "info": "Only used when 'Opens survey form' is disabled."
+    },
+    {
+      "type": "checkbox",
+      "id": "cta_open_new_tab",
+      "label": "Open link in new tab",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "cta_alignment",
+      "label": "Button alignment",
+      "options": [
+        { "value": "left",   "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right",  "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color",
+      "id": "cta_bg",
+      "label": "Button background (Button 4 default)",
+      "default": "#B1FF15"
+    },
+    {
+      "type": "color",
+      "id": "cta_text_color",
+      "label": "Button text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "cta_border",
+      "label": "Button border color",
+      "default": "#B6FF00"
+    },
+    {
+      "type": "color",
+      "id": "cta_bg_hover",
+      "label": "Button background (hover)",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "cta_text_hover",
+      "label": "Button text (hover)",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "cta_border_hover",
+      "label": "Button border (hover)",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "button_radius",
+      "label": "Button corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 5
+    }
+  ],
+
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Feature card",
+      "limit": 12,
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Emoji icon",
+          "info": "Paste any emoji here e.g. 🔒 🪞 🚫 🚪. Leave blank if using an image.",
+          "default": "🔒"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Icon image (optional)",
+          "info": "Upload a small icon image instead of emoji. Overrides the emoji field if set."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Card title",
+          "default": "Secure & private"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Card description",
+          "default": "<p>Your survey answers and details are stored securely and never shared with third parties.</p>"
+        }
+      ]
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "Feature Cards",
+      "category": "Text",
+      "blocks": [
+        {
+          "type": "card",
+          "settings": {
+            "icon": "🔒",
+            "title": "Secure & private",
+            "description": "<p>Your survey answers and details are stored securely and never shared with third parties.</p>"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "icon": "🪞",
+            "title": "Your identity, your terms",
+            "description": "<p>You decide what name, pronouns, and details you're comfortable sharing. Always.</p>"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "icon": "🚫",
+            "title": "Zero media requests",
+            "description": "<p>We never ask for photos, videos, or anything explicit. Ever. Full stop.</p>"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "icon": "🚪",
+            "title": "Always optional",
+            "description": "<p>You can stop at any point. Filling the survey doesn't commit you to anything beyond the discount.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

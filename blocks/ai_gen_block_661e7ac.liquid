@@ -1,0 +1,541 @@
+{% doc %}
+  @prompt
+    make a section where 2 div in one section give the form and in other div give the opotion of uploading imgaes and also some text on image create it , MAKE IT LIKE theme friendly when someone see they can't differnciate this is one the theme form or  i am saying give the option where i uplaod image form backed of shopify not like this and use the theme color code inside this section and both form and image are in same size don't give the heading of image , make it bg back and text white 
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-form-image-section-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    background-color: {{ block.settings.section_bg_color }};
+    padding: {{ block.settings.section_padding }}px 0;
+  }
+
+  .ai-form-image-container-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: {{ block.settings.gap }}px;
+    max-width: {{ settings.cntwd }}px;
+    margin: 0 auto;
+    padding: 0 {{ settings.pad-desk }}px;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-form-image-container-{{ ai_gen_id }} {
+      padding: 0 {{ settings.pad-ipad }}px;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-form-image-container-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: 30px;
+      padding: 0 {{ settings.pad-mbl }}px;
+    }
+  }
+
+  .ai-form-wrapper-{{ ai_gen_id }},
+  .ai-image-wrapper-{{ ai_gen_id }} {
+    background-color: {{ block.settings.box_bg_color }};
+    padding: {{ block.settings.box_padding }}px;
+    border: 1px solid {{ block.settings.border_color }};
+    border-radius: {{ settings.btn_rad }}px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ai-form-title-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: {{ settings.h3_size }}px;
+    margin: 0 0 10px 0;
+    font-weight: {{ settings.heading_weight }};
+    font-family: {% if settings.hd_font == 'ft1' %}{{ settings.font1.family }}, {{ settings.font1.fallback_families }}{% elsif settings.hd_font == 'ft2' %}{{ settings.font2.family }}, {{ settings.font2.fallback_families }}{% else %}{{ settings.font3.family }}, {{ settings.font3.fallback_families }}{% endif %};
+  }
+
+  .ai-form-subtitle-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: {{ settings.bodyfs }}px;
+    margin: 0 0 25px 0;
+    line-height: {{ settings.bodylh }};
+  }
+
+  .ai-form-content-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex: 1;
+  }
+
+  .ai-form-field-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ai-form-label-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: {{ settings.bodyfs }}px;
+    font-weight: 500;
+  }
+
+  .ai-form-input-{{ ai_gen_id }},
+  .ai-form-textarea-{{ ai_gen_id }} {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid {{ block.settings.input_border_color }};
+    border-radius: {{ settings.btn_rad }}px;
+    background-color: {{ block.settings.input_bg_color }};
+    color: {{ block.settings.input_text_color }};
+    font-size: {{ settings.bodyfs }}px;
+    font-family: {% if settings.body_font == 'ft1' %}{{ settings.font1.family }}, {{ settings.font1.fallback_families }}{% elsif settings.body_font == 'ft2' %}{{ settings.font2.family }}, {{ settings.font2.fallback_families }}{% else %}{{ settings.font3.family }}, {{ settings.font3.fallback_families }}{% endif %};
+  }
+
+  .ai-form-textarea-{{ ai_gen_id }} {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  .ai-form-input-{{ ai_gen_id }}:focus,
+  .ai-form-textarea-{{ ai_gen_id }}:focus {
+    outline: none;
+    border-color: {{ block.settings.text_color }};
+  }
+
+  .ai-form-input-{{ ai_gen_id }}::placeholder,
+  .ai-form-textarea-{{ ai_gen_id }}::placeholder {
+    color: {{ block.settings.placeholder_color }};
+  }
+
+  .ai-form-button-{{ ai_gen_id }} {
+    padding: 14px 30px;
+    background-color: {{ settings.btn1 }};
+    color: {{ settings.btn1_txt }};
+    border: {{ settings.bdr_width }}px solid {{ settings.btn1_bdr }};
+    border-radius: {{ settings.btn_rad }}px;
+    font-size: {{ settings.btnf }}px;
+    font-weight: {{ settings.btn_weight }};
+    text-transform: {{ settings.btncase }};
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: {% if settings.btn_font == 'ft1' %}{{ settings.font1.family }}, {{ settings.font1.fallback_families }}{% elsif settings.btn_font == 'ft2' %}{{ settings.font2.family }}, {{ settings.font2.fallback_families }}{% else %}{{ settings.font3.family }}, {{ settings.font3.fallback_families }}{% endif %};
+  }
+
+  .ai-form-button-{{ ai_gen_id }}:hover {
+    background-color: {{ settings.btn1h }};
+    color: {{ settings.btn1_txth }};
+    border-color: {{ settings.btn1_bdrh }};
+  }
+
+  .ai-form-success-{{ ai_gen_id }} {
+    color: #008060;
+    margin-top: 15px;
+    font-size: {{ settings.bodyfs }}px;
+  }
+
+  .ai-form-error-{{ ai_gen_id }} {
+    color: #D82C0D;
+    margin-top: 8px;
+    font-size: {{ settings.bodyfs }}px;
+  }
+
+  .ai-image-wrapper-{{ ai_gen_id }} {
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+  }
+
+  .ai-image-display-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    border-radius: {{ settings.btn_rad }}px;
+    overflow: hidden;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-image-display-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .ai-image-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: {{ block.settings.placeholder_bg_color }};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+  }
+
+  .ai-image-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 300px;
+    max-height: 300px;
+    opacity: 0.3;
+  }
+
+  .ai-image-overlay-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: {{ block.settings.overlay_color }};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .ai-image-text-{{ ai_gen_id }} {
+    color: {{ block.settings.overlay_text_color }};
+    font-size: {{ block.settings.overlay_text_size }}px;
+    font-weight: {{ settings.heading_weight }};
+    text-align: center;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    font-family: {% if settings.hd_font == 'ft1' %}{{ settings.font1.family }}, {{ settings.font1.fallback_families }}{% elsif settings.hd_font == 'ft2' %}{{ settings.font2.family }}, {{ settings.font2.fallback_families }}{% else %}{{ settings.font3.family }}, {{ settings.font3.fallback_families }}{% endif %};
+  }
+{% endstyle %}
+
+<ai-form-image-section-{{ ai_gen_id }} class="ai-form-image-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-form-image-container-{{ ai_gen_id }}">
+    <div class="ai-form-wrapper-{{ ai_gen_id }}">
+      {%- if block.settings.form_title != blank -%}
+        <h2 class="ai-form-title-{{ ai_gen_id }}">{{ block.settings.form_title }}</h2>
+      {%- endif -%}
+      
+      {%- if block.settings.form_subtitle != blank -%}
+        <div class="ai-form-subtitle-{{ ai_gen_id }}">{{ block.settings.form_subtitle }}</div>
+      {%- endif -%}
+
+      {%- form 'contact' -%}
+        <div class="ai-form-content-{{ ai_gen_id }}">
+          <div class="ai-form-field-{{ ai_gen_id }}">
+            <label class="ai-form-label-{{ ai_gen_id }}" for="ai-name-{{ ai_gen_id }}">
+              {{ block.settings.name_label }}
+            </label>
+            <input
+              type="text"
+              id="ai-name-{{ ai_gen_id }}"
+              name="contact[name]"
+              class="ai-form-input-{{ ai_gen_id }}"
+              placeholder="{{ block.settings.name_placeholder }}"
+              required
+            >
+          </div>
+
+          <div class="ai-form-field-{{ ai_gen_id }}">
+            <label class="ai-form-label-{{ ai_gen_id }}" for="ai-email-{{ ai_gen_id }}">
+              {{ block.settings.email_label }}
+            </label>
+            <input
+              type="email"
+              id="ai-email-{{ ai_gen_id }}"
+              name="contact[email]"
+              class="ai-form-input-{{ ai_gen_id }}"
+              placeholder="{{ block.settings.email_placeholder }}"
+              autocomplete="email"
+              {% if form.errors %}
+                aria-invalid="true"
+                aria-describedby="ai-form-error-{{ ai_gen_id }}"
+              {% endif %}
+              {% if form.posted_successfully? %}
+                aria-describedby="ai-form-success-{{ ai_gen_id }}"
+              {% endif %}
+              required
+            >
+          </div>
+
+          <div class="ai-form-field-{{ ai_gen_id }}">
+            <label class="ai-form-label-{{ ai_gen_id }}" for="ai-message-{{ ai_gen_id }}">
+              {{ block.settings.message_label }}
+            </label>
+            <textarea
+              id="ai-message-{{ ai_gen_id }}"
+              name="contact[body]"
+              class="ai-form-textarea-{{ ai_gen_id }}"
+              placeholder="{{ block.settings.message_placeholder }}"
+              required
+            ></textarea>
+          </div>
+
+          <button type="submit" class="ai-form-button-{{ ai_gen_id }}">
+            {{ block.settings.button_text }}
+          </button>
+
+          {%- if form.errors -%}
+            <div id="ai-form-error-{{ ai_gen_id }}" class="ai-form-error-{{ ai_gen_id }}">
+              {{ form.errors.messages.email }}
+            </div>
+          {%- endif -%}
+
+          {%- if form.posted_successfully? -%}
+            <div id="ai-form-success-{{ ai_gen_id }}" class="ai-form-success-{{ ai_gen_id }}">
+              {{ block.settings.success_message }}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endform -%}
+    </div>
+
+    <div class="ai-image-wrapper-{{ ai_gen_id }}">
+      <div class="ai-image-display-{{ ai_gen_id }}">
+        {% if block.settings.display_image %}
+          <img
+            src="{{ block.settings.display_image | image_url: width: 800 }}"
+            alt="{{ block.settings.display_image.alt | escape }}"
+            loading="lazy"
+            width="{{ block.settings.display_image.width }}"
+            height="{{ block.settings.display_image.height }}"
+          >
+        {% else %}
+          <div class="ai-image-placeholder-{{ ai_gen_id }}">
+            {{ 'image' | placeholder_svg_tag }}
+          </div>
+        {% endif %}
+
+        {%- if block.settings.show_overlay and block.settings.overlay_text != blank -%}
+          <div class="ai-image-overlay-{{ ai_gen_id }}">
+            <div class="ai-image-text-{{ ai_gen_id }}">{{ block.settings.overlay_text }}</div>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</ai-form-image-section-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class AiFormImageSection{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+    }
+
+    customElements.define('ai-form-image-section-{{ ai_gen_id }}', AiFormImageSection{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Contact form with image",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap between columns",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "box_padding",
+      "label": "Box padding",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "section_bg_color",
+      "label": "Section background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "box_bg_color",
+      "label": "Box background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "input_bg_color",
+      "label": "Input background",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "input_text_color",
+      "label": "Input text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "input_border_color",
+      "label": "Input border",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "placeholder_color",
+      "label": "Placeholder text",
+      "default": "#888888"
+    },
+    {
+      "type": "color",
+      "id": "placeholder_bg_color",
+      "label": "Image placeholder background",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "header",
+      "content": "Contact form"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "form_title",
+      "label": "Title",
+      "default": "Get in touch"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "form_subtitle",
+      "label": "Subtitle",
+      "default": "We'd love to hear from you"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "name_label",
+      "label": "Name label",
+      "default": "Name"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "name_placeholder",
+      "label": "Name placeholder",
+      "default": "Your name"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "email_label",
+      "label": "Email label",
+      "default": "Email"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "email_placeholder",
+      "label": "Email placeholder",
+      "default": "your@email.com"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "message_label",
+      "label": "Message label",
+      "default": "Message"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "message_placeholder",
+      "label": "Message placeholder",
+      "default": "Your message here..."
+    },
+    {
+      "type": "inline_richtext",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Send message"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Thank you! Your message has been sent."
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "display_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Image overlay"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overlay",
+      "label": "Show overlay",
+      "default": false
+    },
+    {
+      "type": "inline_richtext",
+      "id": "overlay_text",
+      "label": "Overlay text",
+      "default": "Your beautiful moments"
+    },
+    {
+      "type": "range",
+      "id": "overlay_text_size",
+      "label": "Text size",
+      "min": 14,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay background",
+      "default": "rgba(0, 0, 0, 0.4)"
+    },
+    {
+      "type": "color",
+      "id": "overlay_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact form with image"
+    }
+  ]
+}
+{% endschema %}

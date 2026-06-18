@@ -1,0 +1,794 @@
+{%- comment -%}
+  ============================================================
+  SECTION: How It Works (Steps Grid) — Theme-Matched Build
+  ------------------------------------------------------------
+  Fonts     : Aleo (heading + body), SF Mono (button)
+  Colors    : Matched to theme token system
+  Button    : Button 4 (lime-green) default; fully configurable
+  Fixes     : heading font-weight, line-height, letter-spacing,
+              body line-height, button font/size/weight/border,
+              hardcoded old-brand colors removed from CSS,
+              CTA button colors now driven by schema settings
+  ============================================================
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+  assign section_id = 'how-it-works-' | append: section.id
+  assign columns = s.columns | default: 4
+-%}
+
+<section
+  id="{{ section_id }}"
+  class="hiw hiw--cols-{{ columns }} hiw--align-{{ s.heading_alignment }}"
+  style="
+    --hiw-bg: {{ s.bg_color }};
+    --hiw-card-bg: {{ s.card_bg_color }};
+    --hiw-card-dark: {{ s.card_dark_bg }};
+    --hiw-heading: {{ s.heading_color }};
+    --hiw-accent: {{ s.accent_color }};
+    --hiw-eyebrow: {{ s.eyebrow_color }};
+    --hiw-step-title: {{ s.step_title_color }};
+    --hiw-body: {{ s.body_color }};
+    --hiw-number: {{ s.number_color }};
+    --hiw-divider: {{ s.divider_color }};
+    --hiw-heading-font: {{ s.heading_font_family }};
+    --hiw-body-font: {{ s.body_font_family }};
+    --hiw-btn-font: {{ s.button_font_family }};
+    --hiw-heading-size: {{ s.heading_size }}px;
+    --hiw-heading-size-mobile: {{ s.heading_size_mobile }}px;
+    --hiw-step-title-size: {{ s.step_title_size }}px;
+    --hiw-body-size: {{ s.body_size }}px;
+    --hiw-number-size: {{ s.number_size }}px;
+    --hiw-pad-top: {{ s.padding_top }}px;
+    --hiw-pad-bottom: {{ s.padding_bottom }}px;
+    --hiw-pad-top-mobile: {{ s.padding_top_mobile }}px;
+    --hiw-pad-bottom-mobile: {{ s.padding_bottom_mobile }}px;
+    --hiw-side-pad: {{ s.side_padding }}vw;
+    --hiw-max-width: {{ s.container_max_width }}px;
+    --hiw-card-pad-x: {{ s.card_padding_x }}px;
+    --hiw-card-pad-y: {{ s.card_padding_y }}px;
+    --hiw-grid-gap: {{ s.grid_gap }}px;
+    --hiw-heading-margin: {{ s.heading_margin_bottom }}px;
+  "
+>
+  <div class="hiw__inner">
+
+    {%- comment -%} ── HEADING ── {%- endcomment -%}
+    {%- if s.heading != blank or s.subheading != blank -%}
+      <div class="hiw__heading-wrap">
+        {%- if s.heading != blank -%}
+          <{{ s.heading_tag }} class="hiw__heading">
+            {{ s.heading }}
+          </{{ s.heading_tag }}>
+        {%- endif -%}
+
+        {%- if s.subheading != blank -%}
+          <div class="hiw__subheading rte">{{ s.subheading }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ── STEPS GRID ── {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="hiw__grid">
+        {%- for block in section.blocks -%}
+          {%- assign b = block.settings -%}
+          <div
+            class="hiw__step{% if b.highlight %} hiw__step--highlight{% endif %}"
+            {{ block.shopify_attributes }}
+          >
+            {%- if b.number != blank -%}
+              <div class="hiw__step-number">{{ b.number }}</div>
+            {%- endif -%}
+
+            {%- if b.label != blank -%}
+              <div class="hiw__step-label">{{ b.label }}</div>
+            {%- endif -%}
+
+            {%- if b.title != blank -%}
+              <h3 class="hiw__step-title">{{ b.title }}</h3>
+            {%- endif -%}
+
+            {%- if b.description != blank -%}
+              <div class="hiw__step-desc rte">{{ b.description }}</div>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ── CTA BUTTON ── {%- endcomment -%}
+    {%- if s.cta_label != blank -%}
+      <div class="hiw__cta-wrap hiw__cta-wrap--{{ s.cta_alignment }}">
+        <button
+          type="button"
+          class="hiw__cta-btn"
+          onclick="var m=document.querySelector('.coc-modal'); if(m){m.hidden=false;m.classList.add('is-open');document.body.style.overflow='hidden';}"
+        >
+          {{ s.cta_label }}
+        </button>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<style>
+  /* ── Section shell ─────────────────────────────────────── */
+  #{{ section_id }}.hiw {
+    background: var(--hiw-bg);
+    padding: var(--hiw-pad-top) var(--hiw-side-pad) var(--hiw-pad-bottom);
+    font-family: var(--hiw-body-font);
+    font-weight: 300;
+  }
+
+  #{{ section_id }} .hiw__inner {
+    max-width: var(--hiw-max-width);
+    margin: 0 auto;
+  }
+
+  /* ── Heading block ─────────────────────────────────────── */
+  #{{ section_id }}.hiw--align-left   .hiw__heading-wrap { text-align: left; }
+  #{{ section_id }}.hiw--align-center .hiw__heading-wrap { text-align: center; }
+  #{{ section_id }}.hiw--align-right  .hiw__heading-wrap { text-align: right; }
+
+  #{{ section_id }} .hiw__heading-wrap {
+    margin-bottom: var(--hiw-heading-margin);
+  }
+
+  #{{ section_id }} .hiw__heading {
+    font-family: var(--hiw-heading-font);
+    font-size: var(--hiw-heading-size);
+    font-weight: 500;          /* theme: Medium */
+    line-height: 1.3;          /* theme heading line-height */
+    letter-spacing: 0.001em;   /* theme heading letter-spacing: 1 */
+    color: var(--hiw-heading);
+    margin: 0;
+  }
+
+  #{{ section_id }} .hiw__heading em,
+  #{{ section_id }} .hiw__heading i {
+    font-style: italic;
+    color: var(--hiw-accent);
+  }
+
+  #{{ section_id }} .hiw__subheading {
+    font-family: var(--hiw-body-font);
+    font-size: var(--hiw-body-size);
+    line-height: 1.6;          /* theme body line-height */
+    letter-spacing: 0.002em;   /* theme body letter-spacing: 2 */
+    color: var(--hiw-body);
+    margin-top: 12px;
+    max-width: 640px;
+  }
+
+  #{{ section_id }}.hiw--align-center .hiw__subheading { margin-left: auto; margin-right: auto; }
+  #{{ section_id }}.hiw--align-right  .hiw__subheading { margin-left: auto; }
+
+  /* ── Grid ──────────────────────────────────────────────── */
+  #{{ section_id }} .hiw__grid {
+    display: grid;
+    gap: {{ s.grid_gap }}px;
+    background: var(--hiw-divider);
+  }
+
+  #{{ section_id }}.hiw--cols-2 .hiw__grid { grid-template-columns: repeat(2, 1fr); }
+  #{{ section_id }}.hiw--cols-3 .hiw__grid { grid-template-columns: repeat(3, 1fr); }
+  #{{ section_id }}.hiw--cols-4 .hiw__grid { grid-template-columns: repeat(4, 1fr); }
+
+  /* ── Step card ─────────────────────────────────────────── */
+  #{{ section_id }} .hiw__step {
+    background: var(--hiw-card-bg);
+    padding: var(--hiw-card-pad-y) var(--hiw-card-pad-x);
+    display: flex;
+    flex-direction: column;
+  }
+
+  #{{ section_id }} .hiw__step--highlight {
+    background: var(--hiw-card-dark);
+  }
+
+  /* ── Ghosted number ────────────────────────────────────── */
+  #{{ section_id }} .hiw__step-number {
+    font-family: var(--hiw-heading-font);
+    font-size: var(--hiw-number-size);
+    font-weight: 300;
+    line-height: 1;
+    color: var(--hiw-number);
+    margin-bottom: 28px;
+    letter-spacing: -0.02em;
+  }
+
+  #{{ section_id }} .hiw__step--highlight .hiw__step-number {
+    color: rgba(255,255,255,0.08);
+  }
+
+  /* ── Step eyebrow label ────────────────────────────────── */
+  #{{ section_id }} .hiw__step-label {
+    font-family: var(--hiw-body-font);
+    font-size: 12px;           /* theme breadcrumb font-size: 12 */
+    letter-spacing: 0.2em;     /* theme body letter-spacing: 2 */
+    text-transform: uppercase;
+    color: var(--hiw-eyebrow);
+    margin-bottom: 14px;
+    font-weight: 400;          /* theme body weight */
+  }
+
+  #{{ section_id }} .hiw__step--highlight .hiw__step-label {
+    color: var(--hiw-accent);
+  }
+
+  /* ── Step title ────────────────────────────────────────── */
+  #{{ section_id }} .hiw__step-title {
+    font-family: var(--hiw-heading-font);
+    font-size: var(--hiw-step-title-size);
+    font-weight: 500;          /* theme: Medium */
+    line-height: 1.3;          /* theme heading line-height */
+    letter-spacing: 0.001em;   /* theme heading letter-spacing: 1 */
+    color: var(--hiw-step-title);
+    margin: 0 0 14px;
+  }
+
+  #{{ section_id }} .hiw__step--highlight .hiw__step-title {
+    color: #FFFFFF;
+  }
+
+  /* ── Step description ──────────────────────────────────── */
+  #{{ section_id }} .hiw__step-desc {
+    font-family: var(--hiw-body-font);
+    font-size: var(--hiw-body-size);
+    line-height: 1.6;          /* theme body line-height */
+    letter-spacing: 0.002em;   /* theme body letter-spacing: 2 */
+    color: var(--hiw-body);
+    font-weight: 300;
+  }
+
+  #{{ section_id }} .hiw__step-desc p { margin: 0 0 10px; }
+  #{{ section_id }} .hiw__step-desc p:last-child { margin-bottom: 0; }
+
+  #{{ section_id }} .hiw__step--highlight .hiw__step-desc {
+    color: rgba(255,255,255,0.55);
+  }
+
+  /* ── CTA Button — Button 4 default (lime-green) ────────── */
+  #{{ section_id }} .hiw__cta-wrap {
+    margin-top: 48px;
+    display: flex;
+  }
+
+  #{{ section_id }} .hiw__cta-wrap--left   { justify-content: flex-start; }
+  #{{ section_id }} .hiw__cta-wrap--center { justify-content: center; }
+  #{{ section_id }} .hiw__cta-wrap--right  { justify-content: flex-end; }
+
+  #{{ section_id }} .hiw__cta-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    background: {{ s.cta_bg }};
+    color: {{ s.cta_text }};
+    border: 2px solid {{ s.cta_border }};   /* theme border-width: 2 */
+    border-radius: {{ s.cta_radius }}px;    /* theme: 5px */
+    padding: 14px 32px;
+    font-family: var(--hiw-btn-font);       /* theme: SF Mono */
+    font-size: 12px;                         /* theme button font-size: 12 */
+    font-weight: 700;                        /* theme: Bold */
+    letter-spacing: 0.12em;
+    text-transform: uppercase;               /* theme: Uppercase */
+    cursor: pointer;
+    transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease;
+  }
+
+  #{{ section_id }} .hiw__cta-btn:hover {
+    background: {{ s.cta_bg_hover }};
+    color: {{ s.cta_text_hover }};
+    border-color: {{ s.cta_border_hover }};
+  }
+
+  /* ── Responsive ────────────────────────────────────────── */
+  @media (max-width: 1024px) {
+    #{{ section_id }}.hiw--cols-4 .hiw__grid { grid-template-columns: repeat(2, 1fr); }
+    #{{ section_id }}.hiw--cols-3 .hiw__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 600px) {
+    #{{ section_id }}.hiw {
+      padding: var(--hiw-pad-top-mobile) 6vw var(--hiw-pad-bottom-mobile);
+    }
+
+    #{{ section_id }} .hiw__grid,
+    #{{ section_id }}.hiw--cols-2 .hiw__grid,
+    #{{ section_id }}.hiw--cols-3 .hiw__grid,
+    #{{ section_id }}.hiw--cols-4 .hiw__grid {
+      grid-template-columns: 1fr;
+    }
+
+    #{{ section_id }} .hiw__heading {
+      font-size: var(--hiw-heading-size-mobile);
+    }
+
+    #{{ section_id }} .hiw__step-number {
+      font-size: 56px;
+      margin-bottom: 20px;
+    }
+
+    #{{ section_id }} .hiw__heading-wrap {
+      text-align: left !important;
+    }
+
+    #{{ section_id }} .hiw__cta-wrap {
+      margin-top: 32px;
+    }
+
+    #{{ section_id }} .hiw__cta-btn {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "How It Works",
+  "tag": "section",
+  "class": "section-how-it-works",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading tag (SEO)",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Wrap words in <em> tags for italic accent style.",
+      "default": "<p>How the <em>co-creation</em> works</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading (optional)"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "options": [
+        { "value": "left",   "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right",  "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "label": "Space below heading",
+      "min": 20,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+
+    {
+      "type": "header",
+      "content": "Grid Layout"
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns (desktop)",
+      "options": [
+        { "value": "2", "label": "2 columns" },
+        { "value": "3", "label": "3 columns" },
+        { "value": "4", "label": "4 columns" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Grid divider thickness",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "default": 1,
+      "info": "The thin line between cards."
+    },
+    {
+      "type": "range",
+      "id": "card_padding_x",
+      "label": "Card horizontal padding",
+      "min": 16,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "card_padding_y",
+      "label": "Card vertical padding",
+      "min": 24,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "label": "Max content width",
+      "min": 1000,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "default": 1440
+    },
+    {
+      "type": "range",
+      "id": "side_padding",
+      "label": "Side padding",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "unit": "vw",
+      "default": 7
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top (desktop)",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom (desktop)",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding top (mobile)",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding bottom (mobile)",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card background (normal)",
+      "default": "#F5F5F5"
+    },
+    {
+      "type": "color",
+      "id": "card_dark_bg",
+      "label": "Card background (highlighted / dark)",
+      "default": "#222222"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Main heading color",
+      "default": "#222222"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Italic accent color",
+      "default": "#B1FF15"
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_color",
+      "label": "Step eyebrow label color",
+      "default": "#386BBF"
+    },
+    {
+      "type": "color",
+      "id": "step_title_color",
+      "label": "Step title color",
+      "default": "#222222"
+    },
+    {
+      "type": "color",
+      "id": "body_color",
+      "label": "Body / description text",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "number_color",
+      "label": "Ghosted number color",
+      "default": "#EEEEEE"
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Divider / grid gap color",
+      "default": "#EEEEEE"
+    },
+
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "text",
+      "id": "heading_font_family",
+      "label": "Heading font-family (CSS)",
+      "default": "'Aleo', serif"
+    },
+    {
+      "type": "text",
+      "id": "body_font_family",
+      "label": "Body font-family (CSS)",
+      "default": "'Aleo', serif"
+    },
+    {
+      "type": "text",
+      "id": "button_font_family",
+      "label": "Button font-family (CSS)",
+      "info": "Theme uses SF Mono for buttons. System font — no import needed.",
+      "default": "'SF Mono', 'Fira Code', 'Fira Mono', monospace"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Main heading size (desktop)",
+      "min": 28,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "label": "Main heading size (mobile)",
+      "min": 22,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "step_title_size",
+      "label": "Step title size",
+      "min": 16,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "label": "Body text size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "number_size",
+      "label": "Ghosted number size",
+      "min": 40,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "default": 72
+    },
+
+    {
+      "type": "header",
+      "content": "CTA Button"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button label",
+      "default": "Take the Survey → Get 20% Off",
+      "info": "Leave blank to hide the button."
+    },
+    {
+      "type": "select",
+      "id": "cta_alignment",
+      "label": "Button alignment",
+      "options": [
+        { "value": "left",   "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right",  "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color",
+      "id": "cta_bg",
+      "label": "Button background (Button 4 default)",
+      "default": "#B1FF15"
+    },
+    {
+      "type": "color",
+      "id": "cta_text",
+      "label": "Button text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "cta_border",
+      "label": "Button border color",
+      "default": "#B6FF00"
+    },
+    {
+      "type": "color",
+      "id": "cta_bg_hover",
+      "label": "Button background (hover)",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "cta_text_hover",
+      "label": "Button text (hover)",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "cta_border_hover",
+      "label": "Button border (hover)",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "cta_radius",
+      "label": "Button corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 5
+    }
+  ],
+
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "limit": 12,
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Step number",
+          "default": "01"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Eyebrow label (small uppercase)",
+          "default": "Your Voice"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Step title",
+          "default": "Tell Us What You Actually Want"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Fill a short survey about your desires, needs, and what's missing. No right answers. Just real ones. Takes under 10 minutes.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "highlight",
+          "label": "Make this step dark (highlighted)",
+          "default": false
+        }
+      ]
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "How It Works",
+      "category": "Text",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "number": "01",
+            "label": "Your Voice",
+            "title": "Tell Us What You Actually Want",
+            "description": "<p>Fill a short survey about your desires, needs, and what's missing. No right answers. Just real ones. Takes under 10 minutes.</p>",
+            "highlight": false
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "number": "02",
+            "label": "You Shape It",
+            "title": "Your Answers Influence the Product",
+            "description": "<p>We read every response. The patterns you reveal — scents, textures, rituals, gaps — directly inform what we create next.</p>",
+            "highlight": false
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "number": "03",
+            "label": "Early Access",
+            "title": "Be First In Line",
+            "description": "<p>Co-creators get early access to the product before it goes public. You helped make it. You get it first.</p>",
+            "highlight": false
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "number": "04",
+            "label": "Your Reward",
+            "title": "20% Off. Because You Built This.",
+            "description": "<p>Every survey respondent gets an exclusive 20% off the new product at launch. No codes to hunt. No hoops. Just yours.</p>",
+            "highlight": true
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

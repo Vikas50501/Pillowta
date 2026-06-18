@@ -1,0 +1,54 @@
+<!-- sections/shipping-policy-simple.liquid -->
+<section class="shopify-policy__container page-width">
+  <!-- Page Title -->
+  <div class="shopify-policy__title text-center">
+    <h1>{{ section.settings.page_title }}</h1>
+  </div>
+
+  <!-- Page Content -->
+  <div class="shopify-policy__body rte">
+    {{ section.settings.policy_content }}
+  </div>
+
+  <style>
+    .shopify-policy__container {
+      padding: 80px 20px;
+    }
+    .shopify-policy__title h1 {
+      font-size: 40px;
+      font-weight: 700;
+        text-align: center;
+      margin-bottom: 30px;
+    }
+    .shopify-policy__body {
+      font-size: 16px;
+      line-height: 1.7;
+      color: #333;
+    }
+  </style>
+</section>
+
+{% schema %}
+{
+  "name": "Simple Shipping Policy",
+  "settings": [
+    {
+      "type": "text",
+      "id": "page_title",
+      "label": "Page Title",
+      "default": "Shipping Policy"
+    },
+    {
+      "type": "richtext",
+      "id": "policy_content",
+      "label": "Shipping Policy Content",
+      "default": "<p>Paste your full shipping policy here.</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Simple Shipping Policy"
+    }
+  ]
+}
+{% endschema %}

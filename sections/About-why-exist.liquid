@@ -1,0 +1,689 @@
+{% comment %}
+  ============================================================
+  ABOUT — SECTION 01: WHY WE EXIST
+  Two-column layout: left (number + heading) / right (body + callout box)
+  Full 100% schema-driven customisation · Matches theme fonts & colors
+  ============================================================
+{% endcomment %}
+
+{%- liquid
+  assign section_bg        = section.settings.section_bg
+  assign section_margin_top    = section.settings.section_margin_top
+  assign section_margin_bottom = section.settings.section_margin_bottom
+  assign section_padding_x     = section.settings.section_padding_x
+  assign max_width         = section.settings.max_width
+  assign col_gap           = section.settings.column_gap
+
+  assign show_tag          = section.settings.show_section_tag
+  assign tag_text          = section.settings.tag_text
+  assign tag_color         = section.settings.tag_color
+  assign tag_size          = section.settings.tag_size
+
+  assign show_num          = section.settings.show_section_number
+  assign num_text          = section.settings.section_number
+  assign num_color         = section.settings.num_color
+  assign num_size          = section.settings.num_size
+  assign num_overlap       = section.settings.num_overlap
+
+  assign heading_line1     = section.settings.heading_line1
+  assign heading_italic    = section.settings.heading_italic
+  assign heading_color     = section.settings.heading_color
+  assign heading_italic_color = section.settings.heading_italic_color
+  assign heading_size_max  = section.settings.heading_size_max
+  assign heading_size_min  = section.settings.heading_size_min
+
+  assign sub_label         = section.settings.sub_label
+  assign sub_label_color   = section.settings.sub_label_color
+  assign sub_label_size    = section.settings.sub_label_size
+
+  assign para1             = section.settings.paragraph_1
+  assign para2             = section.settings.paragraph_2
+  assign para3             = section.settings.paragraph_3
+  assign body_color        = section.settings.body_color
+  assign body_size         = section.settings.body_font_size
+  assign body_strong_color = section.settings.body_strong_color
+
+  assign show_callout      = section.settings.show_callout
+  assign callout_bg        = section.settings.callout_bg
+  assign callout_text      = section.settings.callout_text
+  assign callout_text_color = section.settings.callout_text_color
+  assign callout_text_size  = section.settings.callout_text_size
+  assign callout_accent    = section.settings.callout_accent_text
+  assign callout_accent_color = section.settings.callout_accent_color
+  assign callout_accent_size  = section.settings.callout_accent_size
+  assign callout_deco_color   = section.settings.callout_deco_color
+  assign callout_border_radius = section.settings.callout_border_radius
+
+  assign col_ratio         = section.settings.column_ratio
+
+  # Extract bg_color RGB for potential use
+  assign bg_hex = section_bg | remove: '#'
+  assign bg_r   = bg_hex | slice: 0, 2 | prepend: '0x' | times: 1
+  assign bg_g   = bg_hex | slice: 2, 2 | prepend: '0x' | times: 1
+  assign bg_b   = bg_hex | slice: 4, 2 | prepend: '0x' | times: 1
+-%}
+
+<style>
+  /* ── Section root variables ── */
+  #shopify-section-{{ section.id }} {
+    --we-bg:                 {{ section_bg }};
+    --we-tag-color:          {{ tag_color }};
+    --we-tag-size:           {{ tag_size }}px;
+    --we-num-color:          {{ num_color }};
+    --we-num-size:           {{ num_size }}rem;
+    --we-num-overlap:        -{{ num_overlap }}rem;
+    --we-h-color:            {{ heading_color }};
+    --we-h-italic:           {{ heading_italic_color }};
+    --we-h-max:              {{ heading_size_max }}px;
+    --we-h-min:              {{ heading_size_min }}px;
+    --we-sub-color:          {{ sub_label_color }};
+    --we-sub-size:           {{ sub_label_size }}px;
+    --we-body-color:         {{ body_color }};
+    --we-body-size:          {{ body_size }}px;
+    --we-body-strong:        {{ body_strong_color }};
+    --we-callout-bg:         {{ callout_bg }};
+    --we-callout-text:       {{ callout_text_color }};
+    --we-callout-size:       {{ callout_text_size }}px;
+    --we-callout-accent:     {{ callout_accent_color }};
+    --we-callout-accent-sz:  {{ callout_accent_size }}px;
+    --we-callout-deco:       {{ callout_deco_color }};
+    --we-callout-radius:     {{ callout_border_radius }}px;
+    --we-max-width:          {{ max_width }}px;
+    --we-padding-x:          {{ section_padding_x }}px;
+    --we-gap:                {{ col_gap }}rem;
+    --we-mt:                 {{ section_margin_top }}rem;
+    --we-mb:                 {{ section_margin_bottom }}rem;
+    --font-heading:          {{ settings.type_header_font.family | default: 'Aleo' }}, Georgia, serif;
+    --font-body:             {{ settings.type_base_font.family | default: 'Aleo' }}, sans-serif;
+    --font-mono:             'SF Mono', 'Fira Code', monospace;
+  }
+
+  /* ── Wrapper ── */
+  .we-section {
+    background: var(--we-bg);
+    width: 100%;
+  }
+
+  .we-inner {
+    max-width: var(--we-max-width);
+    margin: var(--we-mt) auto var(--we-mb);
+    padding: 0 var(--we-padding-x);
+    display: grid;
+    grid-template-columns: {% case col_ratio %}{% when '1-2' %}1fr 2fr{% when '1-3' %}1fr 3fr{% when '2-3' %}2fr 3fr{% when '1-1' %}1fr 1fr{% else %}1fr 2fr{% endcase %};
+    gap: var(--we-gap);
+    align-items: start;
+  }
+
+  /* ── LEFT: Section tag, number, heading, sub-label ── */
+  .we-left {
+    position: relative;
+  }
+
+  .we-tag {
+    font-family: var(--font-mono);
+    font-size: var(--we-tag-size);
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--we-tag-color);
+    margin-bottom: 1rem;
+    display: {% if show_tag %}block{% else %}none{% endif %};
+  }
+
+  .we-num {
+    font-family: var(--font-heading);
+    font-size: var(--we-num-size);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--we-num-color);
+    display: {% if show_num %}block{% else %}none{% endif %};
+    margin-bottom: var(--we-num-overlap);
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .we-heading {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--we-h-min), 3vw, var(--we-h-max));
+    font-weight: {{ settings.type_header_font.weight | default: 500 }};
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--we-h-color);
+    position: relative;
+    z-index: 1;
+    margin: 0;
+  }
+
+  .we-heading em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--we-h-italic);
+  }
+
+  .we-sub-label {
+    font-family: var(--font-body);
+    font-size: var(--we-sub-size);
+    font-style: italic;
+    color: var(--we-sub-color);
+    margin-top: 1rem;
+    line-height: 1.6;
+    display: block;
+  }
+
+  /* ── RIGHT: Body paragraphs + callout ── */
+  .we-right {
+    padding-top: 0.5rem;
+  }
+
+  .we-body p {
+    font-family: var(--font-body);
+    font-size: var(--we-body-size);
+    color: var(--we-body-color);
+    line-height: 1.9;
+    margin-bottom: 1.5rem;
+    letter-spacing: {{ settings.type_base_spacing | default: 0.002 }}em;
+  }
+
+  .we-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .we-body p strong {
+    font-family: var(--font-heading);
+    font-weight: 500;
+    color: var(--we-body-strong);
+    font-size: calc(var(--we-body-size) * 1.1);
+  }
+
+  /* ── Callout box ── */
+  .we-callout {
+    background: var(--we-callout-bg);
+    padding: 2.5rem;
+    margin-top: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--we-callout-radius);
+    display: {% if show_callout %}block{% else %}none{% endif %};
+  }
+
+  /* Giant decorative opening quote mark */
+  .we-callout::before {
+    content: '\201C';
+    position: absolute;
+    top: -1rem;
+    left: 1.5rem;
+    font-family: var(--font-heading);
+    font-size: 8rem;
+    color: var(--we-callout-deco);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .we-callout__text {
+    font-family: var(--font-heading);
+    font-size: var(--we-callout-size);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.65;
+    color: var(--we-callout-text);
+    position: relative;
+    z-index: 1;
+    margin: 0;
+  }
+
+  .we-callout__accent {
+    display: block;
+    margin-top: 1.25rem;
+    font-family: var(--font-mono);
+    font-size: var(--we-callout-accent-sz);
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--we-callout-accent);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .we-inner {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      padding: 0 1.5rem;
+      margin: 4rem auto;
+    }
+
+    .we-num {
+      font-size: calc(var(--we-num-size) * 0.75);
+    }
+
+    .we-heading {
+      font-size: clamp(1.6rem, 7vw, var(--we-h-max));
+    }
+
+    .we-callout {
+      padding: 2rem 1.75rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .we-inner {
+      padding: 0 1.25rem;
+      margin: 3rem auto;
+    }
+
+    .we-callout::before {
+      font-size: 6rem;
+    }
+  }
+</style>
+
+<section
+  class="we-section"
+  id="about-why-{{ section.id }}"
+  aria-labelledby="we-heading-{{ section.id }}"
+>
+  <div class="we-inner">
+
+    <!-- LEFT COLUMN -->
+    <div class="we-left">
+      {%- if show_tag and tag_text != blank -%}
+        <span class="we-tag">{{ tag_text }}</span>
+      {%- endif -%}
+
+      {%- if show_num and num_text != blank -%}
+        <span class="we-num" aria-hidden="true">{{ num_text }}</span>
+      {%- endif -%}
+
+      <h2 class="we-heading" id="we-heading-{{ section.id }}">
+        {%- if heading_line1 != blank -%}{{ heading_line1 }}{%- endif -%}
+        {%- if heading_italic != blank -%}<br><em>{{ heading_italic }}</em>{%- endif -%}
+      </h2>
+
+      {%- if sub_label != blank -%}
+        <span class="we-sub-label">{{ sub_label }}</span>
+      {%- endif -%}
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="we-right">
+      <div class="we-body">
+        {%- if para1 != blank -%}
+          <p>{{ para1 }}</p>
+        {%- endif -%}
+        {%- if para2 != blank -%}
+          <p>{{ para2 }}</p>
+        {%- endif -%}
+        {%- if para3 != blank -%}
+          <p>{{ para3 }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- if show_callout -%}
+        <div class="we-callout">
+          {%- if callout_text != blank -%}
+            <p class="we-callout__text">
+              {{ callout_text }}
+              {%- if callout_accent != blank -%}
+                <span class="we-callout__accent">{{ callout_accent }}</span>
+              {%- endif -%}
+            </p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About — Why We Exist",
+  "tag": "div",
+  "class": "about-why-wrapper",
+  "settings": [
+
+    {
+      "type": "header",
+      "content": "── Section Layout ──"
+    },
+    {
+      "type": "color",
+      "id": "section_bg",
+      "label": "Section Background Color",
+      "default": "#FEFCF8"
+    },
+    {
+      "type": "select",
+      "id": "column_ratio",
+      "label": "Column Ratio (Left : Right)",
+      "options": [
+        { "value": "1-2", "label": "1 : 2 (default)" },
+        { "value": "1-3", "label": "1 : 3 (narrow left)" },
+        { "value": "2-3", "label": "2 : 3" },
+        { "value": "1-1", "label": "1 : 1 (equal)" }
+      ],
+      "default": "1-2"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Content Max Width (px)",
+      "min": 800,
+      "max": 1600,
+      "step": 40,
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "section_padding_x",
+      "label": "Horizontal Padding (px)",
+      "min": 16,
+      "max": 120,
+      "step": 8,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "label": "Column Gap (rem)",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "section_margin_top",
+      "label": "Section Margin Top (rem)",
+      "min": 2,
+      "max": 16,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "section_margin_bottom",
+      "label": "Section Margin Bottom (rem)",
+      "min": 2,
+      "max": 16,
+      "step": 1,
+      "default": 8
+    },
+
+    {
+      "type": "header",
+      "content": "── Section Tag (e.g. '01') ──"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_section_tag",
+      "label": "Show Section Tag",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tag_text",
+      "label": "Tag Text",
+      "default": "01"
+    },
+    {
+      "type": "color",
+      "id": "tag_color",
+      "label": "Tag Color",
+      "default": "#C8593A"
+    },
+    {
+      "type": "range",
+      "id": "tag_size",
+      "label": "Tag Font Size (px)",
+      "min": 8,
+      "max": 16,
+      "step": 1,
+      "default": 10
+    },
+
+    {
+      "type": "header",
+      "content": "── Large Background Number ──"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_section_number",
+      "label": "Show Large Background Number",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "section_number",
+      "label": "Number / Symbol Text",
+      "default": "01"
+    },
+    {
+      "type": "color",
+      "id": "num_color",
+      "label": "Number Color",
+      "default": "#F2EDE4"
+    },
+    {
+      "type": "range",
+      "id": "num_size",
+      "label": "Number Font Size (rem)",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "num_overlap",
+      "label": "Number Overlap Into Heading (rem)",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "default": 2,
+      "info": "Pulls the heading up over the large number for the overlap effect"
+    },
+
+    {
+      "type": "header",
+      "content": "── Heading ──"
+    },
+    {
+      "type": "text",
+      "id": "heading_line1",
+      "label": "Heading Line 1",
+      "default": "Why we"
+    },
+    {
+      "type": "text",
+      "id": "heading_italic",
+      "label": "Heading Italic Line",
+      "default": "exist."
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#1A1714"
+    },
+    {
+      "type": "color",
+      "id": "heading_italic_color",
+      "label": "Heading Italic Color",
+      "default": "#1A1714"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_max",
+      "label": "Heading Max Size — Desktop (px)",
+      "min": 25,
+      "max": 75,
+      "step": 5,
+      "default": 45
+    },
+    {
+      "type": "range",
+      "id": "heading_size_min",
+      "label": "Heading Min Size — Mobile floor (px)",
+      "min": 18,
+      "max": 40,
+      "step": 1,
+      "default": 28
+    },
+
+    {
+      "type": "header",
+      "content": "── Sub Label (below heading) ──"
+    },
+    {
+      "type": "text",
+      "id": "sub_label",
+      "label": "Sub Label Text",
+      "default": "The problem no one was talking about."
+    },
+    {
+      "type": "color",
+      "id": "sub_label_color",
+      "label": "Sub Label Color",
+      "default": "#7A736B"
+    },
+    {
+      "type": "range",
+      "id": "sub_label_size",
+      "label": "Sub Label Font Size (px)",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "default": 13
+    },
+
+    {
+      "type": "header",
+      "content": "── Body Paragraphs ──"
+    },
+    {
+      "type": "richtext",
+      "id": "paragraph_1",
+      "label": "Paragraph 1",
+      "default": "<p><strong>The Kamasutra was never just about sex positions.</strong> It was a science of relationships. A guide to understanding our own desires, your partner's body, and the art of being fully present.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "paragraph_2",
+      "label": "Paragraph 2",
+      "default": "<p>Our ancestors built that knowledge deliberately, and treated it with reverence. We live in its birthplace and know almost none of it.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "paragraph_3",
+      "label": "Paragraph 3 (optional)",
+      "default": "<p>The result is chronic dissatisfaction: partners feeling disconnected, people carrying shame around their own pleasure, and an entire conversation that never happens.</p>"
+    },
+    {
+      "type": "color",
+      "id": "body_color",
+      "label": "Body Text Color",
+      "default": "#4A4540"
+    },
+    {
+      "type": "color",
+      "id": "body_strong_color",
+      "label": "Bold / Strong Text Color",
+      "default": "#1A1714"
+    },
+    {
+      "type": "range",
+      "id": "body_font_size",
+      "label": "Body Font Size (px)",
+      "min": 12,
+      "max": 22,
+      "step": 1,
+      "default": 17
+    },
+
+    {
+      "type": "header",
+      "content": "── Callout Box ──"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_callout",
+      "label": "Show Callout Box",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "callout_bg",
+      "label": "Callout Background Color",
+      "default": "#1A1714"
+    },
+    {
+      "type": "textarea",
+      "id": "callout_text",
+      "label": "Callout Main Text",
+      "default": "We live in its birthplace and know almost none of it."
+    },
+    {
+      "type": "color",
+      "id": "callout_text_color",
+      "label": "Callout Text Color",
+      "default": "#FEFCF8"
+    },
+    {
+      "type": "range",
+      "id": "callout_text_size",
+      "label": "Callout Text Font Size (px)",
+      "min": 14,
+      "max": 28,
+      "step": 1,
+      "default": 19
+    },
+    {
+      "type": "text",
+      "id": "callout_accent_text",
+      "label": "Callout Accent Line (small uppercase below)",
+      "default": "This is the problem we were built to solve."
+    },
+    {
+      "type": "color",
+      "id": "callout_accent_color",
+      "label": "Callout Accent Color",
+      "default": "#B8963E"
+    },
+    {
+      "type": "range",
+      "id": "callout_accent_size",
+      "label": "Callout Accent Font Size (px)",
+      "min": 8,
+      "max": 14,
+      "step": 1,
+      "default": 11
+    },
+    {
+      "type": "color",
+      "id": "callout_deco_color",
+      "label": "Callout Decorative Quote Mark Color",
+      "default": "rgba(255,255,255,0.06)",
+      "info": "The large ghost quotation mark behind the text"
+    },
+    {
+      "type": "range",
+      "id": "callout_border_radius",
+      "label": "Callout Border Radius (px)",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "default": 2
+    }
+
+  ],
+
+  "presets": [
+    {
+      "name": "About — Why We Exist",
+      "category": "Text"
+    }
+  ]
+}
+{% endschema %}
