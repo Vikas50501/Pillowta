@@ -173,8 +173,8 @@
         "bgpos": "center_center",
         "bgsz": "cover",
         "bgat": "inherit",
-        "bdr": "#eeeeee",
-        "bdrm": "#eeeeee"
+        "bdr": "#222222",
+        "bdrm": "#222222"
       }
     }
   },
