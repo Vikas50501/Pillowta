@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "banner": {
@@ -318,12 +327,12 @@
         "mobile_image_first": false,
         "container_max_width": 1440,
         "side_padding": 7,
-        "column_gap": 80,
-        "heading_desc_gap": 24,
-        "padding_top": 80,
-        "padding_bottom": 80,
-        "padding_top_mobile": 56,
-        "padding_bottom_mobile": 56,
+        "column_gap": 32,
+        "heading_desc_gap": 16,
+        "padding_top": 96,
+        "padding_bottom": 96,
+        "padding_top_mobile": 64,
+        "padding_bottom_mobile": 64,
         "image": "shopify://shop_images/medicinal-herbs-and-tinctures-homeopathy-selectiv-2026-03-26-23-35-01-utc.jpg",
         "image_ratio": "5 / 4",
         "image_radius": 2,
@@ -335,23 +344,23 @@
         "button_label": "Take the Survey → Get 20% Off",
         "button_link": "",
         "button_open_new_tab": false,
-        "button_bg": "#e63946",
-        "button_text_color": "#ffffff",
-        "button_border": "#e63946",
-        "button_bg_hover": "#d32f3f",
-        "button_text_hover": "#ffffff",
-        "button_border_hover": "#d32f3f",
-        "button_radius": 5,
+        "button_bg": "#E63946",
+        "button_text_color": "#000000",
+        "button_border": "#E63946",
+        "button_bg_hover": "#000000",
+        "button_text_hover": "#E63946",
+        "button_border_hover": "#E63946",
+        "button_radius": 2,
         "bg_color": "#0d0d0d",
         "heading_color": "#ffffff",
         "text_color": "#b0b0b0",
         "accent_color": "#e63946",
-        "heading_font_family": "'Aleo'",
-        "body_font_family": "'Aleo', system-ui, -apple-system, sans-serif",
-        "button_font_family": "'SF Mono', 'Fira Code', 'Fira Mono', monospace",
-        "heading_size": 56,
-        "heading_size_mobile": 36,
-        "body_size": 15
+        "heading_font_family": "Aleo",
+        "body_font_family": "Aleo",
+        "button_font_family": "SF Mono",
+        "heading_size": 40,
+        "heading_size_mobile": 28,
+        "body_size": 16
       }
     },
     "177134401719982cd6": {
@@ -584,7 +593,7 @@
         "button2_label": "Read the FAQs first",
         "button2_link": "",
         "button2_open_new_tab": false,
-        "button2_bg": "#ffffff00",
+        "button2_bg": "rgba(0,0,0,0)",
         "button2_text_color": "#ffffff",
         "button2_border": "#444444",
         "button2_bg_hover": "#ffffff",

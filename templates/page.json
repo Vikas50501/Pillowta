@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "banner": {
@@ -557,12 +566,12 @@
         "body_font_size": 16,
         "body_strong_size": 17,
         "strip_bg": "#1a1a1a",
-        "strip_border_color": "rgba(255,255,255,0.10)",
+        "strip_border_color": "#ffffff1a",
         "strip_border_radius": 2,
         "strip_padding_x": 4,
         "strip_padding_y": 3,
         "strip_column_gap": 3,
-        "strip_divider_color": "rgba(255,255,255,0.16)",
+        "strip_divider_color": "#ffffff29",
         "strip_margin_top": 5,
         "glyph_color": "#e63946",
         "glyph_size": 2,
@@ -581,7 +590,7 @@
       "settings": {
         "section_bg": "#0d0d0d",
         "section_border_top": true,
-        "section_border_color": "rgba(255,255,255,0.10)",
+        "section_border_color": "#000000",
         "section_padding_top": 4,
         "section_padding_bottom": 4,
         "section_padding_x": 72,
@@ -593,7 +602,7 @@
         "quote_line1": "Our ancestors had answers.",
         "quote_line2": "We're just",
         "quote_italic_word": "translating them.",
-        "quote_color": "#ffffff",
+        "quote_color": "#111111",
         "quote_italic_color": "#e63946",
         "quote_size_max": 32,
         "quote_size_min": 22,
