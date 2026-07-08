@@ -1,0 +1,952 @@
+{% doc %}
+  @prompt
+    Create a homepage product feature section in dark theme that matches the store's design system exactly. Reference image shows a product page layout for "Rati - The Ritual" massage oil. Build this as a Shopify OS 2.0 section with blocks.
+    
+    DESIGN SYSTEM (must match exactly — no hardcoded overrides):
+    - Background: #0d0d0d (var --bodybg)
+    - Body text color: #b0b0b0, font-size: 14px, line-height: 1.6, letter-spacing: 2px
+    - Heading color: #eeeeee, font-size: 35px (desktop), font-weight: 500, line-height: 1.5
+    - Font family: Use CSS variable --font-heading-family (Aleo) for headings, --font-body-family for body
+    - Subheading/italic: same font family, italic style, color #b0b0b0
+    - Primary button (btn4): background #b1ff15, text #000000, border #b6ff00, hover bg #000000, hover text #fff — font: uppercase, weight 700, font-size 12px (use theme btn classes: btn btn4)
+    - Border/divider color: #333333
+    - Border radius: 0px (rad: 0)
+    - Section border: #333333
+    
+    SECTION LAYOUT (matching reference image):
+    Split layout — left: product image with thumbnail gallery strip below; right: product details
+    
+    LEFT COLUMN:
+    - Large main product image (square, no border radius)
+    - Thumbnail strip below (5 small images, horizontally scrollable, clickable to swap main image)
+    - Below thumbnails: a quote block — star icons (filled, color #b1ff15) + italic quote text in body font
+    
+    RIGHT COLUMN (top to bottom):
+    - Breadcrumb text: small, #b0b0b0, letter-spacing 2px, uppercase, 12px
+    - Product title: heading font, 35px, weight 500, color #eeeeee
+    - Subtitle/tagline: italic, body font, 16px, color #b0b0b0
+    - Star rating row: filled stars (#b1ff15) + rating number + review count in #b0b0b0
+    - Promo badge: small pill/tag — "FIRST ORDER: USE CODE RATI20 FOR 20% OFF" — background #1a1a1a, border #333333, text #b0b0b0, font-size 11px, uppercase, letter-spacing 2px
+    - Price: large, 22px, font-weight 500, color #ffffff — with size note below in #b0b0b0 12px
+    - Pack selector: two cards side by side — "1 Pack" and "2 Pack" — each card: background #1a1a1a, border #333333, selected state border #b1ff15; inside each card: pack label (14px, #eeeeee), savings badge (small pill, bg #b1ff15, text #000, 10px uppercase), price (16px, #ffffff), compare-at price (strikethrough, #b0b0b0, 12px)
+    - ADD TO CART button: full width, btn4 class, uppercase, font-weight 700
+    - Product description paragraph: body font, 14px, #b0b0b0, line-height 1.6, inside a subtle box (bg #1a1a1a, border #333333, padding 16px)
+    - Tag pills row: small uppercase tags — "PRESENCE OVER PERFORMANCE", "RATI IS FOR ALL", "BEAT THE STRESS", "MAKE THE FIRST MOVE", "UNFREEZE THE MOMENT" — bg transparent, border #333333, text #b0b0b0, 10px, letter-spacing 2px
+    - Certifications grid: 2x2 grid of small boxes (bg #1a1a1a, border #333333) — ISO 9001 VALID JUL 2026, ISO 22716 COSMETICS GMP, GMP C068 VALID JUN 2029, FDA APPROVED — label in #b0b0b0 10px uppercase, value in #eeeeee 12px
+    - Feature badges row: pill tags — DERMAT TESTED, PARABEN FREE, SILICONE FREE, PH BALANCED, MINERAL OIL FREE — same style as tag pills
+    - Footer note: "COA | MSDS | Derma Report available on request" — 11px, #b0b0b0, letter-spacing 1px
+    - Accordion blocks: DESCRIPTION, INGREDIENTS, HOW TO USE, CAUTIONS — each a collapsible row with border-bottom #333333, heading #eeeeee 13px uppercase letter-spacing 2px, content #b0b0b0 14px
+    
+    BLOCKS (make all content editable via theme editor schema):
+    - Block: Product Image (image picker)
+    - Block: Thumbnail Images (up to 5 image pickers)
+    - Block: Quote (text + star count)
+    - Block: Breadcrumb (text)
+    - Block: Product Title (text)
+    - Block: Subtitle (text)
+    - Block: Rating (number + review count)
+    - Block: Promo Badge (text)
+    - Block: Price (text for price, size note)
+    - Block: Pack Option (x2 — label, savings text, price, compare price)
+    - Block: Button (label, link)
+    - Block: Description Box (richtext)
+    - Block: Tag Pills (up to 8 tags as text fields)
+    - Block: Certifications (up to 4: label + value)
+    - Block: Feature Badges (up to 8 badge labels)
+    - Block: Footer Note (text)
+    - Block: Accordion Item (heading + richtext content, collapsible)
+    
+    Use vanilla JS for thumbnail swap and accordion toggle. No external dependencies. All CSS scoped to section. Fully responsive — stack to single column on mobile.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{%- liquid
+  # ----------------------------------------------------------------------------
+  # Data layer — everything is sourced from the selected product + its metafields.
+  # No product-specific content is stored in section settings.
+  # Resolution order: the picked product wins; otherwise fall back to the product
+  # of the current template (so the block works automatically on product pages).
+  # ----------------------------------------------------------------------------
+  assign current_product = product
+  assign product = block.settings.product | default: current_product
+  assign mf = product.metafields.custom
+
+  assign selected_variant = product.selected_or_first_available_variant
+  assign product_form_id = 'product-form-' | append: ai_gen_id
+
+  # Metafield-driven copy (all optional, graceful fallbacks)
+  assign subtitle = mf.subtitle
+  assign short_description = mf.short_description
+  assign quote_text = mf.quote
+  assign promo_text = mf.promo_badge
+  assign footer_note = mf.footer_note
+  assign price_note = mf.price_note
+  assign rating_value = mf.rating_value
+  assign review_count = mf.review_count
+
+  # Breadcrumb derived from the product's own taxonomy
+  assign first_collection = product.collections.first
+-%}
+
+{% style %}
+  .ai-product-feature-{{ ai_gen_id }} {
+    display: block;
+    background-color: #0d0d0d;
+    width: 100%;
+    padding: 60px 0;
+  }
+
+  .ai-product-feature-container-{{ ai_gen_id }} {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 80px;
+  }
+
+  .ai-product-feature-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+
+  .ai-product-feature-left-{{ ai_gen_id }} {
+    position: sticky;
+    top: 100px;
+  }
+
+  .ai-product-feature-main-image-{{ ai_gen_id }} {
+    width: 100%;
+    aspect-ratio: 1;
+    margin-bottom: 20px;
+    background-color: #1a1a1a;
+  }
+
+  .ai-product-feature-main-image-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0;
+  }
+
+  .ai-product-feature-thumbnails-{{ ai_gen_id }} {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    margin-bottom: 30px;
+    scrollbar-width: thin;
+    scrollbar-color: #333333 #0d0d0d;
+  }
+
+  .ai-product-feature-thumbnails-{{ ai_gen_id }}::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .ai-product-feature-thumbnails-{{ ai_gen_id }}::-webkit-scrollbar-track {
+    background: #0d0d0d;
+  }
+
+  .ai-product-feature-thumbnails-{{ ai_gen_id }}::-webkit-scrollbar-thumb {
+    background: #333333;
+    border-radius: 3px;
+  }
+
+  .ai-product-feature-thumbnail-{{ ai_gen_id }} {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+    border: 1px solid #333333;
+    transition: border-color 0.3s ease;
+    background-color: #1a1a1a;
+  }
+
+  .ai-product-feature-thumbnail-{{ ai_gen_id }}.active {
+    border-color: #b1ff15;
+  }
+
+  .ai-product-feature-thumbnail-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-product-feature-quote-{{ ai_gen_id }} {
+    background-color: #1a1a1a;
+    border: 1px solid #333333;
+    padding: 20px;
+  }
+
+  .ai-product-feature-stars-{{ ai_gen_id }} {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 12px;
+  }
+
+  .ai-product-feature-stars-{{ ai_gen_id }} svg {
+    width: 16px;
+    height: 16px;
+    fill: #b1ff15;
+  }
+
+  .ai-product-feature-quote-text-{{ ai_gen_id }} {
+    font-family: var(--font-body-family);
+    font-style: italic;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #b0b0b0;
+    letter-spacing: 2px;
+  }
+
+  .ai-product-feature-right-{{ ai_gen_id }} {
+    color: #b0b0b0;
+  }
+
+  .ai-product-feature-breadcrumb-{{ ai_gen_id }} {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #b0b0b0;
+    margin-bottom: 20px;
+  }
+
+  .ai-product-feature-title-{{ ai_gen_id }} {
+    font-family: var(--font-heading-family);
+    font-size: 35px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #eeeeee;
+    margin: 0 0 12px 0;
+  }
+
+  .ai-product-feature-subtitle-{{ ai_gen_id }} {
+    font-family: var(--font-body-family);
+    font-style: italic;
+    font-size: 16px;
+    color: #b0b0b0;
+    margin-bottom: 20px;
+  }
+
+  .ai-product-feature-rating-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .ai-product-feature-rating-stars-{{ ai_gen_id }} {
+    display: flex;
+    gap: 2px;
+  }
+
+  .ai-product-feature-rating-stars-{{ ai_gen_id }} svg {
+    width: 18px;
+    height: 18px;
+    fill: #b1ff15;
+  }
+
+  .ai-product-feature-rating-text-{{ ai_gen_id }} {
+    font-size: 14px;
+    color: #b0b0b0;
+  }
+
+  .ai-product-feature-promo-{{ ai_gen_id }} {
+    display: inline-block;
+    background-color: #1a1a1a;
+    border: 1px solid #333333;
+    padding: 8px 16px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #b0b0b0;
+    margin-bottom: 24px;
+  }
+
+  .ai-product-feature-price-{{ ai_gen_id }} {
+    margin-bottom: 8px;
+  }
+
+  .ai-product-feature-price-amount-{{ ai_gen_id }} {
+    font-size: 22px;
+    font-weight: 500;
+    color: #ffffff;
+  }
+
+  .ai-product-feature-price-note-{{ ai_gen_id }} {
+    font-size: 12px;
+    color: #b0b0b0;
+    margin-bottom: 24px;
+  }
+
+  .ai-product-feature-pack-selector-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .ai-product-feature-pack-card-{{ ai_gen_id }} {
+    background-color: #1a1a1a;
+    border: 1px solid #333333;
+    padding: 16px;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+  }
+
+  .ai-product-feature-pack-card-{{ ai_gen_id }}.selected {
+    border-color: #b1ff15;
+  }
+
+  .ai-product-feature-pack-label-{{ ai_gen_id }} {
+    font-size: 14px;
+    color: #eeeeee;
+    margin-bottom: 8px;
+  }
+
+  .ai-product-feature-pack-savings-{{ ai_gen_id }} {
+    display: inline-block;
+    background-color: #b1ff15;
+    color: #000000;
+    font-size: 10px;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    margin-bottom: 8px;
+  }
+
+  .ai-product-feature-pack-price-{{ ai_gen_id }} {
+    font-size: 16px;
+    color: #ffffff;
+    margin-bottom: 4px;
+  }
+
+  .ai-product-feature-pack-compare-{{ ai_gen_id }} {
+    font-size: 12px;
+    color: #b0b0b0;
+    text-decoration: line-through;
+  }
+
+  .ai-product-feature-button-{{ ai_gen_id }} {
+    width: 100%;
+    background-color: #b1ff15;
+    color: #000000;
+    border: 1px solid #b6ff00;
+    padding: 16px 32px;
+    font-family: inherit;
+    font-size: 12px;
+    line-height: 1.6;
+    text-transform: uppercase;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 24px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+  }
+  .ai-product-feature-button-{{ ai_gen_id }}[disabled],
+  .ai-product-feature-button-{{ ai_gen_id }}.disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+  .ai-product-feature-button-{{ ai_gen_id }} .loading__spinner {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 8px;
+  }
+  .ai-product-feature-button-{{ ai_gen_id }} .loading__spinner.hidden {
+    display: none;
+  }
+
+  .ai-product-feature-button-{{ ai_gen_id }}:hover {
+    background-color: #000000;
+    color: #ffffff;
+  }
+
+  .ai-product-feature-description-{{ ai_gen_id }} {
+    background-color: #1a1a1a;
+    border: 1px solid #333333;
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+
+  .ai-product-feature-description-{{ ai_gen_id }} p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #b0b0b0;
+    margin: 0;
+  }
+
+  .ai-product-feature-tags-{{ ai_gen_id }} {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .ai-product-feature-tag-{{ ai_gen_id }} {
+    background-color: transparent;
+    border: 1px solid #333333;
+    padding: 6px 12px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #b0b0b0;
+  }
+
+  .ai-product-feature-certifications-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .ai-product-feature-cert-{{ ai_gen_id }} {
+    background-color: #1a1a1a;
+    border: 1px solid #333333;
+    padding: 12px;
+  }
+
+  .ai-product-feature-cert-label-{{ ai_gen_id }} {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #b0b0b0;
+    margin-bottom: 4px;
+  }
+
+  .ai-product-feature-cert-value-{{ ai_gen_id }} {
+    font-size: 12px;
+    color: #eeeeee;
+  }
+
+  .ai-product-feature-badges-{{ ai_gen_id }} {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .ai-product-feature-badge-{{ ai_gen_id }} {
+    background-color: transparent;
+    border: 1px solid #333333;
+    padding: 6px 12px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #b0b0b0;
+  }
+
+  .ai-product-feature-footer-note-{{ ai_gen_id }} {
+    font-size: 11px;
+    color: #b0b0b0;
+    letter-spacing: 1px;
+    margin-bottom: 24px;
+  }
+
+  .ai-product-feature-accordion-{{ ai_gen_id }} {
+    border-top: 1px solid #333333;
+  }
+
+  .ai-product-feature-accordion-item-{{ ai_gen_id }} {
+    border-bottom: 1px solid #333333;
+  }
+
+  .ai-product-feature-accordion-header-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    cursor: pointer;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+  }
+
+  .ai-product-feature-accordion-title-{{ ai_gen_id }} {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #eeeeee;
+    font-weight: 500;
+  }
+
+  .ai-product-feature-accordion-icon-{{ ai_gen_id }} {
+    color: #eeeeee;
+    transition: transform 0.3s ease;
+  }
+
+  .ai-product-feature-accordion-item-{{ ai_gen_id }}.active .ai-product-feature-accordion-icon-{{ ai_gen_id }} {
+    transform: rotate(180deg);
+  }
+
+  .ai-product-feature-accordion-content-{{ ai_gen_id }} {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .ai-product-feature-accordion-content-{{ ai_gen_id }} p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #b0b0b0;
+    padding-bottom: 16px;
+    margin: 0;
+  }
+
+  .ai-product-feature-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-product-feature-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 200px;
+    max-height: 200px;
+    opacity: 0.3;
+  }
+
+  @media screen and (max-width: 1024px) {
+    .ai-product-feature-container-{{ ai_gen_id }} {
+      padding: 0 30px;
+    }
+
+    .ai-product-feature-grid-{{ ai_gen_id }} {
+      gap: 40px;
+    }
+
+    .ai-product-feature-title-{{ ai_gen_id }} {
+      font-size: 28px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-product-feature-container-{{ ai_gen_id }} {
+      padding: 0 15px;
+    }
+
+    .ai-product-feature-grid-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+
+    .ai-product-feature-left-{{ ai_gen_id }} {
+      position: static;
+    }
+
+    .ai-product-feature-title-{{ ai_gen_id }} {
+      font-size: 24px;
+    }
+
+    .ai-product-feature-pack-selector-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstyle %}
+
+<product-feature-{{ ai_gen_id }}
+  class="ai-product-feature-{{ ai_gen_id }}"
+  data-atc-text="{{ block.settings.button_text | default: 'ADD TO CART' | escape }}"
+  data-sold-out-text="{{ 'products.product.sold_out' | t | escape }}"
+  {{ block.shopify_attributes }}>
+  <div class="ai-product-feature-container-{{ ai_gen_id }}">
+    {%- if product == blank -%}
+      {% comment %} Onboarding state — shown until a product is selected in the theme editor {% endcomment %}
+      <div class="ai-product-feature-grid-{{ ai_gen_id }}">
+        <div class="ai-product-feature-left-{{ ai_gen_id }}">
+          <div class="ai-product-feature-main-image-{{ ai_gen_id }}">
+            <div class="ai-product-feature-placeholder-{{ ai_gen_id }}">{{ 'product-1' | placeholder_svg_tag }}</div>
+          </div>
+        </div>
+        <div class="ai-product-feature-right-{{ ai_gen_id }}">
+          <div class="ai-product-feature-breadcrumb-{{ ai_gen_id }}">Home / Shop</div>
+          <h2 class="ai-product-feature-title-{{ ai_gen_id }}">Select a product</h2>
+          <div class="ai-product-feature-subtitle-{{ ai_gen_id }}">Choose a product in the theme editor and this section fills in automatically.</div>
+        </div>
+      </div>
+    {%- else -%}
+      <div class="ai-product-feature-grid-{{ ai_gen_id }}">
+        <div class="ai-product-feature-left-{{ ai_gen_id }}">
+          {%- assign main_image = selected_variant.featured_image | default: product.featured_image -%}
+          <div class="ai-product-feature-main-image-{{ ai_gen_id }}" data-main-image>
+            {% if main_image %}
+              <img src="{{ main_image | image_url: width: 800 }}" alt="{{ main_image.alt | escape }}" width="{{ main_image.width }}" height="{{ main_image.height }}" loading="lazy">
+            {% else %}
+              <div class="ai-product-feature-placeholder-{{ ai_gen_id }}">
+                {{ 'product-1' | placeholder_svg_tag }}
+              </div>
+            {% endif %}
+          </div>
+
+          {% if block.settings.show_thumbnails and product.images.size > 0 %}
+            <div class="ai-product-feature-thumbnails-{{ ai_gen_id }}">
+              {% for image in product.images %}
+                <div class="ai-product-feature-thumbnail-{{ ai_gen_id }}{% if main_image and image.id == main_image.id %} active{% endif %}" data-thumbnail data-image="{{ image | image_url: width: 800 }}">
+                  <img src="{{ image | image_url: width: 100 }}" alt="{{ image.alt | escape }}" width="80" height="80" loading="lazy">
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          {% if block.settings.show_quote and quote_text != blank %}
+            <div class="ai-product-feature-quote-{{ ai_gen_id }}">
+              <div class="ai-product-feature-stars-{{ ai_gen_id }}">
+                {% for i in (1..5) %}
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                {% endfor %}
+              </div>
+              <div class="ai-product-feature-quote-text-{{ ai_gen_id }}">{{ quote_text }}</div>
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="ai-product-feature-right-{{ ai_gen_id }}">
+          <div class="ai-product-feature-breadcrumb-{{ ai_gen_id }}">
+            {{- 'general.breadcrumbs.home' | t -}}
+            {%- if first_collection %} / {{ first_collection.title }}{% endif -%}
+            {%- if product.type != blank %} / {{ product.type }}{% endif -%}
+          </div>
+
+          <h1 class="ai-product-feature-title-{{ ai_gen_id }}">{{ product.title }}</h1>
+
+          {% if subtitle != blank %}
+            <div class="ai-product-feature-subtitle-{{ ai_gen_id }}">{{ subtitle }}</div>
+          {% endif %}
+
+          {% if block.settings.show_rating and rating_value != blank %}
+            <div class="ai-product-feature-rating-{{ ai_gen_id }}">
+              <div class="ai-product-feature-rating-stars-{{ ai_gen_id }}">
+                {% for i in (1..5) %}
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                {% endfor %}
+              </div>
+              <span class="ai-product-feature-rating-text-{{ ai_gen_id }}">{{ rating_value }}{% if review_count != blank %} ({{ review_count }} reviews){% endif %}</span>
+            </div>
+          {% endif %}
+
+          {% if promo_text != blank %}
+            <div class="ai-product-feature-promo-{{ ai_gen_id }}">{{ promo_text }}</div>
+          {% endif %}
+
+          <div class="ai-product-feature-price-{{ ai_gen_id }}">
+            <div class="ai-product-feature-price-amount-{{ ai_gen_id }}" data-price-target>{{ selected_variant.price | money }}</div>
+          </div>
+          {% if price_note != blank %}
+            <div class="ai-product-feature-price-note-{{ ai_gen_id }}">{{ price_note }}</div>
+          {% endif %}
+
+          {% if block.settings.show_pack_selector and product.variants.size > 1 %}
+            <div class="ai-product-feature-pack-selector-{{ ai_gen_id }}">
+              {% for variant in product.variants %}
+                {%- liquid
+                  assign v_image = variant.featured_image | default: product.featured_image
+                  assign save_pct = 0
+                  if variant.compare_at_price > variant.price
+                    assign save_pct = variant.compare_at_price | minus: variant.price | times: 100.0 | divided_by: variant.compare_at_price | round
+                  endif
+                -%}
+                <div class="ai-product-feature-pack-card-{{ ai_gen_id }}{% if variant.id == selected_variant.id %} selected{% endif %}"
+                  data-pack-card
+                  data-variant-id="{{ variant.id }}"
+                  data-price="{{ variant.price | money }}"
+                  data-available="{{ variant.available }}"
+                  {% if v_image %}data-image="{{ v_image | image_url: width: 800 }}"{% endif %}>
+                  <div class="ai-product-feature-pack-label-{{ ai_gen_id }}">{{ variant.title }}</div>
+                  {% if save_pct > 0 %}
+                    <div class="ai-product-feature-pack-savings-{{ ai_gen_id }}">SAVE {{ save_pct }}%</div>
+                  {% endif %}
+                  <div class="ai-product-feature-pack-price-{{ ai_gen_id }}">{{ variant.price | money }}</div>
+                  {% if variant.compare_at_price > variant.price %}
+                    <div class="ai-product-feature-pack-compare-{{ ai_gen_id }}">{{ variant.compare_at_price | money }}</div>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          {%- assign atc_disabled = false -%}
+          {%- if product.available == false or selected_variant == nil -%}{%- assign atc_disabled = true -%}{%- endif -%}
+          <product-form class="ai-product-feature-form-wrap-{{ ai_gen_id }}" data-section="{{ ai_gen_id }}" data-hide-errors="false">
+            {%- form 'product', product, id: product_form_id, novalidate: 'novalidate' -%}
+              <input type="hidden" name="id" value="{{ selected_variant.id }}"{% if atc_disabled %} disabled{% endif %}>
+              <button type="submit" name="add" class="ai-product-feature-button-{{ ai_gen_id }}"{% if atc_disabled %} disabled{% endif %}>
+                <span>
+                  {%- if product.available == false -%}{{ 'products.product.sold_out' | t }}
+                  {%- elsif selected_variant == nil -%}{{ 'products.product.unavailable' | t }}
+                  {%- else -%}{{ block.settings.button_text | default: 'ADD TO CART' }}{%- endif -%}
+                </span>
+                <div class="loading__spinner hidden"><svg class="at-icon at-spin" aria-hidden="true" focusable="false"><use xlink:href="#icon-loading"></use></svg></div>
+              </button>
+              <div class="product-form__error-message-wrapper" role="alert" hidden>
+                <span class="product-form__error-message"></span>
+              </div>
+            {%- endform -%}
+          </product-form>
+
+          {%- assign box_desc = short_description | default: product.description -%}
+          {% if block.settings.show_description and box_desc != blank %}
+            <div class="ai-product-feature-description-{{ ai_gen_id }}">
+              {%- if short_description != blank -%}<p>{{ short_description }}</p>{%- else -%}{{ product.description }}{%- endif -%}
+            </div>
+          {% endif %}
+
+          {% if block.settings.show_tags and mf.tag_pills != blank %}
+            <div class="ai-product-feature-tags-{{ ai_gen_id }}">
+              {% for tag in mf.tag_pills.value %}
+                <div class="ai-product-feature-tag-{{ ai_gen_id }}">{{ tag }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          {% if block.settings.show_certifications and mf.certifications != blank %}
+            <div class="ai-product-feature-certifications-{{ ai_gen_id }}">
+              {% for cert in mf.certifications.value %}
+                <div class="ai-product-feature-cert-{{ ai_gen_id }}">
+                  <div class="ai-product-feature-cert-label-{{ ai_gen_id }}">{{ cert.label }}</div>
+                  <div class="ai-product-feature-cert-value-{{ ai_gen_id }}">{{ cert.value }}</div>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          {% if block.settings.show_badges and mf.feature_badges != blank %}
+            <div class="ai-product-feature-badges-{{ ai_gen_id }}">
+              {% for badge in mf.feature_badges.value %}
+                <div class="ai-product-feature-badge-{{ ai_gen_id }}">{{ badge }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          {% if footer_note != blank %}
+            <div class="ai-product-feature-footer-note-{{ ai_gen_id }}">{{ footer_note }}</div>
+          {% endif %}
+
+          {% if block.settings.show_accordion and mf.accordion_items != blank %}
+            <div class="ai-product-feature-accordion-{{ ai_gen_id }}">
+              {% for item in mf.accordion_items.value %}
+                {% if item.title != blank %}
+                  <div class="ai-product-feature-accordion-item-{{ ai_gen_id }}" data-accordion-item>
+                    <button type="button" class="ai-product-feature-accordion-header-{{ ai_gen_id }}" data-accordion-header aria-expanded="false">
+                      <span class="ai-product-feature-accordion-title-{{ ai_gen_id }}">{{ item.title }}</span>
+                      <span class="ai-product-feature-accordion-icon-{{ ai_gen_id }}">▼</span>
+                    </button>
+                    <div class="ai-product-feature-accordion-content-{{ ai_gen_id }}" data-accordion-content>
+                      {{ item.content }}
+                    </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</product-feature-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ProductFeature{{ ai_gen_id }} extends HTMLElement {
+      connectedCallback() {
+        this.thumbnails = Array.from(this.querySelectorAll('[data-thumbnail]'));
+        this.mainImg = this.querySelector('[data-main-image] img');
+        this.setupThumbnails();
+        this.setupPackSelector();
+        this.setupAccordion();
+        this.setupSwipe();
+      }
+
+      /* Swap the main gallery image and keep the matching thumbnail highlighted */
+      showImage(url) {
+        if (this.mainImg && url) this.mainImg.src = url;
+        this.thumbnails.forEach((t) => t.classList.toggle('active', t.getAttribute('data-image') === url));
+      }
+
+      setupThumbnails() {
+        if (!this.mainImg || this.thumbnails.length === 0) return;
+        this.thumbnails.forEach((thumbnail) => {
+          thumbnail.addEventListener('click', () => {
+            this.showImage(thumbnail.getAttribute('data-image'));
+          });
+        });
+      }
+
+      /* Pack cards drive real variant selection: price, image, availability + cart id */
+      setupPackSelector() {
+        const packCards = this.querySelectorAll('[data-pack-card]');
+        if (!packCards.length) return;
+
+        const idInput = this.querySelector('input[name="id"]');
+        const priceTarget = this.querySelector('[data-price-target]');
+        const submit = this.querySelector('[name="add"]');
+        const submitText = submit ? submit.querySelector('span') : null;
+        const atcText = this.dataset.atcText || 'ADD TO CART';
+        const soldOutText = this.dataset.soldOutText || 'Sold out';
+
+        packCards.forEach((card) => {
+          card.addEventListener('click', () => {
+            packCards.forEach((c) => c.classList.remove('selected'));
+            card.classList.add('selected');
+
+            const variantId = card.getAttribute('data-variant-id');
+            const price = card.getAttribute('data-price');
+            const available = card.getAttribute('data-available') === 'true';
+            const image = card.getAttribute('data-image');
+
+            if (idInput && variantId) {
+              idInput.value = variantId;
+              idInput.removeAttribute('disabled');
+              idInput.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+            if (priceTarget && price) priceTarget.innerHTML = price;
+            if (image) this.showImage(image);
+
+            if (submit) {
+              submit.toggleAttribute('disabled', !available);
+              if (submitText) submitText.textContent = available ? atcText : soldOutText;
+            }
+          });
+        });
+      }
+
+      /* Basic left/right swipe on the main image for mobile */
+      setupSwipe() {
+        const main = this.querySelector('[data-main-image]');
+        const urls = this.thumbnails.map((t) => t.getAttribute('data-image')).filter(Boolean);
+        if (!main || urls.length < 2) return;
+
+        let startX = 0;
+        main.addEventListener('touchstart', (e) => { startX = e.changedTouches[0].clientX; }, { passive: true });
+        main.addEventListener('touchend', (e) => {
+          const dx = e.changedTouches[0].clientX - startX;
+          if (Math.abs(dx) < 40) return;
+          let idx = this.thumbnails.findIndex((t) => t.classList.contains('active'));
+          if (idx < 0) idx = 0;
+          idx = dx < 0 ? (idx + 1) % urls.length : (idx - 1 + urls.length) % urls.length;
+          this.showImage(urls[idx]);
+        }, { passive: true });
+      }
+
+      setupAccordion() {
+        const accordionItems = this.querySelectorAll('[data-accordion-item]');
+
+        accordionItems.forEach((item) => {
+          const header = item.querySelector('[data-accordion-header]');
+          const content = item.querySelector('[data-accordion-content]');
+
+          if (!header || !content) return;
+
+          header.addEventListener('click', () => {
+            const isActive = item.classList.contains('active');
+
+            accordionItems.forEach((i) => {
+              i.classList.remove('active');
+              const c = i.querySelector('[data-accordion-content]');
+              if (c) c.style.maxHeight = null;
+              const h = i.querySelector('[data-accordion-header]');
+              if (h) h.setAttribute('aria-expanded', 'false');
+            });
+
+            if (!isActive) {
+              item.classList.add('active');
+              content.style.maxHeight = content.scrollHeight + 'px';
+              header.setAttribute('aria-expanded', 'true');
+            }
+          });
+        });
+      }
+    }
+
+    if (!customElements.get('product-feature-{{ ai_gen_id }}')) {
+      customElements.define('product-feature-{{ ai_gen_id }}', ProductFeature{{ ai_gen_id }});
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product feature",
+  "tag": null,
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product",
+      "info": "Leave empty on a product template to use the current product automatically. All content (images, title, price, variants, description, metafields) is pulled from the product."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Add to cart label",
+      "default": "ADD TO CART"
+    },
+    {
+      "type": "header",
+      "content": "Display options"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_thumbnails",
+      "label": "Show thumbnail gallery",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quote",
+      "label": "Show quote (metafield custom.quote)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "Show rating (metafields custom.rating_value / custom.review_count)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pack_selector",
+      "label": "Show pack / variant selector",
+      "info": "Shown automatically when the product has more than one variant.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show description box",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tags",
+      "label": "Show tag pills (metafield custom.tag_pills)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_certifications",
+      "label": "Show certifications (metafield custom.certifications)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badges",
+      "label": "Show feature badges (metafield custom.feature_badges)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_accordion",
+      "label": "Show accordion (metafield custom.accordion_items)",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product feature"
+    }
+  ]
+}
+{% endschema %}
