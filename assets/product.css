@@ -23,6 +23,7 @@
 /* ==========================================================================
    Product gallery
    ========================================================================== */
+.product-gallery { display: block; }
 .product-gallery__stage { position: relative; border-radius: var(--radius-image); overflow: hidden; background: rgb(var(--color-surface)); }
 .product-gallery__slide { display: none; }
 .product-gallery__slide.is-active { display: block; }

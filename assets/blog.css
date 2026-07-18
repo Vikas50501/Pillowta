@@ -38,7 +38,7 @@
 .main-article__image--placeholder {
   background: linear-gradient(135deg, rgb(var(--color-accent)) 0%, rgb(var(--color-surface)) 100%);
 }
-.main-article__inner { max-width: var(--max-content-width); margin-inline: auto; padding-top: 40px; display: flex; flex-direction: column; gap: 24px; }
+.main-article__inner { max-width: var(--max-content-width); margin-inline: auto; display: flex; flex-direction: column; gap: 24px; }
 .main-article__header { display: flex; flex-direction: column; gap: 12px; text-align: center; }
 .main-article__tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
 .main-article__tag {
@@ -49,6 +49,7 @@
 }
 .main-article__byline { opacity: 0.65; }
 .main-article__content :is(p, ul, ol, blockquote, h2, h3, h4, img) { margin-bottom: 16px; }
+.main-article__content :is(ul, ol) { padding-left: 20px; list-style: revert; }
 .main-article__nav { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-top: 24px; border-top: 1px solid rgb(var(--color-border)); }
 .main-article__nav-link { display: flex; align-items: center; gap: 10px; }
 .main-article__nav-link--next { justify-content: flex-end; text-align: right; }
@@ -58,10 +59,15 @@
 .main-article__comments { padding-top: 24px; border-top: 1px solid rgb(var(--color-border)); display: flex; flex-direction: column; gap: 20px; }
 .main-article__comments-list { display: flex; flex-direction: column; gap: 20px; }
 .main-article__comment { padding-bottom: 16px; border-bottom: 1px solid rgb(var(--color-border)); }
+.main-article__comment-author { margin-bottom: 4px; }
 .main-article__comment-date { opacity: 0.6; margin-bottom: 8px; }
 .main-article__comment-form { display: flex; flex-direction: column; gap: 12px; max-width: 480px; }
+.main-article__comment-field { display: flex; flex-direction: column; gap: 8px; }
+.main-article__comment-field input,
+.main-article__comment-field textarea { width: 100%; }
 .main-article__comment-moderation { opacity: 0.7; }
 .main-article__comment-errors { color: rgb(var(--color-error)); }
+.main-article__comment-errors ul { list-style: revert; padding-left: 20px; }
 
 /* ==========================================================================
    Homepage: blog posts (sections/blog-posts.liquid)
@@ -118,4 +124,6 @@ promo-popup.popup.is-open .popup__panel { opacity: 1; transform: translate(-50%,
 .popup__media { margin-bottom: 20px; }
 .popup__content { display: flex; flex-direction: column; gap: 12px; text-align: center; }
 .popup__form { display: flex; flex-direction: column; gap: 10px; }
+.popup__form-input { width: 100%; }
 .popup__form-success { opacity: 0.8; }
+.popup__body :is(ul, ol) { padding-left: 20px; list-style: revert; }

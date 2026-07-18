@@ -29,7 +29,11 @@
   </div>
 
   <div class="{{ section_width_class }} page-width--narrow">
-    <div class="main-article__inner"{% if reveal != 'none' %} data-scroll-reveal="{{ reveal }}"{% endif %}>
+    <div
+      class="main-article__inner"
+      style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+      {% if reveal != 'none' %} data-scroll-reveal="{{ reveal }}"{% endif %}
+    >
       <header class="main-article__header">
         {%- if article.tags.size > 0 -%}
           <div class="main-article__tags">

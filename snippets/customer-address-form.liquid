@@ -30,7 +30,7 @@
   <div class="address-form__field">
     <label class="text-form" for="AddressCountry{{ address.id }}">{{ 'customer.address_form.country' | t }}</label>
     <select id="AddressCountry{{ address.id }}" name="address[country]" data-address-country autocomplete="country" class="text-form">
-      {{ form.country_option_tags }}
+      {{ country_option_tags }}
     </select>
   </div>
   <div class="address-form__field" data-address-province-wrapper>

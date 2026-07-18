@@ -1,6 +1,8 @@
 <div
   class="rich-text section-padding{% if section.settings.hide_on_mobile %} rich-text--hide-mobile{% endif %}{% if section.settings.hide_on_desktop %} rich-text--hide-desktop{% endif %}"
   style="background: {% if section.settings.background_color != blank %}{{ section.settings.background_color }}{% else %}rgb(var(--color-background)){% endif %};"
+  data-hide-mobile="{{ section.settings.hide_on_mobile }}"
+  data-hide-desktop="{{ section.settings.hide_on_desktop }}"
 >
   <div class="page-width">
     <div class="rich-text__inner"{% if section.settings.animation != 'none' %} data-scroll-reveal="{{ section.settings.animation }}"{% endif %}>

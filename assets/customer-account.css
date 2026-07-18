@@ -14,23 +14,48 @@
 .customer-form__row .customer-form__field { flex: 1; }
 .customer-form__field { display: flex; flex-direction: column; gap: 6px; }
 .customer-form__field input, .customer-form__field select { width: 100%; }
+/* base.css only styles input[type="text"/"email"/"search"/"number"/"tel"] + select/textarea globally;
+   password fields are missed there, so give them the same baseline look here. */
+.customer-form__field input[type="password"] {
+  width: 100%;
+  background: rgb(var(--color-input-bg));
+  border: 1px solid rgb(var(--color-input-border));
+  color: rgb(var(--color-input-text));
+  border-radius: var(--radius-input);
+  padding: 12px 16px;
+  font-family: var(--font-form-family);
+  font-size: var(--font-form-size-mobile);
+}
 .customer-form__submit { margin-top: 4px; }
 .customer-form__errors { background: rgba(var(--color-error), 0.08); border: 1px solid rgb(var(--color-error)); border-radius: var(--radius-global); padding: 12px 16px; color: rgb(var(--color-error)); }
 .customer-form__success { color: rgb(var(--color-success)); }
 .customer-form__recover { margin-top: 4px; }
+.customer-form__recover > summary { cursor: pointer; }
 .customer-form__recover-content { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; max-width: 420px; }
+/* the nested {% form 'recover_customer_password' %} renders its own <form class="customer-form__recover-form">
+   which (unlike the outer .customer-form) had no layout rule of its own, so its field/button stacked with no gap. */
+.customer-form__recover-form { display: flex; flex-direction: column; gap: 16px; }
 
 .customer-orders-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
 .customer-orders-table th, .customer-orders-table td { padding: 12px; text-align: left; border-bottom: 1px solid rgb(var(--color-border)); }
+@media screen and (max-width: 749px) {
+  .customer-orders-table th, .customer-orders-table td { padding: 8px 6px; font-size: var(--font-caption-size-mobile); }
+}
 
 .customer-addresses-grid, .address-book__grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
 @media screen and (min-width: 750px) {
   .customer-addresses-grid, .address-book__grid { grid-template-columns: repeat(2, 1fr); }
 }
 .customer-address-card { border: 1px solid rgb(var(--color-border)); border-radius: var(--radius-global); padding: 20px; display: flex; flex-direction: column; gap: 12px; }
-.customer-address-card__actions { display: flex; gap: 16px; }
-.address-book__delete { opacity: 0.7; }
+.customer-address-card__actions { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 16px; }
+.address-book__edit > summary { cursor: pointer; }
+/* the edit disclosure's content (a full address form) must not render squeezed into the flex row
+   next to the delete button, so it always takes the full row width. */
+.address-book__edit { flex: 1 1 100%; }
+.address-book__delete { opacity: 0.7; cursor: pointer; }
+.address-book__delete:hover { opacity: 1; }
 .address-book__add { margin-bottom: 24px; }
+.address-book__add > summary { cursor: pointer; }
 .address-book__form-wrapper { margin-top: 16px; }
 
 .address-form__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
@@ -40,6 +65,19 @@
 .address-form__field input, .address-form__field select { width: 100%; }
 
 .order-status-badges { display: flex; gap: 8px; }
+/* order.liquid reuses cart-page.js's row/table/subtotal markup (class="cart-page__table order-detail__table"
+   etc.), but layout/theme.liquid only loads cart-page.css when template.name == 'cart', never for
+   customers/order. Re-declare the needed rules here so the order-detail line items aren't unstyled. */
+.cart-page__table { width: 100%; border-collapse: collapse; }
+.cart-page__row { border-bottom: 1px solid rgb(var(--color-border)); }
+.cart-page__row td { padding-block: 20px; vertical-align: top; }
+.cart-page__row-media { width: 100px; }
+.cart-page__row-media a { display: block; width: 88px; }
+.cart-page__row-details { padding-inline: 16px; }
+.cart-page__row-title { display: block; }
+.cart-page__row-variant { opacity: 0.7; margin-top: 4px; }
+.cart-page__row-total { text-align: right; white-space: nowrap; }
+.cart-page__subtotal { display: flex; justify-content: space-between; }
 .order-detail__table { margin-bottom: 32px; }
 .order-detail__layout { display: grid; grid-template-columns: 1fr; gap: 32px; }
 @media screen and (min-width: 990px) { .order-detail__layout { grid-template-columns: 1fr 320px; } }

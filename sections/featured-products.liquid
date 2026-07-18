@@ -5,8 +5,10 @@
   endunless
 -%}
 <div
-  class="featured-products section-padding{% if section.settings.hide_on_mobile %} rich-text--hide-mobile{% endif %}{% if section.settings.hide_on_desktop %} rich-text--hide-desktop{% endif %}"
+  class="featured-products section-padding{% if section.settings.hide_on_mobile %} featured-products--hide-mobile{% endif %}{% if section.settings.hide_on_desktop %} featured-products--hide-desktop{% endif %}"
   style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+  data-hide-mobile="{{ section.settings.hide_on_mobile }}"
+  data-hide-desktop="{{ section.settings.hide_on_desktop }}"
 >
   <div class="{{ section_width_class }}">
     {%- if section.settings.heading != blank -%}

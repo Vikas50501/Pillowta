@@ -164,6 +164,7 @@
    ========================================================================== */
 .countdown-section__inner { display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
 .countdown-section__timer { display: flex; gap: 24px; }
+.countdown-section__timer[hidden] { display: none; }
 .countdown-section__unit { display: flex; flex-direction: column; align-items: center; min-width: 56px; }
 .countdown-section__value { line-height: 1; }
 .countdown-section__label { text-transform: uppercase; opacity: 0.7; }
