@@ -1,0 +1,68 @@
+{%- if predictive_search.performed -%}
+  {%- liquid
+    assign results = predictive_search.resources.results
+    assign has_results = false
+    if results.products.size > 0 or results.collections.size > 0 or results.pages.size > 0 or results.articles.size > 0
+      assign has_results = true
+    endif
+  -%}
+  <div class="predictive-search__results" data-predictive-search-results>
+    {%- if has_results -%}
+      {%- if results.products.size > 0 -%}
+        <div class="predictive-search__group">
+          <p class="predictive-search__group-title text-caption">{{ 'general.search.products' | t }}</p>
+          <ul>
+            {%- for product in results.products -%}
+              <li>
+                <a href="{{ product.url }}" class="predictive-search__result">
+                  {%- render 'responsive-image', image: product.featured_image, ratio: 'square', sizes: '48px', class: 'predictive-search__result-image' -%}
+                  <span class="predictive-search__result-details">
+                    <span class="text-body">{{ product.title }}</span>
+                    {%- render 'price', product: product -%}
+                  </span>
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+
+      {%- if results.collections.size > 0 -%}
+        <div class="predictive-search__group">
+          <p class="predictive-search__group-title text-caption">{{ 'general.search.collections' | t }}</p>
+          <ul>
+            {%- for collection in results.collections -%}
+              <li><a href="{{ collection.url }}" class="predictive-search__result predictive-search__result--text text-body">{{ collection.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+
+      {%- if results.pages.size > 0 or results.articles.size > 0 -%}
+        <div class="predictive-search__group">
+          <p class="predictive-search__group-title text-caption">{{ 'general.search.pages_articles' | t }}</p>
+          <ul>
+            {%- for page in results.pages -%}
+              <li><a href="{{ page.url }}" class="predictive-search__result predictive-search__result--text text-body">{{ page.title }}</a></li>
+            {%- endfor -%}
+            {%- for article in results.articles -%}
+              <li><a href="{{ article.url }}" class="predictive-search__result predictive-search__result--text text-body">{{ article.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+
+      <a href="{{ routes.search_url }}?q={{ predictive_search.terms | url_encode }}" class="button button--secondary predictive-search__view-all">
+        {{ 'general.search.view_all_results' | t }}
+      </a>
+    {%- else -%}
+      <p class="predictive-search__empty text-body">{{ 'general.search.no_results' | t: terms: predictive_search.terms }}</p>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Predictive search"
+}
+{% endschema %}

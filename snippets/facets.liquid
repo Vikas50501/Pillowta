@@ -1,0 +1,94 @@
+{%- comment -%}
+  Params: results (a collection or search object exposing .filters and .url)
+  Renders Shopify's native storefront filters. Submits as a GET form so
+  filtering degrades gracefully without JS; assets/facets.js progressively
+  enhances it into an AJAX update of the results + this panel.
+{%- endcomment -%}
+<facet-filters class="facets" data-facets>
+  {%- form 'facets', results, class: 'facets__form' -%}
+    <div class="facets__header">
+      <p class="facets__heading text-heading">{{ 'collection.filters.title' | t }}</p>
+      <a href="{{ results.url }}" class="facets__clear-all text-caption" data-facets-clear-all>
+        {{ 'collection.filters.clear_all' | t }}
+      </a>
+    </div>
+
+    {%- for filter in results.filters -%}
+      {%- if filter.values.size > 0 or filter.type == 'price_range' -%}
+        <div class="facets__group accordion-item">
+          <button type="button" class="accordion__trigger text-body" data-accordion-trigger aria-expanded="true" aria-controls="Facet-{{ forloop.index }}">
+            <span>{{ filter.label }}{% if filter.active_values.size > 0 %} ({{ filter.active_values.size }}){% endif %}</span>
+            {%- render 'icon-chevron-down' -%}
+          </button>
+          <div id="Facet-{{ forloop.index }}" class="accordion__content facets__group-content" style="height: auto;">
+            <div class="accordion__content-inner">
+              {%- case filter.type -%}
+                {%- when 'list' -%}
+                  <ul class="facets__list">
+                    {%- for value in filter.values -%}
+                      <li class="facets__list-item">
+                        <label class="facets__checkbox-label text-body">
+                          <input
+                            type="checkbox"
+                            name="{{ value.param_name }}"
+                            value="{{ value.value }}"
+                            {% if value.active %}checked{% endif %}
+                            {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                            data-facet-input
+                          >
+                          <span>{{ value.label }} ({{ value.count }})</span>
+                        </label>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+
+                {%- when 'boolean' -%}
+                  {%- for value in filter.values -%}
+                    <label class="facets__checkbox-label text-body">
+                      <input
+                        type="checkbox"
+                        name="{{ value.param_name }}"
+                        value="{{ value.value }}"
+                        {% if value.active %}checked{% endif %}
+                        data-facet-input
+                      >
+                      <span>{{ filter.label }} ({{ value.count }})</span>
+                    </label>
+                  {%- endfor -%}
+
+                {%- when 'price_range' -%}
+                  <div class="facets__price-range">
+                    <label class="visually-hidden" for="FacetPriceMin-{{ forloop.index }}">{{ 'collection.filters.title' | t }} min</label>
+                    <input
+                      type="number"
+                      id="FacetPriceMin-{{ forloop.index }}"
+                      class="facets__price-input"
+                      name="{{ filter.min_value.param_name }}"
+                      value="{{ filter.min_value.value }}"
+                      placeholder="{{ filter.min_value.value | default: 0 | money }}"
+                      data-facet-input
+                    >
+                    <span aria-hidden="true">–</span>
+                    <label class="visually-hidden" for="FacetPriceMax-{{ forloop.index }}">{{ 'collection.filters.title' | t }} max</label>
+                    <input
+                      type="number"
+                      id="FacetPriceMax-{{ forloop.index }}"
+                      class="facets__price-input"
+                      name="{{ filter.max_value.param_name }}"
+                      value="{{ filter.max_value.value }}"
+                      placeholder="{{ filter.range_max | money }}"
+                      data-facet-input
+                    >
+                  </div>
+              {%- endcase -%}
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+
+    <button type="submit" class="button button--primary facets__apply" data-facets-apply>
+      {{ 'collection.filters.apply' | t }}
+    </button>
+  {%- endform -%}
+</facet-filters>

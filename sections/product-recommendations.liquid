@@ -1,0 +1,31 @@
+{%- liquid
+  assign recommendations_url = routes.product_recommendations_url | append: '?section_id=' | append: section.id | append: '&product_id=' | append: product.id | append: '&limit=' | append: section.settings.products_to_show | append: '&intent=related'
+-%}
+<div
+  class="product-recommendations section-padding page-width"
+  data-product-recommendations
+  data-url="{{ recommendations_url }}"
+  {% if recommendations.performed == false or recommendations.products_count == 0 %}hidden{% endif %}
+>
+  {%- if recommendations.performed and recommendations.products_count > 0 -%}
+    <h2 class="product-recommendations__heading text-heading">{{ section.settings.heading }}</h2>
+    <ul class="featured-products__grid" style="--columns-desktop: {{ section.settings.columns_desktop }};">
+      {%- for recommended_product in recommendations.products limit: section.settings.products_to_show -%}
+        <li>{%- render 'product-card', product: recommended_product -%}</li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Product recommendations",
+  "tag": "section",
+  "class": "shopify-section--product-recommendations",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "You may also like" },
+    { "type": "range", "id": "products_to_show", "label": "Products to show", "min": 2, "max": 10, "step": 1, "default": 4 },
+    { "type": "range", "id": "columns_desktop", "label": "Columns (desktop)", "min": 2, "max": 5, "step": 1, "default": 4 }
+  ]
+}
+{% endschema %}

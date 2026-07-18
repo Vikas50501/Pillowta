@@ -1,0 +1,51 @@
+{%- liquid
+  assign section_width_class = 'page-width'
+  if section.settings.section_width == 'full'
+    assign section_width_class = ''
+  endif
+  assign reveal = section.settings.animation
+-%}
+<div
+  class="main-policy{% if section.settings.hide_on_mobile %} main-policy--hide-mobile{% endif %}{% if section.settings.hide_on_desktop %} main-policy--hide-desktop{% endif %}"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+  data-hide-mobile="{{ section.settings.hide_on_mobile }}"
+  data-hide-desktop="{{ section.settings.hide_on_desktop }}"
+>
+  <div class="{{ section_width_class }} page-width--narrow">
+    <div class="main-policy__inner"{% if reveal != 'none' %} data-scroll-reveal="{{ reveal }}"{% endif %}>
+      {% # theme-check-disable UndefinedObject %}
+      <h1 class="main-policy__title text-heading">{{ policy.title }}</h1>
+      <div class="main-policy__content rte text-body">{{ policy.body }}</div>
+      {% # theme-check-enable UndefinedObject %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Policy",
+  "tag": "section",
+  "class": "shopify-section--main-policy",
+  "settings": [
+    { "type": "select", "id": "animation", "label": "Entrance animation", "default": "fade",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "fade", "label": "Fade" },
+        { "value": "slide-up", "label": "Slide up" },
+        { "value": "scale", "label": "Scale" }
+      ]
+    },
+    { "type": "select", "id": "section_width", "label": "Width", "default": "full",
+      "options": [
+        { "value": "full", "label": "Full width" },
+        { "value": "wide", "label": "Wide" },
+        { "value": "contained", "label": "Contained" }
+      ]
+    },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 64 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 64 },
+    { "type": "checkbox", "id": "hide_on_mobile", "label": "Hide on mobile", "default": false },
+    { "type": "checkbox", "id": "hide_on_desktop", "label": "Hide on desktop", "default": false }
+  ]
+}
+{% endschema %}

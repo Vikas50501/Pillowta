@@ -1,0 +1,70 @@
+{%- liquid
+  assign section_width_class = 'page-width'
+  if section.settings.section_width == 'full'
+    assign section_width_class = ''
+  endif
+  assign reveal = section.settings.animation
+-%}
+<div
+  class="main-blog section-padding{% if section.settings.hide_on_mobile %} main-blog--hide-mobile{% endif %}{% if section.settings.hide_on_desktop %} main-blog--hide-desktop{% endif %}"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+  data-hide-mobile="{{ section.settings.hide_on_mobile }}"
+  data-hide-desktop="{{ section.settings.hide_on_desktop }}"
+>
+  <div class="{{ section_width_class }}">
+    <div class="main-blog__header"{% if reveal != 'none' %} data-scroll-reveal="{{ reveal }}"{% endif %}>
+      <h1 class="main-blog__title text-heading">{{ blog.title }}</h1>
+    </div>
+
+    {%- paginate blog.articles by section.settings.posts_per_page -%}
+      {%- if blog.articles.size == 0 -%}
+        <p class="main-blog__empty text-body">{{ 'blog.list.empty' | t }}</p>
+      {%- else -%}
+        <ul class="main-blog__grid" style="--columns-desktop: {{ section.settings.columns_desktop }};">
+          {%- for article in blog.articles -%}
+            <li data-scroll-reveal="{{ reveal }}" data-scroll-reveal-delay="{{ forloop.index0 | times: 60 }}">
+              {%- render 'article-card', article: article -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      <div class="main-blog__pagination">
+        {%- render 'pagination', paginate: paginate -%}
+      </div>
+    {%- endpaginate -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Blog",
+  "tag": "section",
+  "class": "shopify-section--main-blog",
+  "settings": [
+    { "type": "range", "id": "posts_per_page", "label": "Posts per page", "min": 4, "max": 24, "step": 4, "default": 12 },
+    { "type": "range", "id": "columns_desktop", "label": "Columns (desktop)", "min": 2, "max": 4, "step": 1, "default": 3 },
+
+    { "type": "header", "content": "Section" },
+    { "type": "select", "id": "section_width", "label": "Width", "default": "wide",
+      "options": [
+        { "value": "full", "label": "Full width" },
+        { "value": "wide", "label": "Wide" },
+        { "value": "contained", "label": "Contained" }
+      ]
+    },
+    { "type": "select", "id": "animation", "label": "Entrance animation", "default": "fade",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "fade", "label": "Fade" },
+        { "value": "slide-up", "label": "Slide up" },
+        { "value": "scale", "label": "Scale" }
+      ]
+    },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 48 },
+    { "type": "checkbox", "id": "hide_on_mobile", "label": "Hide on mobile", "default": false },
+    { "type": "checkbox", "id": "hide_on_desktop", "label": "Hide on desktop", "default": false }
+  ]
+}
+{% endschema %}

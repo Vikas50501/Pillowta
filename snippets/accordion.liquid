@@ -1,0 +1,20 @@
+{%- comment -%}
+  Params: id (unique string), title, content (HTML), open (bool, default false)
+  Matches the generic accordion contract wired up in assets/global.js (initAccordions)
+  and styled in assets/animations.css (.accordion__content height-transition).
+{%- endcomment -%}
+<div class="accordion-item">
+  <button
+    type="button"
+    class="accordion__trigger text-body"
+    data-accordion-trigger
+    aria-expanded="{{ open }}"
+    aria-controls="Accordion-{{ id }}"
+  >
+    <span>{{ title }}</span>
+    {%- render 'icon-chevron-down' -%}
+  </button>
+  <div id="Accordion-{{ id }}" class="accordion__content text-body" {% unless open %}style="height: 0px;"{% endunless %}>
+    <div class="accordion__content-inner">{{ content }}</div>
+  </div>
+</div>

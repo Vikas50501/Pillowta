@@ -1,0 +1,13 @@
+{%- comment -%}
+  Params: type ('sale' | 'new' | 'sold_out' | 'custom'), text (required when type == 'custom')
+{%- endcomment -%}
+{%- case type -%}
+  {%- when 'sale' -%}
+    <span class="badge badge--sale text-badge">{{ 'products.product.on_sale' | t }}</span>
+  {%- when 'new' -%}
+    <span class="badge badge--new text-badge">{{ 'products.product.new' | t }}</span>
+  {%- when 'sold_out' -%}
+    <span class="badge badge--sold-out text-badge">{{ 'products.product.sold_out' | t }}</span>
+  {%- when 'custom' -%}
+    <span class="badge badge--custom text-badge">{{ text }}</span>
+{%- endcase -%}

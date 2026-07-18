@@ -1,0 +1,157 @@
+{%- liquid
+  assign section_width_class = 'page-width'
+  if section.settings.section_width == 'full'
+    assign section_width_class = ''
+  endif
+  assign reveal = section.settings.animation
+  assign is_overlay = false
+  if section.settings.layout == 'overlay'
+    assign is_overlay = true
+  endif
+-%}
+<div
+  class="image-with-text image-with-text--{{ section.settings.layout }}{% unless is_overlay %} image-with-text--image-{{ section.settings.image_position }}{% endunless %}{% if section.settings.hide_on_mobile %} image-with-text--hide-mobile{% endif %}{% if section.settings.hide_on_desktop %} image-with-text--hide-desktop{% endif %}"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+  data-hide-mobile="{{ section.settings.hide_on_mobile }}"
+  data-hide-desktop="{{ section.settings.hide_on_desktop }}"
+>
+  <div class="{{ section_width_class }}">
+    <div class="image-with-text__grid">
+      <div class="image-with-text__media">
+        {%- render 'responsive-image', image: section.settings.image, ratio: 'square', sizes: '(min-width: 750px) 50vw, 100vw' -%}
+        {%- if is_overlay and section.settings.overlay_opacity > 0 -%}
+          <div class="image-with-text__overlay" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+        {%- endif -%}
+        {%- if is_overlay -%}
+          <div class="image-with-text__content image-with-text__content--overlay image-with-text__content--{{ section.settings.content_position }}"{% if reveal != 'none' %} data-scroll-reveal="{{ reveal }}"{% endif %}>
+            {%- for block in section.blocks -%}
+              {%- case block.type -%}
+                {%- when 'heading' -%}
+                  <h2 class="image-with-text__heading text-heading" {{ block.shopify_attributes }}>{{ block.settings.heading }}</h2>
+                {%- when 'text' -%}
+                  <div class="image-with-text__text text-body" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+                {%- when 'button' -%}
+                  <a href="{{ block.settings.link | default: '#' }}" class="button button--{{ block.settings.style }}" {{ block.shopify_attributes }}>
+                    {{ block.settings.label }}
+                  </a>
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- unless is_overlay -%}
+        <div class="image-with-text__content"{% if reveal != 'none' %} data-scroll-reveal="{{ reveal }}"{% endif %}>
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'heading' -%}
+                <h2 class="image-with-text__heading text-heading" {{ block.shopify_attributes }}>{{ block.settings.heading }}</h2>
+              {%- when 'text' -%}
+                <div class="image-with-text__text text-body" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+              {%- when 'button' -%}
+                <a href="{{ block.settings.link | default: '#' }}" class="button button--{{ block.settings.style }}" {{ block.shopify_attributes }}>
+                  {{ block.settings.label }}
+                </a>
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+      {%- endunless -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Image with text",
+  "tag": "section",
+  "class": "shopify-section--image-with-text",
+  "settings": [
+    { "type": "header", "content": "Layout" },
+    { "type": "select", "id": "layout", "label": "Layout", "default": "side-by-side",
+      "options": [
+        { "value": "side-by-side", "label": "Side by side" },
+        { "value": "overlay", "label": "Text overlaid on image" }
+      ]
+    },
+    { "type": "select", "id": "image_position", "label": "Image position", "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "info": "Only applies to the side-by-side layout."
+    },
+    { "type": "select", "id": "content_position", "label": "Content position (overlay layout)", "default": "center",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+
+    { "type": "header", "content": "Media" },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "range", "id": "overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 80, "step": 5, "unit": "%", "default": 20, "info": "Only applies to the overlay layout." },
+
+    { "type": "header", "content": "Section" },
+    { "type": "select", "id": "animation", "label": "Entrance animation", "default": "fade",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "fade", "label": "Fade" },
+        { "value": "slide-up", "label": "Slide up" },
+        { "value": "scale", "label": "Scale" }
+      ]
+    },
+    { "type": "select", "id": "section_width", "label": "Width", "default": "full",
+      "options": [
+        { "value": "full", "label": "Full width" },
+        { "value": "wide", "label": "Wide" },
+        { "value": "contained", "label": "Contained" }
+      ]
+    },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 64 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 64 },
+    { "type": "checkbox", "id": "hide_on_mobile", "label": "Hide on mobile", "default": false },
+    { "type": "checkbox", "id": "hide_on_desktop", "label": "Hide on desktop", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Formulated with intention" }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Every product starts with a simple question: does it actually work? We only ship the ones that do.</p>" }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Shop the collection" },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "select", "id": "style", "label": "Style", "default": "primary",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "secondary", "label": "Secondary" }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with text",
+      "blocks": [
+        { "type": "heading" },
+        { "type": "text" },
+        { "type": "button" }
+      ]
+    }
+  ]
+}
+{% endschema %}

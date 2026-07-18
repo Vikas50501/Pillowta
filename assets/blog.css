@@ -1,0 +1,121 @@
+/* ==========================================================================
+   Blog listing (sections/main-blog.liquid)
+   ========================================================================== */
+.main-blog__header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--spacing-grid); gap: 16px; }
+.main-blog__empty { text-align: center; padding-block: 40px; opacity: 0.7; }
+.main-blog__grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: var(--spacing-grid);
+}
+@media screen and (min-width: 750px) {
+  .main-blog__grid { grid-template-columns: repeat(var(--columns-desktop, 3), 1fr); }
+}
+.main-blog__pagination { margin-top: var(--spacing-grid); }
+
+/* ==========================================================================
+   Article card (snippets/article-card.liquid)
+   ========================================================================== */
+.article-card { display: flex; flex-direction: column; }
+.article-card__media { display: block; }
+.article-card__details { padding-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+.article-card__tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.article-card__tag {
+  padding: 2px 10px;
+  border-radius: var(--radius-global);
+  background: rgb(var(--color-surface));
+  opacity: 0.8;
+}
+.article-card__title { font-weight: normal; }
+.article-card__meta { opacity: 0.65; }
+.article-card__excerpt { opacity: 0.85; }
+
+/* ==========================================================================
+   Single article (sections/main-article.liquid)
+   ========================================================================== */
+.main-article__media { position: relative; width: 100%; aspect-ratio: 16 / 7; overflow: hidden; background: rgb(var(--color-surface)); }
+.main-article__image { width: 100%; height: 100%; object-fit: cover; }
+.main-article__image--placeholder {
+  background: linear-gradient(135deg, rgb(var(--color-accent)) 0%, rgb(var(--color-surface)) 100%);
+}
+.main-article__inner { max-width: var(--max-content-width); margin-inline: auto; padding-top: 40px; display: flex; flex-direction: column; gap: 24px; }
+.main-article__header { display: flex; flex-direction: column; gap: 12px; text-align: center; }
+.main-article__tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.main-article__tag {
+  padding: 2px 10px;
+  border-radius: var(--radius-global);
+  background: rgb(var(--color-surface));
+  opacity: 0.8;
+}
+.main-article__byline { opacity: 0.65; }
+.main-article__content :is(p, ul, ol, blockquote, h2, h3, h4, img) { margin-bottom: 16px; }
+.main-article__nav { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-top: 24px; border-top: 1px solid rgb(var(--color-border)); }
+.main-article__nav-link { display: flex; align-items: center; gap: 10px; }
+.main-article__nav-link--next { justify-content: flex-end; text-align: right; }
+.main-article__nav-text { display: flex; flex-direction: column; gap: 2px; }
+.main-article__nav-label { opacity: 0.6; }
+
+.main-article__comments { padding-top: 24px; border-top: 1px solid rgb(var(--color-border)); display: flex; flex-direction: column; gap: 20px; }
+.main-article__comments-list { display: flex; flex-direction: column; gap: 20px; }
+.main-article__comment { padding-bottom: 16px; border-bottom: 1px solid rgb(var(--color-border)); }
+.main-article__comment-date { opacity: 0.6; margin-bottom: 8px; }
+.main-article__comment-form { display: flex; flex-direction: column; gap: 12px; max-width: 480px; }
+.main-article__comment-moderation { opacity: 0.7; }
+.main-article__comment-errors { color: rgb(var(--color-error)); }
+
+/* ==========================================================================
+   Homepage: blog posts (sections/blog-posts.liquid)
+   ========================================================================== */
+.blog-posts__header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--spacing-grid); gap: 16px; }
+.blog-posts__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-grid);
+}
+@media screen and (min-width: 750px) {
+  .blog-posts__grid { grid-template-columns: repeat(var(--columns-desktop, 3), 1fr); }
+}
+
+/* ==========================================================================
+   Homepage: featured article (sections/featured-article.liquid)
+   ========================================================================== */
+.featured-article__inner { display: grid; grid-template-columns: 1fr; gap: 32px; align-items: center; }
+@media screen and (min-width: 750px) {
+  .featured-article__inner { grid-template-columns: 1fr 1fr; gap: 48px; }
+}
+.featured-article__content { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+.featured-article__tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.featured-article__tag {
+  padding: 2px 10px;
+  border-radius: var(--radius-global);
+  background: rgb(var(--color-surface));
+  opacity: 0.8;
+}
+.featured-article__meta { opacity: 0.65; }
+.featured-article__excerpt { opacity: 0.85; }
+
+/* ==========================================================================
+   Promotional popup (sections/popup.liquid)
+   ========================================================================== */
+promo-popup.popup { position: fixed; inset: 0; z-index: 130; visibility: hidden; pointer-events: none; }
+promo-popup.popup.is-open { visibility: visible; pointer-events: auto; }
+.popup__overlay { position: absolute; inset: 0; background: var(--color-overlay); opacity: 0; transition: opacity var(--speed-transition) ease; }
+promo-popup.popup.is-open .popup__overlay { opacity: 1; }
+.popup__panel {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0.96);
+  width: min(480px, 92vw);
+  max-height: 88vh;
+  overflow-y: auto;
+  border-radius: var(--radius-global);
+  box-shadow: var(--shadow);
+  padding: 32px;
+  opacity: 0;
+  transition: opacity var(--speed-transition) ease, transform var(--speed-transition) ease;
+}
+promo-popup.popup.is-open .popup__panel { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.popup__close { position: absolute; top: 16px; right: 16px; z-index: 1; }
+.popup__media { margin-bottom: 20px; }
+.popup__content { display: flex; flex-direction: column; gap: 12px; text-align: center; }
+.popup__form { display: flex; flex-direction: column; gap: 10px; }
+.popup__form-success { opacity: 0.8; }

@@ -1,0 +1,39 @@
+{
+  "sections": {
+    "intro": {
+      "type": "rich-text",
+      "settings": {
+        "animation": "fade"
+      },
+      "blocks": {
+        "heading": { "type": "heading", "settings": { "heading": "Get in touch" } },
+        "text": { "type": "text", "settings": { "text": "<p>Questions about an order, a product, or anything else? Send us a message and our team will get back to you within 1-2 business days.</p>" } }
+      },
+      "block_order": ["heading", "text"]
+    },
+    "contact-form": {
+      "type": "contact-form",
+      "settings": {
+        "heading": "",
+        "animation": "fade",
+        "section_width": "wide",
+        "padding_top": 24,
+        "padding_bottom": 64,
+        "hide_on_mobile": false,
+        "hide_on_desktop": false
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "heading": "Stay in the loop",
+        "subheading": "<p>Sign up for early access to new drops and exclusive offers.</p>",
+        "animation": "fade",
+        "section_width": "full",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    }
+  },
+  "order": ["intro", "contact-form", "newsletter"]
+}

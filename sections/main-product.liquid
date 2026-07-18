@@ -1,0 +1,186 @@
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+-%}
+{%- render 'structured-data-product', product: product -%}
+<section class="product-detail page-width" data-section-id="{{ section.id }}" data-product-detail>
+  <div class="product-detail__grid">
+    <div class="product-detail__media">
+      {%- render 'gallery', product: product -%}
+    </div>
+
+    <div class="product-detail__info">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'title' -%}
+            <div {{ block.shopify_attributes }}>
+              {%- if block.settings.show_vendor -%}
+                <p class="product-detail__vendor text-caption">{{ product.vendor }}</p>
+              {%- endif -%}
+              <h1 class="product-detail__title text-heading">{{ product.title }}</h1>
+            </div>
+
+          {%- when 'price' -%}
+            <div class="product-detail__price" data-price-wrapper {{ block.shopify_attributes }}>
+              {%- render 'price', variant: current_variant -%}
+            </div>
+
+          {%- when 'sku' -%}
+            {%- if current_variant.sku != blank -%}
+              <p class="product-detail__sku text-caption" data-sku {{ block.shopify_attributes }}>
+                {{ 'products.product.sku' | t }}: {{ current_variant.sku }}
+              </p>
+            {%- endif -%}
+
+          {%- when 'inventory' -%}
+            <p class="product-detail__inventory text-caption" data-inventory {{ block.shopify_attributes }}>
+              {%- if current_variant.available == false -%}
+                {{ 'products.product.sold_out' | t }}
+              {%- elsif current_variant.inventory_management != blank and current_variant.inventory_quantity <= block.settings.low_stock_threshold and current_variant.inventory_quantity > 0 -%}
+                {{ 'products.product.low_stock' | t: count: current_variant.inventory_quantity }}
+              {%- else -%}
+                {{ 'products.product.in_stock' | t }}
+              {%- endif -%}
+            </p>
+
+          {%- when 'variant_picker' -%}
+            <div {{ block.shopify_attributes }}>
+              {%- render 'variant-picker', product: product -%}
+            </div>
+
+          {%- when 'quantity_selector' -%}
+            <div class="product-detail__quantity" {{ block.shopify_attributes }}>
+              <label class="text-body" for="Quantity-{{ product.id }}">{{ 'products.product.quantity' | t }}</label>
+              {%- render 'quantity-selector', name: 'quantity', id: product.id -%}
+            </div>
+
+          {%- when 'buy_buttons' -%}
+            <div class="product-detail__buy-buttons" data-buy-buttons {{ block.shopify_attributes }}>
+              {%- form 'product', product, id: 'ProductForm-' | append: product.id, class: 'product-detail__form', data-product-detail-form: '' -%}
+                <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id-input>
+                <button
+                  type="submit"
+                  name="add"
+                  class="button button--primary product-detail__add-to-cart"
+                  data-add-to-cart
+                  {% unless current_variant.available %}disabled{% endunless %}
+                >
+                  <span data-add-to-cart-text>
+                    {%- if current_variant.available == false -%}
+                      {{ 'products.product.sold_out' | t }}
+                    {%- else -%}
+                      {{ 'products.product.add_to_cart' | t }}
+                    {%- endif -%}
+                  </span>
+                </button>
+                {%- if block.settings.show_dynamic_checkout -%}
+                  {{ form | payment_button }}
+                {%- endif -%}
+              {%- endform -%}
+            </div>
+
+          {%- when 'description' -%}
+            <div class="product-detail__description rte text-body" {{ block.shopify_attributes }}>
+              {{ product.description }}
+            </div>
+
+          {%- when 'accordion' -%}
+            {%- render 'accordion', id: block.id, title: block.settings.title, content: block.settings.content, open: false -%}
+
+          {%- when 'rating' -%}
+            <div class="product-detail__rating" {{ block.shopify_attributes }}>
+              {%- for i in (1..5) -%}{%- render 'icon-star', filled: true, size: '16px' -%}{%- endfor -%}
+              <span class="text-caption">{{ block.settings.rating_text }}</span>
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<div class="sticky-atc" data-sticky-atc hidden>
+  <div class="page-width sticky-atc__inner">
+    <div class="sticky-atc__media">
+      {%- render 'responsive-image', image: product.featured_image, ratio: 'square', sizes: '64px' -%}
+    </div>
+    <div class="sticky-atc__details">
+      <p class="sticky-atc__title text-body">{{ product.title }}</p>
+      <div data-sticky-atc-price>{%- render 'price', variant: current_variant -%}</div>
+    </div>
+    <button type="submit" form="ProductForm-{{ product.id }}" class="button button--primary sticky-atc__button" data-sticky-atc-button {% unless current_variant.available %}disabled{% endunless %}>
+      {%- if current_variant.available == false -%}
+        {{ 'products.product.sold_out' | t }}
+      {%- else -%}
+        {{ 'products.product.add_to_cart' | t }}
+      {%- endif -%}
+    </button>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product information",
+  "tag": "section",
+  "class": "shopify-section--main-product",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1,
+      "settings": [
+        { "type": "checkbox", "id": "show_vendor", "label": "Show vendor", "default": true }
+      ]
+    },
+    { "type": "price", "name": "Price", "limit": 1, "settings": [] },
+    { "type": "sku", "name": "SKU", "limit": 1, "settings": [] },
+    {
+      "type": "inventory",
+      "name": "Inventory status",
+      "limit": 1,
+      "settings": [
+        { "type": "range", "id": "low_stock_threshold", "label": "Low stock threshold", "min": 1, "max": 20, "step": 1, "default": 5 }
+      ]
+    },
+    { "type": "variant_picker", "name": "Variant picker", "limit": 1, "settings": [] },
+    { "type": "quantity_selector", "name": "Quantity selector", "limit": 1, "settings": [] },
+    {
+      "type": "buy_buttons",
+      "name": "Buy buttons",
+      "limit": 1,
+      "settings": [
+        { "type": "checkbox", "id": "show_dynamic_checkout", "label": "Show dynamic checkout buttons", "default": true }
+      ]
+    },
+    { "type": "description", "name": "Description", "limit": 1, "settings": [] },
+    {
+      "type": "rating",
+      "name": "Rating (placeholder)",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "rating_text", "label": "Text", "default": "4.8 (2,300 reviews)" }
+      ]
+    },
+    {
+      "type": "accordion",
+      "name": "Accordion",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Details" },
+        { "type": "richtext", "id": "content", "label": "Content" }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "title" },
+      { "type": "price" },
+      { "type": "inventory" },
+      { "type": "variant_picker" },
+      { "type": "quantity_selector" },
+      { "type": "buy_buttons" },
+      { "type": "description" },
+      { "type": "accordion", "settings": { "title": "Ingredients" } },
+      { "type": "accordion", "settings": { "title": "Shipping & returns" } }
+    ]
+  }
+}
+{% endschema %}

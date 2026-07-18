@@ -1,0 +1,19 @@
+{%- comment -%}
+  Params: quantity (default 1), line (cart line index, for AJAX cart updates), name (form input name), min, max, id
+{%- endcomment -%}
+<div class="quantity-selector" data-quantity-selector {% if line %}data-line="{{ line }}"{% endif %}>
+  <button type="button" class="quantity-selector__button" data-quantity-decrease aria-label="{{ 'products.product.quantity' | t }} -1">−</button>
+  <input
+    type="number"
+    class="quantity-selector__input"
+    {% if id %}id="Quantity-{{ id }}"{% endif %}
+    name="{{ name | default: 'quantity' }}"
+    value="{{ quantity | default: 1 }}"
+    min="{{ min | default: 1 }}"
+    {% if max %}max="{{ max }}"{% endif %}
+    inputmode="numeric"
+    data-quantity-input
+    aria-label="{{ 'products.product.quantity' | t }}"
+  >
+  <button type="button" class="quantity-selector__button" data-quantity-increase aria-label="{{ 'products.product.quantity' | t }} +1">+</button>
+</div>

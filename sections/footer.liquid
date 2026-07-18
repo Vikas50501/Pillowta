@@ -1,0 +1,119 @@
+<footer class="site-footer color-footer" id="Footer">
+  <div class="site-footer__inner page-width">
+    <div class="site-footer__grid">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'menu' -%}
+            <div class="site-footer__column site-footer__column--menu" {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}
+                <h3 class="site-footer__heading text-footer">{{ block.settings.heading }}</h3>
+              {%- endif -%}
+              {%- if block.settings.menu != blank -%}
+                <ul class="site-footer__links">
+                  {%- for link in block.settings.menu.links -%}
+                    <li><a href="{{ link.url }}" class="site-footer__link text-footer">{{ link.title }}</a></li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            </div>
+
+          {%- when 'text' -%}
+            <div class="site-footer__column site-footer__column--text" {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}
+                <h3 class="site-footer__heading text-footer">{{ block.settings.heading }}</h3>
+              {%- endif -%}
+              <div class="site-footer__rich-text text-footer">{{ block.settings.text }}</div>
+            </div>
+
+          {%- when 'newsletter' -%}
+            <div class="site-footer__column site-footer__column--newsletter" {{ block.shopify_attributes }}>
+              <h3 class="site-footer__heading text-footer">{{ block.settings.heading | default: 'footer.newsletter.heading' | t }}</h3>
+              {%- if block.settings.subheading != blank -%}
+                <p class="site-footer__newsletter-sub text-footer">{{ block.settings.subheading }}</p>
+              {%- endif -%}
+              {%- form 'customer', class: 'site-footer__newsletter-form' -%}
+                <input type="hidden" name="contact[tags]" value="newsletter">
+                <label class="visually-hidden" for="FooterNewsletterEmail">{{ 'footer.newsletter.placeholder' | t }}</label>
+                <input
+                  type="email"
+                  name="contact[email]"
+                  id="FooterNewsletterEmail"
+                  class="site-footer__newsletter-input"
+                  placeholder="{{ 'footer.newsletter.placeholder' | t }}"
+                  required
+                >
+                <button type="submit" class="button button--primary site-footer__newsletter-submit">
+                  {{ 'footer.newsletter.submit' | t }}
+                </button>
+                {%- if form.posted_successfully? -%}
+                  <p class="site-footer__newsletter-success text-caption">{{ 'footer.newsletter.success' | t }}</p>
+                {%- endif -%}
+              {%- endform -%}
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+
+    <div class="site-footer__bottom">
+      {%- render 'social-icons' -%}
+
+      {%- if section.settings.show_payment_icons -%}
+        <ul class="site-footer__payment-icons" aria-label="{{ 'footer.payment_heading' | t }}">
+          {%- for type in shop.enabled_payment_types -%}
+            <li>{{ type | payment_type_svg_tag: class: 'site-footer__payment-icon' }}</li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      <p class="site-footer__copyright text-caption">
+        {%- assign current_year = 'now' | date: '%Y' -%}
+        {{ 'footer.copyright' | t: year: current_year, shop: shop.name }}
+      </p>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "tag": "footer",
+  "class": "shopify-section--footer",
+  "settings": [
+    { "type": "checkbox", "id": "show_payment_icons", "label": "Show payment icons", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menu",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "link_list", "id": "menu", "label": "Menu" }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Rich text",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "richtext", "id": "text", "label": "Text" }
+      ]
+    },
+    {
+      "type": "newsletter",
+      "name": "Newsletter",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Join the list" },
+        { "type": "text", "id": "subheading", "label": "Subheading", "default": "Sign up for early access to new drops and exclusive offers." }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "menu", "settings": { "heading": "Shop" } },
+      { "type": "menu", "settings": { "heading": "Help" } },
+      { "type": "newsletter" }
+    ]
+  }
+}
+{% endschema %}

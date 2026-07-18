@@ -1,0 +1,131 @@
+{%- liquid
+  assign section_width_class = 'page-width'
+  if section.settings.section_width == 'full'
+    assign section_width_class = ''
+  endif
+  assign reveal = section.settings.animation
+
+  # Build an ordered list of unique category names (first-seen order), flattening
+  # the block list once since section blocks can't be nested by category.
+  assign category_join = ''
+  for block in section.blocks
+    if block.type == 'question'
+      assign cat = block.settings.category | strip
+      assign category_array = category_join | split: '~~'
+      unless category_array contains cat
+        if category_join == ''
+          assign category_join = cat
+        else
+          assign category_join = category_join | append: '~~' | append: cat
+        endif
+      endunless
+    endif
+  endfor
+  assign category_list = category_join | split: '~~'
+  assign question_blocks = section.blocks | where: 'type', 'question'
+-%}
+{%- render 'structured-data-faq', blocks: question_blocks -%}
+<div
+  class="faq-categories{% if section.settings.hide_on_mobile %} faq-categories--hide-mobile{% endif %}{% if section.settings.hide_on_desktop %} faq-categories--hide-desktop{% endif %}"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+  data-hide-mobile="{{ section.settings.hide_on_mobile }}"
+  data-hide-desktop="{{ section.settings.hide_on_desktop }}"
+>
+  <div class="{{ section_width_class }} page-width--narrow">
+    <div class="faq-categories__inner"{% if reveal != 'none' %} data-scroll-reveal="{{ reveal }}"{% endif %}>
+      {%- if section.settings.heading != blank -%}
+        <h2 class="faq-categories__heading text-heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      {%- if category_list.size > 1 -%}
+        <nav class="faq-categories__nav" aria-label="{{ 'faq.nav_label' | t }}">
+          {%- for category in category_list -%}
+            <a href="#faq-category-{{ category | handleize }}" class="faq-categories__nav-link text-navigation">{{ category }}</a>
+          {%- endfor -%}
+        </nav>
+      {%- endif -%}
+
+      {%- for category in category_list -%}
+        <div class="faq-categories__group">
+          <h3 id="faq-category-{{ category | handleize }}" class="faq-categories__group-heading text-heading">{{ category }}</h3>
+          <div class="faq-categories__list">
+            {%- for block in section.blocks -%}
+              {%- assign block_category = block.settings.category | strip -%}
+              {%- if block.type == 'question' and block_category == category -%}
+                {%- assign unique_id = section.id | append: '-' | append: block.id -%}
+                <div class="faq-categories__item accordion-item" {{ block.shopify_attributes }}>
+                  <button
+                    type="button"
+                    class="faq-categories__trigger accordion__trigger text-body"
+                    data-accordion-trigger
+                    aria-expanded="false"
+                    aria-controls="{{ unique_id }}"
+                  >
+                    <span>{{ block.settings.question }}</span>
+                    {%- render 'icon-chevron-down', size: 18 -%}
+                  </button>
+                  <div id="{{ unique_id }}" class="faq-categories__content accordion__content">
+                    <div class="faq-categories__answer text-body">{{ block.settings.answer }}</div>
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "FAQ categories",
+  "tag": "section",
+  "class": "shopify-section--faq-categories",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Frequently asked questions" },
+
+    { "type": "header", "content": "Section" },
+    { "type": "select", "id": "animation", "label": "Entrance animation", "default": "fade",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "fade", "label": "Fade" },
+        { "value": "slide-up", "label": "Slide up" },
+        { "value": "scale", "label": "Scale" }
+      ]
+    },
+    { "type": "select", "id": "section_width", "label": "Width", "default": "full",
+      "options": [
+        { "value": "full", "label": "Full width" },
+        { "value": "wide", "label": "Wide" },
+        { "value": "contained", "label": "Contained" }
+      ]
+    },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 64 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 64 },
+    { "type": "checkbox", "id": "hide_on_mobile", "label": "Hide on mobile", "default": false },
+    { "type": "checkbox", "id": "hide_on_desktop", "label": "Hide on desktop", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        { "type": "text", "id": "category", "label": "Category", "default": "Orders" },
+        { "type": "text", "id": "question", "label": "Question", "default": "How do I track my order?" },
+        { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>Once your order ships, you'll receive a confirmation email with a tracking link.</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ categories",
+      "blocks": [
+        { "type": "question" },
+        { "type": "question" },
+        { "type": "question" }
+      ]
+    }
+  ]
+}
+{% endschema %}

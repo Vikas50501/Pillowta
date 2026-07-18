@@ -1,0 +1,116 @@
+{%- liquid
+  assign main_menu = section.settings.menu
+  assign mega_blocks = section.blocks | where: 'type', 'mega_menu'
+-%}
+<site-header
+  class="site-header color-header{% if section.settings.enable_transparent %} site-header--transparent{% endif %}"
+  data-sticky="{{ settings.enable_sticky_header }}"
+  data-shrink="{{ settings.enable_shrink_header }}"
+>
+  <div class="site-header__inner page-width">
+    <button type="button" class="site-header__mobile-toggle" data-mobile-menu-open aria-label="{{ 'general.accessibility.open_menu' | t }}" aria-expanded="false" aria-controls="MobileMenu">
+      {%- render 'icon-menu' -%}
+    </button>
+
+    <a href="{{ routes.root_url }}" class="site-header__logo">
+      {%- if section.settings.logo != blank -%}
+        <img
+          src="{{ section.settings.logo | image_url: width: 300 }}"
+          srcset="{{ section.settings.logo | image_url: width: 150 }} 150w, {{ section.settings.logo | image_url: width: 300 }} 300w"
+          width="{{ section.settings.logo_width }}"
+          height="{{ section.settings.logo_width | divided_by: section.settings.logo.aspect_ratio }}"
+          alt="{{ section.settings.logo.alt | default: shop.name }}"
+          style="--logo-width: {{ section.settings.logo_width }}px;"
+        >
+      {%- else -%}
+        <span class="site-header__logo-text text-heading">{{ shop.name }}</span>
+      {%- endif -%}
+    </a>
+
+    {%- if main_menu != blank -%}
+      <nav class="site-header__nav" aria-label="{{ 'header.menu' | t }}">
+        <ul class="site-header__nav-list">
+          {%- for link in main_menu.links -%}
+            {%- liquid
+              assign matching_block = nil
+              for b in mega_blocks
+                if b.settings.parent_handle == link.handle
+                  assign matching_block = b
+                endif
+              endfor
+              assign has_dropdown = false
+              if link.links != blank or matching_block.settings.promo_image != blank
+                assign has_dropdown = true
+              endif
+            -%}
+            <li class="site-header__nav-item{% if has_dropdown %} has-dropdown{% endif %}">
+              <a href="{{ link.url }}" class="site-header__nav-link text-navigation"{% if link.current %} aria-current="page"{% endif %}>
+                {{ link.title }}
+                {%- if has_dropdown %}{% render 'icon-chevron-down' %}{% endif -%}
+              </a>
+              {%- if has_dropdown -%}
+                {%- render 'mega-menu', link: link, block: matching_block -%}
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+
+    <div class="site-header__actions">
+      {%- if section.settings.show_language_selector or section.settings.show_currency_selector -%}
+        {%- render 'localization-form', show_language: section.settings.show_language_selector, show_currency: section.settings.show_currency_selector -%}
+      {%- endif -%}
+
+      <button type="button" class="site-header__action" data-search-open aria-label="{{ 'general.accessibility.open_search' | t }}">
+        {%- render 'icon-search' -%}
+      </button>
+
+      {%- if section.settings.show_wishlist -%}
+        <a href="{{ routes.root_url }}pages/wishlist" class="site-header__action" aria-label="{{ 'header.wishlist' | t }}">
+          {%- render 'icon-heart' -%}
+        </a>
+      {%- endif -%}
+
+      <a href="{{ routes.account_url }}" class="site-header__action" aria-label="{{ 'header.account' | t }}">
+        {%- render 'icon-account' -%}
+      </a>
+
+      <button type="button" class="site-header__action site-header__cart-toggle" data-cart-open aria-label="{{ 'general.accessibility.open_cart' | t }}">
+        {%- render 'icon-cart' -%}
+        <span class="site-header__cart-count" data-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
+      </button>
+    </div>
+  </div>
+</site-header>
+
+{%- render 'mobile-menu', menu: main_menu, mega_blocks: mega_blocks, show_wishlist: section.settings.show_wishlist -%}
+
+{% schema %}
+{
+  "name": "Header",
+  "tag": "header",
+  "class": "shopify-section--header",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "range", "id": "logo_width", "label": "Logo width", "min": 60, "max": 260, "step": 5, "unit": "px", "default": 140 },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
+    { "type": "checkbox", "id": "enable_transparent", "label": "Transparent over first section", "default": false },
+    { "type": "checkbox", "id": "show_wishlist", "label": "Show wishlist icon", "default": true },
+    { "type": "checkbox", "id": "show_language_selector", "label": "Show language selector", "default": false },
+    { "type": "checkbox", "id": "show_currency_selector", "label": "Show currency selector", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "mega_menu",
+      "name": "Mega menu",
+      "settings": [
+        { "type": "text", "id": "parent_handle", "label": "Menu item handle", "info": "Must match a top-level menu item's handle exactly, e.g. \"shop\"" },
+        { "type": "image_picker", "id": "promo_image", "label": "Promo image" },
+        { "type": "text", "id": "promo_heading", "label": "Promo heading" },
+        { "type": "url", "id": "promo_link", "label": "Promo link" }
+      ]
+    }
+  ]
+}
+{% endschema %}

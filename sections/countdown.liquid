@@ -1,0 +1,107 @@
+{%- liquid
+  assign section_width_class = 'page-width'
+  if section.settings.section_width == 'full'
+    assign section_width_class = ''
+  endif
+  assign reveal = section.settings.animation
+-%}
+<div
+  class="countdown-section{% if section.settings.hide_on_mobile %} countdown-section--hide-mobile{% endif %}{% if section.settings.hide_on_desktop %} countdown-section--hide-desktop{% endif %}"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+  data-hide-mobile="{{ section.settings.hide_on_mobile }}"
+  data-hide-desktop="{{ section.settings.hide_on_desktop }}"
+>
+  <div class="{{ section_width_class }}">
+    <div class="countdown-section__inner" data-countdown data-end-date="{{ section.settings.end_date }}"{% if reveal != 'none' %} data-scroll-reveal="{{ reveal }}"{% endif %}>
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'heading' -%}
+            <h2 class="countdown-section__heading text-heading" {{ block.shopify_attributes }}>{{ block.settings.heading }}</h2>
+          {%- when 'text' -%}
+            <div class="countdown-section__text text-body" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+        {%- endcase -%}
+      {%- endfor -%}
+
+      <div class="countdown-section__timer" data-countdown-timer>
+        <div class="countdown-section__unit">
+          <span class="countdown-section__value text-heading" data-countdown-days>00</span>
+          <span class="countdown-section__label text-caption">Days</span>
+        </div>
+        <div class="countdown-section__unit">
+          <span class="countdown-section__value text-heading" data-countdown-hours>00</span>
+          <span class="countdown-section__label text-caption">Hours</span>
+        </div>
+        <div class="countdown-section__unit">
+          <span class="countdown-section__value text-heading" data-countdown-minutes>00</span>
+          <span class="countdown-section__label text-caption">Minutes</span>
+        </div>
+        <div class="countdown-section__unit">
+          <span class="countdown-section__value text-heading" data-countdown-seconds>00</span>
+          <span class="countdown-section__label text-caption">Seconds</span>
+        </div>
+      </div>
+
+      <p class="countdown-section__expired text-body" data-countdown-expired hidden>
+        {{ section.settings.expired_message | default: "This offer has ended." }}
+      </p>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Countdown",
+  "tag": "section",
+  "class": "shopify-section--countdown",
+  "settings": [
+    { "type": "text", "id": "end_date", "label": "End date", "default": "2026-12-31T00:00:00", "info": "Format: YYYY-MM-DDTHH:MM:SS, for example 2026-12-31T00:00:00. Uses the visitor's local time zone." },
+    { "type": "text", "id": "expired_message", "label": "Expired message", "default": "This offer has ended." },
+
+    { "type": "header", "content": "Section" },
+    { "type": "select", "id": "animation", "label": "Entrance animation", "default": "fade",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "fade", "label": "Fade" },
+        { "value": "slide-up", "label": "Slide up" },
+        { "value": "scale", "label": "Scale" }
+      ]
+    },
+    { "type": "select", "id": "section_width", "label": "Width", "default": "full",
+      "options": [
+        { "value": "full", "label": "Full width" },
+        { "value": "wide", "label": "Wide" },
+        { "value": "contained", "label": "Contained" }
+      ]
+    },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 56 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 56 },
+    { "type": "checkbox", "id": "hide_on_mobile", "label": "Hide on mobile", "default": false },
+    { "type": "checkbox", "id": "hide_on_desktop", "label": "Hide on desktop", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Our summer sale ends soon" }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Save up to 30% storewide for a limited time.</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Countdown",
+      "blocks": [
+        { "type": "heading" },
+        { "type": "text" }
+      ]
+    }
+  ]
+}
+{% endschema %}

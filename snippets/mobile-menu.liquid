@@ -1,0 +1,72 @@
+{%- comment -%} Params: menu, mega_blocks, show_wishlist {%- endcomment -%}
+<mobile-menu class="mobile-menu color-drawer" id="MobileMenu" aria-hidden="true">
+  <div class="mobile-menu__overlay" data-mobile-menu-close></div>
+  <div class="mobile-menu__panel" role="dialog" aria-modal="true" aria-label="{{ 'header.menu' | t }}">
+    <header class="mobile-menu__header">
+      <span class="mobile-menu__logo text-heading">{{ shop.name }}</span>
+      <button type="button" class="mobile-menu__close" data-mobile-menu-close aria-label="{{ 'general.accessibility.close_menu' | t }}">
+        {%- render 'icon-close' -%}
+      </button>
+    </header>
+
+    {%- if menu != blank -%}
+      <nav class="mobile-menu__nav" aria-label="{{ 'header.menu' | t }}">
+        <ul class="mobile-menu__list">
+          {%- for link in menu.links -%}
+            {%- liquid
+              assign matching_block = nil
+              for b in mega_blocks
+                if b.settings.parent_handle == link.handle
+                  assign matching_block = b
+                endif
+              endfor
+              assign has_children = false
+              if link.links != blank
+                assign has_children = true
+              endif
+            -%}
+            <li class="mobile-menu__item{% if has_children %} has-children{% endif %}">
+              {%- if has_children -%}
+                <button type="button" class="mobile-menu__link mobile-menu__disclosure text-navigation" data-mobile-submenu-toggle aria-expanded="false">
+                  {{ link.title }}
+                  {%- render 'icon-chevron-down' -%}
+                </button>
+                <ul class="mobile-menu__submenu" data-mobile-submenu hidden>
+                  <li><a href="{{ link.url }}" class="mobile-menu__submenu-link mobile-menu__submenu-link--all text-navigation">{{ link.title }}</a></li>
+                  {%- for childlink in link.links -%}
+                    <li><a href="{{ childlink.url }}" class="mobile-menu__submenu-link text-navigation">{{ childlink.title }}</a></li>
+                  {%- endfor -%}
+                  {%- if matching_block.settings.promo_image != blank -%}
+                    <li class="mobile-menu__submenu-promo">
+                      <a href="{{ matching_block.settings.promo_link | default: '#' }}">
+                        {%- render 'responsive-image', image: matching_block.settings.promo_image, ratio: 'landscape', sizes: '280px' -%}
+                        {%- if matching_block.settings.promo_heading != blank -%}
+                          <span class="text-heading">{{ matching_block.settings.promo_heading }}</span>
+                        {%- endif -%}
+                      </a>
+                    </li>
+                  {%- endif -%}
+                </ul>
+              {%- else -%}
+                <a href="{{ link.url }}" class="mobile-menu__link text-navigation"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+
+    <div class="mobile-menu__utility">
+      <a href="{{ routes.account_url }}" class="mobile-menu__utility-link text-navigation">{%- render 'icon-account', size: '18px' -%} {{ 'header.account' | t }}</a>
+      {%- if show_wishlist -%}
+        <a href="{{ routes.root_url }}pages/wishlist" class="mobile-menu__utility-link text-navigation">{%- render 'icon-heart', size: '18px' -%} {{ 'header.wishlist' | t }}</a>
+      {%- endif -%}
+    </div>
+
+    {%- if settings.social_instagram != blank or settings.social_tiktok != blank or settings.social_facebook != blank or settings.social_twitter != blank or settings.social_youtube != blank or settings.social_pinterest != blank -%}
+      <div class="mobile-menu__social">
+        {%- render 'social-icons' -%}
+      </div>
+    {%- endif -%}
+  </div>
+</mobile-menu>

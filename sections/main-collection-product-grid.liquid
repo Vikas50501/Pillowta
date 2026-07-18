@@ -1,0 +1,89 @@
+<div
+  class="collection-grid-section page-width"
+  data-collection-grid-section
+  data-section-id="{{ section.id }}"
+>
+  <div class="collection-grid-section__toolbar">
+    <button
+      type="button"
+      class="collection-grid-section__filters-toggle text-navigation"
+      data-facets-toggle
+      aria-controls="FacetsPanel-{{ section.id }}"
+      aria-expanded="false"
+    >
+      {{ 'collection.filters.title' | t }}
+    </button>
+
+    <p class="collection-grid-section__count text-caption" data-results-count>
+      {{ 'collection.filters.results_count' | t: count: collection.products_count }}
+    </p>
+
+    <div class="collection-grid-section__sort">
+      <label class="visually-hidden" for="SortBy-{{ section.id }}">{{ 'collection.filters.sort_by' | t }}</label>
+      <select name="sort_by" id="SortBy-{{ section.id }}" class="collection-grid-section__sort-select text-navigation" data-sort-select>
+        {%- for option in collection.sort_options -%}
+          <option value="{{ option.value }}" {% if option.value == collection.sort_by %}selected{% endif %}>{{ option.name }}</option>
+        {%- endfor -%}
+      </select>
+    </div>
+  </div>
+
+  <div class="collection-grid-section__layout">
+    <aside class="collection-grid-section__filters" id="FacetsPanel-{{ section.id }}" data-facets-panel>
+      {%- render 'facets', results: collection -%}
+    </aside>
+
+    <div class="collection-grid-section__results">
+      {%- paginate collection.products by section.settings.products_per_page -%}
+        <div data-collection-grid-results>
+          {%- if collection.products.size == 0 -%}
+            <p class="collection-grid-section__empty text-body">{{ 'collection.filters.no_products' | t }}</p>
+          {%- else -%}
+            <ul
+              class="collection-grid"
+              style="--columns-desktop: {{ section.settings.columns_desktop }}; --columns-mobile: {{ section.settings.columns_mobile }};"
+              data-collection-grid-list
+            >
+              {%- for product in collection.products -%}
+                <li>
+                  {%- render 'product-card', product: product, show_quick_add: section.settings.show_quick_add, show_vendor: section.settings.show_vendor -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+
+        <div data-collection-grid-pagination>
+          {%- render 'pagination', paginate: paginate, mode: section.settings.pagination_mode -%}
+        </div>
+      {%- endpaginate -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product grid",
+  "tag": "section",
+  "class": "shopify-section--main-collection-product-grid",
+  "settings": [
+    { "type": "range", "id": "products_per_page", "label": "Products per page", "min": 8, "max": 48, "step": 4, "default": 16 },
+    { "type": "range", "id": "columns_desktop", "label": "Columns (desktop)", "min": 2, "max": 5, "step": 1, "default": 4 },
+    { "type": "select", "id": "columns_mobile", "label": "Columns (mobile)", "default": "2",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ]
+    },
+    { "type": "select", "id": "pagination_mode", "label": "Pagination style", "default": "pagination",
+      "options": [
+        { "value": "pagination", "label": "Numbered pages" },
+        { "value": "load_more", "label": "Load more button" },
+        { "value": "infinite_scroll", "label": "Infinite scroll" }
+      ]
+    },
+    { "type": "checkbox", "id": "show_vendor", "label": "Show vendor", "default": false },
+    { "type": "checkbox", "id": "show_quick_add", "label": "Show quick add", "default": true }
+  ]
+}
+{% endschema %}

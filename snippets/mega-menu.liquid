@@ -1,0 +1,37 @@
+{%- comment -%}
+  Renders a dropdown or rich mega menu for one top-level nav link.
+  Accepts: link (linklist link object with .links children), block (optional matching "mega_menu" section block)
+{%- endcomment -%}
+{%- if link.links != blank or block.settings.promo_image != blank -%}
+  <div class="mega-menu {% if block.settings.promo_image != blank %}mega-menu--rich{% endif %} color-mega-menu" id="MegaMenu-{{ link.handle }}" data-mega-menu>
+    <div class="mega-menu__inner page-width">
+      {%- if link.links != blank -%}
+        <ul class="mega-menu__column mega-menu__links">
+          {%- for childlink in link.links -%}
+            <li>
+              <a href="{{ childlink.url }}" class="mega-menu__link text-navigation"{% if childlink.current %} aria-current="page"{% endif %}>
+                {{ childlink.title }}
+              </a>
+              {%- if childlink.links != blank -%}
+                <ul class="mega-menu__sublinks">
+                  {%- for grandchild in childlink.links -%}
+                    <li><a href="{{ grandchild.url }}" class="text-navigation">{{ grandchild.title }}</a></li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- if block.settings.promo_image != blank -%}
+        <a href="{{ block.settings.promo_link | default: '#' }}" class="mega-menu__promo">
+          {%- render 'responsive-image', image: block.settings.promo_image, ratio: 'landscape', sizes: '320px' -%}
+          {%- if block.settings.promo_heading != blank -%}
+            <span class="mega-menu__promo-heading text-heading">{{ block.settings.promo_heading }}</span>
+          {%- endif -%}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}

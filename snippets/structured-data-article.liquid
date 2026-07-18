@@ -1,0 +1,24 @@
+{%- comment -%} Params: article, blog {%- endcomment -%}
+{%- if article -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": {{ article.title | json }},
+      "image": [{{ article.image | image_url: width: 1200 | prepend: 'https:' | json }}],
+      "datePublished": {{ article.published_at | date: '%Y-%m-%dT%H:%M:%S%z' | json }},
+      {%- if article.updated_at -%}
+      "dateModified": {{ article.updated_at | date: '%Y-%m-%dT%H:%M:%S%z' | json }},
+      {%- endif -%}
+      "author": {
+        "@type": "Person",
+        "name": {{ article.author | json }}
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": {{ shop.name | json }}
+      },
+      "mainEntityOfPage": {{ request.origin | append: article.url | json }}
+    }
+  </script>
+{%- endif -%}

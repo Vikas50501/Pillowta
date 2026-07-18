@@ -1,0 +1,17 @@
+{%- comment -%}
+  Params: option_value (an entry from product.options_with_values[n].values, or
+  a variant option value string), selected (bool), size ('sm' | 'md', default 'md')
+{%- endcomment -%}
+{%- liquid
+  assign swatch_size = size | default: 'md'
+  assign swatch = option_value.swatch
+-%}
+<span class="swatch swatch--{{ swatch_size }}{% if selected %} is-selected{% endif %}">
+  {%- if swatch.image -%}
+    <span class="swatch__media" style="background-image: url({{ swatch.image | image_url: width: 64 }});"></span>
+  {%- elsif swatch.color -%}
+    <span class="swatch__media" style="background-color: rgb({{ swatch.color.red }}, {{ swatch.color.green }}, {{ swatch.color.blue }});"></span>
+  {%- else -%}
+    <span class="swatch__media swatch__media--text text-caption">{{ option_value.name | default: option_value | truncate: 3, '' }}</span>
+  {%- endif -%}
+</span>

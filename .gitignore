@@ -1,0 +1,9 @@
+# Reference-only files (not part of the theme, not for publishing)
+*.htm
+
+# Build artifacts
+*.zip
+
+# Local tooling
+.claude/
+.code-review-graph/

@@ -1,0 +1,94 @@
+{%- comment -%}
+  Params: product, show_quick_add (default true), show_vendor (default false),
+  image_ratio (defaults to settings.image_ratio), sizes (default sizes attr)
+{%- endcomment -%}
+{%- liquid
+  assign card_ratio = image_ratio | default: settings.image_ratio
+  assign card_sizes = sizes | default: '(min-width: 990px) 25vw, 50vw'
+  assign show_quick_add_button = true
+  if show_quick_add == false
+    assign show_quick_add_button = false
+  endif
+  assign color_option = nil
+  for option in product.options_with_values
+    if option.name == 'Color' or option.name == 'Colour'
+      assign color_option = option
+    endif
+  endfor
+-%}
+<div class="product-card hover-target" data-product-card>
+  <a href="{{ product.url }}" class="product-card__media hover-target--media" aria-label="{{ product.title | escape }}">
+    {%- render 'responsive-image', image: product.featured_image, ratio: card_ratio, sizes: card_sizes, alt: product.featured_image.alt -%}
+    {%- if product.images.size > 1 -%}
+      <img
+        class="responsive-image__img responsive-image__img--secondary"
+        src="{{ product.images[1] | image_url: width: 800 }}"
+        srcset="{% render 'image-srcset', image: product.images[1] %}"
+        sizes="{{ card_sizes }}"
+        width="{{ product.images[1].width }}"
+        height="{{ product.images[1].height }}"
+        alt=""
+        loading="lazy"
+      >
+    {%- endif -%}
+    {%- if product.compare_at_price > product.price or product.available == false or product.tags contains 'New' -%}
+      <div class="product-card__badges">
+        {%- if product.available == false -%}
+          {%- render 'badge', type: 'sold_out' -%}
+        {%- else -%}
+          {%- if product.compare_at_price > product.price -%}{%- render 'badge', type: 'sale' -%}{%- endif -%}
+          {%- if product.tags contains 'New' -%}{%- render 'badge', type: 'new' -%}{%- endif -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </a>
+
+  <button
+    type="button"
+    class="product-card__quick-view-trigger"
+    data-quick-view-trigger
+    data-product-url="{{ product.url }}"
+    aria-label="{{ 'products.product.quick_view' | t }} — {{ product.title | escape }}"
+  >
+    {%- render 'icon-quick-view' -%}
+  </button>
+
+  <div class="product-card__details">
+    {%- if show_vendor -%}
+      <p class="product-card__vendor text-caption">{{ product.vendor }}</p>
+    {%- endif -%}
+
+    <h3 class="product-card__title text-body">
+      <a href="{{ product.url }}" class="hover-target--text">{{ product.title }}</a>
+    </h3>
+
+    {%- if color_option -%}
+      <div class="product-card__swatches">
+        {%- for value in color_option.values limit: 6 -%}
+          {%- render 'swatch', option_value: value, size: 'sm' -%}
+        {%- endfor -%}
+        {%- if color_option.values.size > 6 -%}
+          <span class="product-card__swatches-more text-caption">+{{ color_option.values.size | minus: 6 }}</span>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="product-card__price">
+      {%- if product.price_varies -%}
+        <span class="product-card__price-prefix text-caption">{{ 'products.price.from_label' | t }}</span>
+      {%- endif -%}
+      {%- render 'price', product: product -%}
+    </div>
+
+    {%- if show_quick_add_button and product.available -%}
+      <quick-add-form class="product-card__quick-add">
+        {%- form 'product', product, class: 'product-card__quick-add-form' -%}
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+          <button type="submit" class="button button--secondary product-card__quick-add-button" data-quick-add-button>
+            {{ 'products.product.quick_add' | t }}
+          </button>
+        {%- endform -%}
+      </quick-add-form>
+    {%- endif -%}
+  </div>
+</div>

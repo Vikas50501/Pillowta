@@ -1,0 +1,41 @@
+{
+  "sections": {
+    "intro": {
+      "type": "rich-text",
+      "settings": {
+        "animation": "fade"
+      },
+      "blocks": {
+        "heading": { "type": "heading", "settings": { "heading": "Frequently asked questions" } },
+        "text": { "type": "text", "settings": { "text": "<p>Find quick answers about orders, shipping, payments, returns, and more. Can't find what you're looking for? Reach out to our team any time.</p>" } }
+      },
+      "block_order": ["heading", "text"]
+    },
+    "faq": {
+      "type": "faq-categories",
+      "settings": {
+        "heading": "",
+        "animation": "fade",
+        "section_width": "wide",
+        "padding_top": 24,
+        "padding_bottom": 64,
+        "hide_on_mobile": false,
+        "hide_on_desktop": false
+      },
+      "blocks": {
+        "orders-1": { "type": "question", "settings": { "category": "Orders", "question": "How do I track my order?", "answer": "<p>Once your order ships, you'll receive a confirmation email with a tracking link.</p>" } },
+        "orders-2": { "type": "question", "settings": { "category": "Orders", "question": "Can I change or cancel my order?", "answer": "<p>Contact us within 2 hours of placing your order and we'll do our best to update it before it ships.</p>" } },
+        "shipping-1": { "type": "question", "settings": { "category": "Shipping", "question": "How long does shipping take?", "answer": "<p>Most orders arrive within 3-5 business days. Expedited options are available at checkout.</p>" } },
+        "shipping-2": { "type": "question", "settings": { "category": "Shipping", "question": "Do you ship internationally?", "answer": "<p>Yes, we ship to select international destinations. Rates and timelines are calculated at checkout.</p>" } },
+        "payment-1": { "type": "question", "settings": { "category": "Payment", "question": "What payment methods do you accept?", "answer": "<p>We accept all major credit cards as well as popular digital wallets at checkout.</p>" } },
+        "payment-2": { "type": "question", "settings": { "category": "Payment", "question": "Is it safe to enter my card details?", "answer": "<p>Yes, all transactions are encrypted and processed through a secure, PCI-compliant checkout.</p>" } },
+        "returns-1": { "type": "question", "settings": { "category": "Returns", "question": "What is your return policy?", "answer": "<p>Unopened products can be returned within 30 days of delivery for a full refund.</p>" } },
+        "returns-2": { "type": "question", "settings": { "category": "Returns", "question": "How do I start a return?", "answer": "<p>Reach out to our support team with your order number and we'll send over the next steps.</p>" } },
+        "products-1": { "type": "question", "settings": { "category": "Products", "question": "Are your products cruelty-free?", "answer": "<p>Yes, every Bloom Beauty product is cruelty-free and never tested on animals.</p>" } },
+        "products-2": { "type": "question", "settings": { "category": "Products", "question": "Where are your products made?", "answer": "<p>Our formulas are developed and manufactured in small batches to ensure consistent quality.</p>" } }
+      },
+      "block_order": ["orders-1", "orders-2", "shipping-1", "shipping-2", "payment-1", "payment-2", "returns-1", "returns-2", "products-1", "products-2"]
+    }
+  },
+  "order": ["intro", "faq"]
+}

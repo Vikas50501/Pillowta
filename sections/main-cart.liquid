@@ -1,0 +1,152 @@
+<div class="cart-page page-width" data-cart-page data-section-id="{{ section.id }}">
+  <h1 class="cart-page__title text-heading">{{ 'cart.general.title' | t }}</h1>
+
+  {%- if cart.item_count > 0 -%}
+    <div class="cart-page__layout">
+      <div class="cart-page__items">
+        {%- liquid
+          assign free_shipping_threshold = 5000
+          assign remaining = free_shipping_threshold | minus: cart.total_price
+          assign progress = cart.total_price | times: 100 | divided_by: free_shipping_threshold
+          if progress > 100
+            assign progress = 100
+          endif
+        -%}
+        <div class="cart-page__shipping-bar">
+          <div class="cart-page__shipping-track">
+            <div class="cart-page__shipping-fill" style="width: {{ progress }}%;"></div>
+          </div>
+          <p class="text-caption">
+            {%- if remaining > 0 -%}
+              {{ 'cart.general.free_shipping_progress' | t: amount: remaining | money }}
+            {%- else -%}
+              {{ 'cart.general.free_shipping_reached' | t }}
+            {%- endif -%}
+          </p>
+        </div>
+
+        <table class="cart-page__table" data-cart-items-table>
+          <thead class="visually-hidden">
+            <tr>
+              <th>{{ 'products.product.details' | t }}</th>
+              <th>{{ 'products.price.regular_price' | t }}</th>
+              <th>{{ 'products.product.quantity' | t }}</th>
+              <th>{{ 'cart.general.subtotal' | t }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%- for item in cart.items -%}
+              <tr class="cart-page__row" data-cart-item data-line="{{ forloop.index }}">
+                <td class="cart-page__row-media">
+                  <a href="{{ item.url }}">
+                    {%- render 'responsive-image', image: item.image, ratio: 'square', sizes: '120px' -%}
+                  </a>
+                </td>
+                <td class="cart-page__row-details">
+                  <a href="{{ item.url }}" class="cart-page__row-title text-body">{{ item.product.title }}</a>
+                  {%- unless item.product.has_only_default_variant -%}
+                    <p class="cart-page__row-variant text-caption">{{ item.variant.title }}</p>
+                  {%- endunless -%}
+                  <div class="cart-page__row-price cart-page__row-price--mobile" data-line-price>
+                    {%- render 'price', item: item -%}
+                  </div>
+                  <button type="button" class="cart-page__remove text-caption" data-cart-remove data-line="{{ forloop.index }}">
+                    {{ 'cart.general.remove' | t }}
+                  </button>
+                </td>
+                <td class="cart-page__row-price cart-page__row-price--desktop" data-line-price>
+                  {%- render 'price', item: item -%}
+                </td>
+                <td class="cart-page__row-quantity">
+                  {%- render 'quantity-selector', quantity: item.quantity, line: forloop.index, max: item.variant.inventory_quantity -%}
+                </td>
+                <td class="cart-page__row-total text-price" data-line-total>{{ item.final_line_price | money }}</td>
+              </tr>
+            {%- endfor -%}
+          </tbody>
+        </table>
+
+        <div class="cart-page__note">
+          <label for="CartNote" class="text-body">{{ 'cart.general.gift_note' | t }}</label>
+          <textarea id="CartNote" class="cart-page__note-input" data-cart-note rows="3">{{ cart.note }}</textarea>
+        </div>
+
+        {%- assign has_upsell_products = false -%}
+        {%- for block in section.blocks -%}
+          {%- if block.settings.product != blank -%}{%- assign has_upsell_products = true -%}{%- endif -%}
+        {%- endfor -%}
+        {%- if has_upsell_products -%}
+          <div class="cart-page__upsell">
+            <p class="cart-page__upsell-heading text-heading">{{ 'products.product.you_may_also_like' | t }}</p>
+            <ul class="featured-products__grid" style="--columns-desktop: {{ section.blocks.size }};">
+              {%- for block in section.blocks -%}
+                {%- if block.settings.product != blank -%}
+                  <li {{ block.shopify_attributes }}>
+                    {%- render 'product-card', product: block.settings.product, show_quick_add: true -%}
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+      </div>
+
+      <aside class="cart-page__summary" data-cart-summary>
+        <form class="cart-page__discount-form" data-discount-form data-cart-url="{{ routes.cart_url }}">
+          <label class="visually-hidden" for="DiscountCode">{{ 'cart.general.discount_code' | t }}</label>
+          <input type="text" id="DiscountCode" class="cart-page__discount-input" placeholder="{{ 'cart.general.discount_code' | t }}" data-discount-input>
+          <button type="submit" class="button button--secondary">{{ 'cart.general.apply_discount' | t }}</button>
+        </form>
+
+        <div class="cart-page__shipping-estimator">
+          <p class="text-body">{{ 'cart.shipping.title' | t }}</p>
+          <form class="cart-page__shipping-form" data-shipping-estimator-form>
+            <select name="address[country]" class="cart-page__shipping-select" data-shipping-country>
+              {{ country_option_tags }}
+            </select>
+            <input type="text" name="address[province]" placeholder="{{ 'cart.shipping.province' | t }}" data-shipping-province>
+            <input type="text" name="address[zip]" placeholder="{{ 'cart.shipping.zip' | t }}" data-shipping-zip>
+            <button type="submit" class="button button--secondary">{{ 'cart.shipping.calculate' | t }}</button>
+          </form>
+          <div class="cart-page__shipping-results text-caption" data-shipping-results></div>
+        </div>
+
+        <div class="cart-page__totals">
+          <div class="cart-page__subtotal">
+            <span class="text-body">{{ 'cart.general.subtotal' | t }}</span>
+            <span class="text-price" data-cart-subtotal>{{ cart.total_price | money }}</span>
+          </div>
+          <p class="cart-page__taxes-note text-caption">{{ 'cart.general.taxes_note' | t }}</p>
+          <a href="{{ routes.cart_checkout_url }}" class="button button--primary cart-page__checkout">
+            {{ 'cart.general.checkout' | t }}
+          </a>
+        </div>
+      </aside>
+    </div>
+  {%- else -%}
+    <div class="cart-page__empty">
+      <p class="text-body">{{ 'cart.general.empty' | t }}</p>
+      <a href="{{ routes.all_products_collection_url }}" class="button button--primary">
+        {{ 'cart.general.continue_shopping' | t }}
+      </a>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Cart page",
+  "tag": "section",
+  "class": "shopify-section--main-cart",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "upsell_product",
+      "name": "Upsell product",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" }
+      ]
+    }
+  ]
+}
+{% endschema %}

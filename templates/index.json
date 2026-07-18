@@ -1,0 +1,129 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero-banner",
+      "settings": {
+        "overlay_opacity": 20,
+        "height": "large",
+        "content_position": "center",
+        "animation": "slide-up",
+        "section_width": "full",
+        "padding_top": 0,
+        "padding_bottom": 0
+      },
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": { "heading": "Beauty, reimagined" }
+        },
+        "text": {
+          "type": "text",
+          "settings": { "text": "<p>Clean, high-performance formulas made for real life.</p>" }
+        },
+        "button": {
+          "type": "button",
+          "settings": { "label": "Shop now", "link": "", "style": "primary" }
+        }
+      },
+      "block_order": ["heading", "text", "button"]
+    },
+    "featured-collection": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Best sellers",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "show_view_all": true,
+        "show_quick_add": true
+      }
+    },
+    "image-with-text": {
+      "type": "image-with-text",
+      "settings": {
+        "layout": "side-by-side",
+        "image_position": "left"
+      },
+      "blocks": {
+        "heading": { "type": "heading" },
+        "text": { "type": "text" },
+        "button": { "type": "button" }
+      },
+      "block_order": ["heading", "text", "button"]
+    },
+    "featured-collection-2": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "New arrivals",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "show_view_all": true,
+        "show_quick_add": true
+      }
+    },
+    "multi-column": {
+      "type": "multi-column",
+      "settings": {
+        "heading": "Why shop with us",
+        "columns": "3",
+        "stagger_animation": true
+      },
+      "blocks": {
+        "col1": { "type": "column" },
+        "col2": {
+          "type": "column",
+          "settings": { "heading": "Dermatologist-tested", "text": "<p>Every formula is tested for sensitivity before it ships.</p>" }
+        },
+        "col3": {
+          "type": "column",
+          "settings": { "heading": "Fast, free shipping", "text": "<p>Free shipping on every order over $50.</p>" }
+        }
+      },
+      "block_order": ["col1", "col2", "col3"]
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "settings": {
+        "heading": "Loved by our customers",
+        "layout": "scroll"
+      },
+      "blocks": {
+        "t1": { "type": "testimonial" },
+        "t2": { "type": "testimonial" },
+        "t3": { "type": "testimonial" }
+      },
+      "block_order": ["t1", "t2", "t3"]
+    },
+    "brand-logos": {
+      "type": "brand-logos",
+      "settings": {
+        "heading": "As seen in",
+        "enable_marquee": true,
+        "marquee_speed": 30
+      },
+      "blocks": {
+        "l1": { "type": "logo" },
+        "l2": { "type": "logo" },
+        "l3": { "type": "logo" },
+        "l4": { "type": "logo" }
+      },
+      "block_order": ["l1", "l2", "l3", "l4"]
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "heading": "Join the list",
+        "subheading": "<p>Sign up for early access to new drops and exclusive offers.</p>"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "featured-collection",
+    "image-with-text",
+    "featured-collection-2",
+    "multi-column",
+    "testimonials",
+    "brand-logos",
+    "newsletter"
+  ]
+}

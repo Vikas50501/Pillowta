@@ -1,0 +1,112 @@
+{%- liquid
+  assign section_width_class = 'page-width'
+  if section.settings.section_width == 'full'
+    assign section_width_class = ''
+  endif
+  assign reveal = section.settings.animation
+  assign video_host = section.settings.video.type
+  assign video_id = section.settings.video.id
+-%}
+<div
+  class="video-section{% if section.settings.hide_on_mobile %} video-section--hide-mobile{% endif %}{% if section.settings.hide_on_desktop %} video-section--hide-desktop{% endif %}"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+  data-hide-mobile="{{ section.settings.hide_on_mobile }}"
+  data-hide-desktop="{{ section.settings.hide_on_desktop }}"
+>
+  <div class="{{ section_width_class }}">
+    <div class="video-section__inner"{% if reveal != 'none' %} data-scroll-reveal="{{ reveal }}"{% endif %}>
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'heading' -%}
+            <h2 class="video-section__heading text-heading" {{ block.shopify_attributes }}>{{ block.settings.heading }}</h2>
+          {%- when 'text' -%}
+            <div class="video-section__text text-body" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+        {%- endcase -%}
+      {%- endfor -%}
+
+      <div
+        class="video-section__player-wrap"
+        data-video-section
+        data-video-host="{{ video_host }}"
+        data-video-id="{{ video_id }}"
+        data-autoplay="{{ section.settings.autoplay }}"
+        data-loop="{{ section.settings.loop }}"
+        data-muted="{{ section.settings.muted }}"
+      >
+        {%- if section.settings.video != blank -%}
+          <button type="button" class="video-section__poster" data-video-play aria-label="Play video">
+            {%- render 'responsive-image', image: section.settings.poster, ratio: 'landscape', sizes: '(min-width: 750px) 1200px, 100vw' -%}
+            <span class="video-section__play-icon">
+              {%- render 'icon-play', size: 56 -%}
+            </span>
+          </button>
+          <div class="video-section__player" data-video-player hidden></div>
+        {%- else -%}
+          <div class="video-section__poster video-section__poster--empty">
+            {%- render 'responsive-image', image: section.settings.poster, ratio: 'landscape', sizes: '(min-width: 750px) 1200px, 100vw' -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Video",
+  "tag": "section",
+  "class": "shopify-section--video",
+  "settings": [
+    { "type": "video_url", "id": "video", "label": "Video", "accept": ["youtube", "vimeo"] },
+    { "type": "image_picker", "id": "poster", "label": "Poster image" },
+    { "type": "checkbox", "id": "autoplay", "label": "Autoplay after clicking play", "default": true },
+    { "type": "checkbox", "id": "loop", "label": "Loop", "default": false },
+    { "type": "checkbox", "id": "muted", "label": "Mute", "default": false },
+
+    { "type": "header", "content": "Section" },
+    { "type": "select", "id": "animation", "label": "Entrance animation", "default": "fade",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "fade", "label": "Fade" },
+        { "value": "slide-up", "label": "Slide up" },
+        { "value": "scale", "label": "Scale" }
+      ]
+    },
+    { "type": "select", "id": "section_width", "label": "Width", "default": "full",
+      "options": [
+        { "value": "full", "label": "Full width" },
+        { "value": "wide", "label": "Wide" },
+        { "value": "contained", "label": "Contained" }
+      ]
+    },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 64 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 64 },
+    { "type": "checkbox", "id": "hide_on_mobile", "label": "Hide on mobile", "default": false },
+    { "type": "checkbox", "id": "hide_on_desktop", "label": "Hide on desktop", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Watch how it's made" }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>A closer look at our formulation process.</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video",
+      "blocks": [
+        { "type": "heading" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,72 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero-banner",
+      "settings": {
+        "height": "medium",
+        "content_position": "center",
+        "overlay_opacity": 20,
+        "animation": "fade",
+        "section_width": "full",
+        "padding_top": 0,
+        "padding_bottom": 0
+      },
+      "blocks": {
+        "heading": { "type": "heading", "settings": { "heading": "Beauty made with intention" } },
+        "text": { "type": "text", "settings": { "text": "<p>Bloom Beauty started with a simple belief: skincare and fragrance should feel as good as they perform.</p>" } }
+      },
+      "block_order": ["heading", "text"]
+    },
+    "story": {
+      "type": "image-with-text",
+      "settings": {
+        "layout": "side-by-side",
+        "image_position": "left",
+        "animation": "fade",
+        "section_width": "wide",
+        "padding_top": 64,
+        "padding_bottom": 64
+      },
+      "blocks": {
+        "heading": { "type": "heading", "settings": { "heading": "Our story" } },
+        "text": { "type": "text", "settings": { "text": "<p>Bloom Beauty began in a small studio with one goal: make clean, effective beauty products without the guesswork. What started as a handful of formulas shared with friends has grown into a full line of skincare and fragrance, still made with the same care.</p>" } }
+      },
+      "block_order": ["heading", "text"]
+    },
+    "mission": {
+      "type": "image-with-text",
+      "settings": {
+        "layout": "side-by-side",
+        "image_position": "right",
+        "animation": "fade",
+        "section_width": "wide",
+        "padding_top": 0,
+        "padding_bottom": 64
+      },
+      "blocks": {
+        "heading": { "type": "heading", "settings": { "heading": "Our mission" } },
+        "text": { "type": "text", "settings": { "text": "<p>We believe beauty should never come at a cost to your skin, your values, or the planet. Every formula is cruelty-free, dermatologist-tested, and built to work as hard as you do.</p>" } }
+      },
+      "block_order": ["heading", "text"]
+    },
+    "values": {
+      "type": "multi-column",
+      "settings": {
+        "heading": "What we stand for",
+        "columns": "3",
+        "stagger_animation": true,
+        "animation": "fade",
+        "section_width": "wide",
+        "padding_top": 0,
+        "padding_bottom": 64
+      },
+      "blocks": {
+        "col1": { "type": "column", "settings": { "heading": "Cruelty-free", "text": "<p>Never tested on animals, always tested on real skin.</p>" } },
+        "col2": { "type": "column", "settings": { "heading": "Clean formulas", "text": "<p>Thoughtfully formulated without unnecessary fillers.</p>" } },
+        "col3": { "type": "column", "settings": { "heading": "Made to last", "text": "<p>Packaging and products designed to be used, not wasted.</p>" } }
+      },
+      "block_order": ["col1", "col2", "col3"]
+    }
+  },
+  "order": ["hero", "story", "mission", "values"]
+}

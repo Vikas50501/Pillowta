@@ -1,0 +1,30 @@
+{%- comment -%}
+  Params: item (cart line item) OR variant OR product — first one present wins.
+{%- endcomment -%}
+{%- liquid
+  if item
+    assign current = item.final_price
+    assign compare_at = item.original_price
+  elsif variant
+    assign current = variant.price
+    assign compare_at = variant.compare_at_price
+  elsif product
+    assign current = product.price
+    assign compare_at = product.compare_at_price
+  endif
+
+  assign on_sale = false
+  if compare_at > current
+    assign on_sale = true
+  endif
+-%}
+<div class="price text-price{% if on_sale %} price--sale{% endif %}">
+  {%- if on_sale -%}
+    <span class="visually-hidden">{{ 'products.price.sale_price' | t }}</span>
+    <span class="price__sale color-sale">{{ current | money }}</span>
+    <span class="visually-hidden">{{ 'products.price.regular_price' | t }}</span>
+    <s class="price__compare color-compare-price">{{ compare_at | money }}</s>
+  {%- else -%}
+    <span class="price__regular">{{ current | money }}</span>
+  {%- endif -%}
+</div>

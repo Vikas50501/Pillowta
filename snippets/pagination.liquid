@@ -1,0 +1,47 @@
+{%- comment -%}
+  Params: paginate (the {% paginate %} object), mode ('pagination' | 'load_more' | 'infinite_scroll', default 'pagination')
+{%- endcomment -%}
+{%- if paginate.pages > 1 -%}
+  {%- assign pagination_mode = mode | default: 'pagination' -%}
+  <div class="pagination-wrapper" data-pagination data-pagination-mode="{{ pagination_mode }}">
+    {%- if pagination_mode == 'pagination' -%}
+      <nav class="pagination" role="navigation" aria-label="Pagination">
+        {%- if paginate.previous -%}
+          <a href="{{ paginate.previous.url }}" class="pagination__link pagination__link--prev" data-pagination-link aria-label="{{ 'general.slider.previous' | t }}">
+            {%- render 'icon-chevron-left' -%}
+          </a>
+        {%- endif -%}
+        <ul class="pagination__list">
+          {%- for part in paginate.parts -%}
+            <li>
+              {%- if part.is_link -%}
+                <a href="{{ part.url }}" class="pagination__number" data-pagination-link>{{ part.title }}</a>
+              {%- elsif part.title == paginate.current_page -%}
+                <span class="pagination__number is-current" aria-current="page">{{ part.title }}</span>
+              {%- else -%}
+                <span class="pagination__ellipsis">{{ part.title }}</span>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+        {%- if paginate.next -%}
+          <a href="{{ paginate.next.url }}" class="pagination__link pagination__link--next" data-pagination-link aria-label="{{ 'general.slider.next' | t }}">
+            {%- render 'icon-chevron-right' -%}
+          </a>
+        {%- endif -%}
+      </nav>
+    {%- else -%}
+      {%- if paginate.next -%}
+        <button
+          type="button"
+          class="button button--secondary pagination__load-more"
+          data-pagination-load-more
+          data-next-url="{{ paginate.next.url }}"
+          {% if pagination_mode == 'infinite_scroll' %}data-auto-load{% endif %}
+        >
+          {{ 'collection.filters.load_more' | t }}
+        </button>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+{%- endif -%}

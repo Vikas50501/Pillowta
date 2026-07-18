@@ -1,0 +1,18 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-blog",
+      "settings": {
+        "posts_per_page": 12,
+        "columns_desktop": 3,
+        "section_width": "wide",
+        "animation": "fade",
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "hide_on_mobile": false,
+        "hide_on_desktop": false
+      }
+    }
+  },
+  "order": ["main"]
+}

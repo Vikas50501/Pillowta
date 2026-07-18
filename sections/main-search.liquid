@@ -1,0 +1,73 @@
+<div class="search-page page-width">
+  <form action="{{ routes.search_url }}" method="get" role="search" class="search-page__form">
+    <input
+      type="search"
+      name="q"
+      value="{{ search.terms | escape }}"
+      placeholder="{{ 'general.search.placeholder' | t }}"
+      class="search-page__input text-body"
+      aria-label="{{ 'general.search.placeholder' | t }}"
+    >
+    <input type="hidden" name="type" value="product,article,page,collection">
+    <button type="submit" class="button button--primary">{{ 'general.search.submit' | t }}</button>
+  </form>
+
+  {%- if search.performed -%}
+    <p class="search-page__count text-caption">
+      {{ 'general.search.results_count' | t: count: search.results_count }}
+    </p>
+
+    {%- if search.results_count == 0 -%}
+      <p class="search-page__empty text-body">{{ 'general.search.no_results' | t: terms: search.terms }}</p>
+    {%- else -%}
+      {%- paginate search.results by section.settings.results_per_page -%}
+        {%- assign products = search.results | where: 'object_type', 'product' -%}
+        {%- assign other_results_count = search.results_count | minus: products.size -%}
+
+        {%- if products.size > 0 -%}
+          <div class="search-page__group">
+            <h2 class="search-page__group-title text-heading">{{ 'general.search.products' | t }}</h2>
+            <ul class="collection-grid" style="--columns-desktop: {{ section.settings.columns_desktop }}; --columns-mobile: 2;">
+              {%- for product in products -%}
+                <li>{%- render 'product-card', product: product, show_quick_add: section.settings.show_quick_add -%}</li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        {%- if other_results_count > 0 -%}
+          <div class="search-page__group">
+            <h2 class="search-page__group-title text-heading">{{ 'general.search.pages_articles' | t }}</h2>
+            <ul class="search-page__list">
+              {%- for result in search.results -%}
+                {%- unless result.object_type == 'product' -%}
+                  <li>
+                    <a href="{{ result.url }}" class="search-page__list-link text-body">{{ result.title }}</a>
+                    {%- if result.object_type == 'article' -%}
+                      <p class="search-page__list-excerpt text-caption">{{ result.excerpt_or_content | strip_html | truncate: 120 }}</p>
+                    {%- endif -%}
+                  </li>
+                {%- endunless -%}
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        {%- render 'pagination', paginate: paginate -%}
+      {%- endpaginate -%}
+    {%- endif -%}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Search results",
+  "tag": "section",
+  "class": "shopify-section--main-search",
+  "settings": [
+    { "type": "range", "id": "results_per_page", "label": "Results per page", "min": 8, "max": 48, "step": 4, "default": 16 },
+    { "type": "range", "id": "columns_desktop", "label": "Columns (desktop)", "min": 2, "max": 5, "step": 1, "default": 4 },
+    { "type": "checkbox", "id": "show_quick_add", "label": "Show quick add", "default": true }
+  ]
+}
+{% endschema %}

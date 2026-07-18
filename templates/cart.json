@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-cart",
+      "blocks": {
+        "upsell1": { "type": "upsell_product" },
+        "upsell2": { "type": "upsell_product" },
+        "upsell3": { "type": "upsell_product" },
+        "upsell4": { "type": "upsell_product" }
+      },
+      "block_order": ["upsell1", "upsell2", "upsell3", "upsell4"]
+    }
+  },
+  "order": ["main"]
+}

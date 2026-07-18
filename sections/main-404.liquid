@@ -1,0 +1,33 @@
+<div class="error-404 page-width page-width--narrow">
+  <div class="error-404__inner">
+    <p class="error-404__code text-caption">404</p>
+    <h1 class="error-404__title text-heading">{{ '404.title' | t }}</h1>
+    <p class="error-404__subtext text-body">{{ '404.subtext' | t }}</p>
+
+    <form action="{{ routes.search_url }}" method="get" role="search" class="error-404__search">
+      <label class="visually-hidden" for="Error404Search">{{ '404.search_prompt' | t }}</label>
+      <input
+        type="search"
+        name="q"
+        id="Error404Search"
+        placeholder="{{ 'general.search.placeholder' | t }}"
+        class="error-404__search-input text-body"
+      >
+      <input type="hidden" name="type" value="product,article,page,collection">
+      <button type="submit" class="button button--primary">{{ 'general.search.submit' | t }}</button>
+    </form>
+
+    <div class="error-404__links">
+      <a href="{{ routes.root_url }}" class="button button--secondary">{{ '404.back_home' | t }}</a>
+      <a href="{{ routes.all_products_collection_url }}" class="button button--secondary">{{ '404.browse_collections' | t }}</a>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "404 page",
+  "tag": "section",
+  "class": "shopify-section--main-404"
+}
+{% endschema %}

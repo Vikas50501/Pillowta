@@ -1,0 +1,175 @@
+{%- liquid
+  assign section_width_class = 'page-width'
+  if section.settings.section_width == 'full'
+    assign section_width_class = ''
+  endif
+  assign reveal = section.settings.animation
+-%}
+{%- render 'structured-data-article', article: article, blog: blog -%}
+<div
+  class="main-article{% if section.settings.hide_on_mobile %} main-article--hide-mobile{% endif %}{% if section.settings.hide_on_desktop %} main-article--hide-desktop{% endif %}"
+  data-hide-mobile="{{ section.settings.hide_on_mobile }}"
+  data-hide-desktop="{{ section.settings.hide_on_desktop }}"
+>
+  <div class="main-article__media">
+    {%- if article.image != blank -%}
+      <img
+        src="{{ article.image | image_url: width: 1800 }}"
+        srcset="{% render 'image-srcset', image: article.image %}"
+        sizes="100vw"
+        alt="{{ article.image.alt | escape }}"
+        width="{{ article.image.width }}"
+        height="{{ article.image.height }}"
+        loading="eager"
+        class="main-article__image"
+      >
+    {%- else -%}
+      <div class="main-article__image main-article__image--placeholder"></div>
+    {%- endif -%}
+  </div>
+
+  <div class="{{ section_width_class }} page-width--narrow">
+    <div class="main-article__inner"{% if reveal != 'none' %} data-scroll-reveal="{{ reveal }}"{% endif %}>
+      <header class="main-article__header">
+        {%- if article.tags.size > 0 -%}
+          <div class="main-article__tags">
+            {%- for tag in article.tags -%}
+              <span class="main-article__tag text-caption">{{ tag }}</span>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        <h1 class="main-article__title text-heading">{{ article.title }}</h1>
+
+        <p class="main-article__byline text-caption">
+          {%- if article.author != blank -%}
+            {{ 'blog.article.by_author' | t: author: article.author }}
+            <span class="main-article__byline-separator">·</span>
+          {%- endif -%}
+          {{ article.published_at | date: '%B %d, %Y' }}
+        </p>
+      </header>
+
+      <div class="main-article__content rte text-blog">
+        {{ article.content }}
+      </div>
+
+      {%- if article.previous_article or article.next_article -%}
+        <nav class="main-article__nav" aria-label="{{ 'blog.article.post_navigation' | t }}">
+          {%- if article.previous_article -%}
+            <a href="{{ article.previous_article.url }}" class="main-article__nav-link main-article__nav-link--prev">
+              {%- render 'icon-chevron-left' -%}
+              <span class="main-article__nav-text">
+                <span class="main-article__nav-label text-caption">{{ 'blog.article.previous_post' | t }}</span>
+                <span class="main-article__nav-title text-body">{{ article.previous_article.title }}</span>
+              </span>
+            </a>
+          {%- else -%}
+            <span></span>
+          {%- endif -%}
+
+          {%- if article.next_article -%}
+            <a href="{{ article.next_article.url }}" class="main-article__nav-link main-article__nav-link--next">
+              <span class="main-article__nav-text">
+                <span class="main-article__nav-label text-caption">{{ 'blog.article.next_post' | t }}</span>
+                <span class="main-article__nav-title text-body">{{ article.next_article.title }}</span>
+              </span>
+              {%- render 'icon-chevron-right' -%}
+            </a>
+          {%- endif -%}
+        </nav>
+      {%- endif -%}
+
+      {%- if blog.comments_enabled? -%}
+        <div class="main-article__comments" id="Comments">
+          <h2 class="main-article__comments-heading text-heading">
+            {{ 'blog.comments.heading' | t: count: article.comments_count }}
+          </h2>
+
+          {%- if article.comments_count > 0 -%}
+            <ul class="main-article__comments-list">
+              {%- for comment in article.comments -%}
+                <li class="main-article__comment">
+                  <p class="main-article__comment-author text-body">{{ comment.author }}</p>
+                  <p class="main-article__comment-date text-caption">{{ comment.created_at | date: '%B %d, %Y' }}</p>
+                  <div class="main-article__comment-content text-blog">{{ comment.content }}</div>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+
+          {%- form 'new_comment', article, class: 'main-article__comment-form' -%}
+            {%- if blog.moderated? -%}
+              <p class="main-article__comment-moderation text-caption">{{ 'blog.comments.moderated_notice' | t }}</p>
+            {%- endif -%}
+
+            {%- if form.posted_successfully? -%}
+              <p class="main-article__comment-success text-caption">
+                {%- if blog.moderated? -%}
+                  {{ 'blog.comments.success_moderated' | t }}
+                {%- else -%}
+                  {{ 'blog.comments.success' | t }}
+                {%- endif -%}
+              </p>
+            {%- endif -%}
+
+            {%- if form.errors -%}
+              <div class="main-article__comment-errors text-caption">
+                <ul>
+                  {%- for field in form.errors -%}
+                    <li>{{ form.errors.messages[field] }}</li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            {%- endif -%}
+
+            <div class="main-article__comment-field">
+              <label class="visually-hidden" for="CommentAuthor">{{ 'blog.comments.name' | t }}</label>
+              <input type="text" name="comment[author]" id="CommentAuthor" placeholder="{{ 'blog.comments.name' | t }}" value="{{ form.author }}" required>
+            </div>
+            <div class="main-article__comment-field">
+              <label class="visually-hidden" for="CommentEmail">{{ 'blog.comments.email' | t }}</label>
+              <input type="email" name="comment[email]" id="CommentEmail" placeholder="{{ 'blog.comments.email' | t }}" value="{{ form.email }}" required>
+            </div>
+            <div class="main-article__comment-field">
+              <label class="visually-hidden" for="CommentBody">{{ 'blog.comments.message' | t }}</label>
+              <textarea name="comment[body]" id="CommentBody" rows="5" placeholder="{{ 'blog.comments.message' | t }}" required>{{ form.body }}</textarea>
+            </div>
+            <button type="submit" class="button button--primary main-article__comment-submit">
+              {{ 'blog.comments.submit' | t }}
+            </button>
+          {%- endform -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Article",
+  "tag": "section",
+  "class": "shopify-section--main-article",
+  "settings": [
+    { "type": "select", "id": "animation", "label": "Entrance animation", "default": "fade",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "fade", "label": "Fade" },
+        { "value": "slide-up", "label": "Slide up" },
+        { "value": "scale", "label": "Scale" }
+      ]
+    },
+    { "type": "select", "id": "section_width", "label": "Width", "default": "wide",
+      "options": [
+        { "value": "full", "label": "Full width" },
+        { "value": "wide", "label": "Wide" },
+        { "value": "contained", "label": "Contained" }
+      ]
+    },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 48 },
+    { "type": "checkbox", "id": "hide_on_mobile", "label": "Hide on mobile", "default": false },
+    { "type": "checkbox", "id": "hide_on_desktop", "label": "Hide on desktop", "default": false }
+  ]
+}
+{% endschema %}

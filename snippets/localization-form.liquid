@@ -1,0 +1,22 @@
+{%- comment -%} Params: show_language, show_currency {%- endcomment -%}
+{%- if show_language and localization.available_languages.size > 1 -%}
+  {%- form 'localization', id: 'HeaderLanguageForm', class: 'localization-form localization-form--language' -%}
+    <input type="hidden" name="locale_code" value="{{ localization.language.iso_code }}">
+    <select name="locale_code" onchange="this.form.submit()" aria-label="{{ 'general.language' | t }}" class="localization-form__select text-navigation">
+      {%- for language in localization.available_languages -%}
+        <option value="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %}>{{ language.endonym_name | capitalize }}</option>
+      {%- endfor -%}
+    </select>
+  {%- endform -%}
+{%- endif -%}
+
+{%- if show_currency and localization.available_countries.size > 1 -%}
+  {%- form 'localization', id: 'HeaderCurrencyForm', class: 'localization-form localization-form--currency' -%}
+    <input type="hidden" name="country_code" value="{{ localization.country.iso_code }}">
+    <select name="country_code" onchange="this.form.submit()" aria-label="{{ 'general.country' | t }}" class="localization-form__select text-navigation">
+      {%- for country in localization.available_countries -%}
+        <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>{{ country.name }} ({{ country.currency.iso_code }})</option>
+      {%- endfor -%}
+    </select>
+  {%- endform -%}
+{%- endif -%}

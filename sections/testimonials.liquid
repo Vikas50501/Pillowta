@@ -1,0 +1,106 @@
+{%- liquid
+  assign section_width_class = 'page-width'
+  if section.settings.section_width == 'full'
+    assign section_width_class = ''
+  endif
+  assign reveal = section.settings.animation
+-%}
+<div
+  class="testimonials{% if section.settings.hide_on_mobile %} testimonials--hide-mobile{% endif %}{% if section.settings.hide_on_desktop %} testimonials--hide-desktop{% endif %}"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+  data-hide-mobile="{{ section.settings.hide_on_mobile }}"
+  data-hide-desktop="{{ section.settings.hide_on_desktop }}"
+>
+  <div class="{{ section_width_class }}">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="testimonials__heading text-heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    <div class="testimonials__{{ section.settings.layout }}"{% if reveal != 'none' %} data-scroll-reveal="{{ reveal }}"{% endif %}>
+      {%- for block in section.blocks -%}
+        <div class="testimonials__item" {{ block.shopify_attributes }}>
+          {%- render 'icon-quote', size: 28 -%}
+          {%- if block.settings.rating > 0 -%}
+            <div class="testimonials__rating" aria-label="Rated {{ block.settings.rating }} out of 5">
+              {%- for i in (1..5) -%}
+                {%- if i <= block.settings.rating -%}
+                  {%- render 'icon-star', size: 16, filled: true -%}
+                {%- else -%}
+                  {%- render 'icon-star', size: 16, filled: false -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+          {%- if block.settings.quote != blank -%}
+            <div class="testimonials__quote text-body">{{ block.settings.quote }}</div>
+          {%- endif -%}
+          <p class="testimonials__author text-caption">
+            {{- block.settings.author_name -}}
+            {%- if block.settings.author_title != blank -%}
+              <span class="testimonials__author-title">{{ block.settings.author_title }}</span>
+            {%- endif -%}
+          </p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "tag": "section",
+  "class": "shopify-section--testimonials",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Loved by our customers" },
+    { "type": "select", "id": "layout", "label": "Layout", "default": "scroll",
+      "options": [
+        { "value": "scroll", "label": "Scrollable row" },
+        { "value": "grid", "label": "Grid" }
+      ]
+    },
+
+    { "type": "header", "content": "Section" },
+    { "type": "select", "id": "animation", "label": "Entrance animation", "default": "fade",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "fade", "label": "Fade" },
+        { "value": "slide-up", "label": "Slide up" },
+        { "value": "scale", "label": "Scale" }
+      ]
+    },
+    { "type": "select", "id": "section_width", "label": "Width", "default": "full",
+      "options": [
+        { "value": "full", "label": "Full width" },
+        { "value": "wide", "label": "Wide" },
+        { "value": "contained", "label": "Contained" }
+      ]
+    },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 64 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 64 },
+    { "type": "checkbox", "id": "hide_on_mobile", "label": "Hide on mobile", "default": false },
+    { "type": "checkbox", "id": "hide_on_desktop", "label": "Hide on desktop", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        { "type": "richtext", "id": "quote", "label": "Quote", "default": "<p>This is the first product that's actually delivered on its promise. My skin has never looked better.</p>" },
+        { "type": "range", "id": "rating", "label": "Rating", "min": 0, "max": 5, "step": 1, "default": 5 },
+        { "type": "text", "id": "author_name", "label": "Author name", "default": "Jamie R." },
+        { "type": "text", "id": "author_title", "label": "Author title or location", "default": "Verified buyer" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        { "type": "testimonial" },
+        { "type": "testimonial" },
+        { "type": "testimonial" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,72 @@
+<div class="customer-page page-width">
+  <a href="{{ routes.account_url }}" class="customer-page__back text-caption">← {{ 'customer.order.back_to_account' | t }}</a>
+
+  <h1 class="customer-page__title text-heading">{{ 'customer.addresses.title' | t }}</h1>
+
+  <details class="address-book__add">
+    <summary class="button button--secondary">{{ 'customer.addresses.add_new' | t }}</summary>
+    <div class="address-book__form-wrapper">
+      {%- form 'customer_address', customer.new_address, class: 'customer-form' -%}
+        {%- if form.errors -%}
+          <div class="customer-form__errors" role="alert">
+            <ul>
+              {%- for field in form.errors -%}
+                <li>{{ form.errors.messages[field] }}</li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+        {%- render 'customer-address-form', address: customer.new_address, form: form -%}
+        <button type="submit" class="button button--primary">{{ 'customer.address_form.save' | t }}</button>
+      {%- endform -%}
+    </div>
+  </details>
+
+  {%- if customer.addresses.size == 0 -%}
+    <p class="text-body">{{ 'customer.addresses.no_addresses' | t }}</p>
+  {%- else -%}
+    <div class="address-book__grid">
+      {%- for address in customer.addresses -%}
+        <div class="customer-address-card">
+          {%- if address == customer.default_address -%}
+            <span class="badge badge--custom text-badge">{{ 'customer.addresses.default' | t }}</span>
+          {%- endif -%}
+          <p class="text-body">{{ address | format_address }}</p>
+
+          <div class="customer-address-card__actions">
+            <details class="address-book__edit">
+              <summary class="text-caption">{{ 'customer.addresses.edit' | t }}</summary>
+              <div class="address-book__form-wrapper">
+                {%- form 'customer_address', address, class: 'customer-form' -%}
+                  {%- if form.errors -%}
+                    <div class="customer-form__errors" role="alert">
+                      <ul>
+                        {%- for field in form.errors -%}
+                          <li>{{ form.errors.messages[field] }}</li>
+                        {%- endfor -%}
+                      </ul>
+                    </div>
+                  {%- endif -%}
+                  {%- render 'customer-address-form', address: address, form: form -%}
+                  <button type="submit" class="button button--primary">{{ 'customer.address_form.save' | t }}</button>
+                {%- endform -%}
+              </div>
+            </details>
+
+            {%- form 'customer_address', address, class: 'address-book__delete-form' -%}
+              <button
+                type="submit"
+                name="_method"
+                value="delete"
+                class="text-caption address-book__delete"
+                data-confirm="{{ 'customer.addresses.delete_confirm' | t }}"
+              >
+                {{ 'customer.addresses.delete' | t }}
+              </button>
+            {%- endform -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>

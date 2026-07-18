@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-article",
+      "settings": {
+        "animation": "fade",
+        "section_width": "wide",
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "hide_on_mobile": false,
+        "hide_on_desktop": false
+      }
+    }
+  },
+  "order": ["main"]
+}

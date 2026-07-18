@@ -1,0 +1,50 @@
+{%- comment -%}
+  Renders a blog article "card": image, tags, title, byline, excerpt.
+  Shared by sections/main-blog.liquid and sections/blog-posts.liquid.
+  Params: article (required), image_ratio (default 'landscape'), sizes (default sizes attr),
+          show_tags (default true)
+{%- endcomment -%}
+{%- liquid
+  assign card_ratio = image_ratio | default: 'landscape'
+  assign card_sizes = sizes | default: '(min-width: 990px) 33vw, 50vw'
+  assign show_article_tags = true
+  if show_tags == false
+    assign show_article_tags = false
+  endif
+  assign excerpt_source = article.excerpt
+  if excerpt_source == blank
+    assign excerpt_source = article.content
+  endif
+  assign excerpt_text = excerpt_source | strip_html | truncate: 140
+-%}
+<div class="article-card hover-target" data-article-card>
+  <a href="{{ article.url }}" class="article-card__media hover-target--media" aria-label="{{ article.title | escape }}">
+    {%- render 'responsive-image', image: article.image, ratio: card_ratio, sizes: card_sizes, alt: article.image.alt, placeholder: 'lifestyle-2' -%}
+  </a>
+
+  <div class="article-card__details">
+    {%- if show_article_tags and article.tags.size > 0 -%}
+      <div class="article-card__tags">
+        {%- for tag in article.tags limit: 3 -%}
+          <span class="article-card__tag text-caption">{{ tag }}</span>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <h3 class="article-card__title text-body">
+      <a href="{{ article.url }}" class="hover-target--text">{{ article.title }}</a>
+    </h3>
+
+    <p class="article-card__meta text-caption">
+      {%- if article.author != blank -%}
+        {{ 'blog.article.by_author' | t: author: article.author }}
+        <span class="article-card__meta-separator">·</span>
+      {%- endif -%}
+      {{ article.published_at | date: '%B %d, %Y' }}
+    </p>
+
+    {%- if excerpt_text != blank -%}
+      <p class="article-card__excerpt text-blog">{{ excerpt_text }}</p>
+    {%- endif -%}
+  </div>
+</div>

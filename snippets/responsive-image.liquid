@@ -1,0 +1,42 @@
+{%- comment -%}
+  Renders a responsive <img> for a real image, or a placeholder_svg_tag fallback
+  sized to match, so no copyrighted photography is required to preview the theme.
+  Params: image, ratio ('square'|'portrait'|'landscape'|'natural'|blank to use settings.image_ratio),
+          sizes (string, default '100vw'), class, alt, loading ('lazy'|'eager'), placeholder (svg name)
+{%- endcomment -%}
+{%- liquid
+  assign use_ratio = ratio | default: settings.image_ratio
+  assign img_class = class | default: ''
+  assign img_loading = loading | default: 'lazy'
+  assign img_sizes = sizes | default: '100vw'
+  assign placeholder_name = placeholder | default: 'lifestyle-1'
+-%}
+{%- case use_ratio -%}
+  {%- when 'square' -%}
+    {%- assign ratio_padding = '100%' -%}
+  {%- when 'portrait' -%}
+    {%- assign ratio_padding = '125%' -%}
+  {%- when 'landscape' -%}
+    {%- assign ratio_padding = '66.66%' -%}
+  {%- else -%}
+    {%- assign ratio_padding = '' -%}
+{%- endcase -%}
+
+<div class="responsive-image {{ img_class }}" {% if ratio_padding != '' %}style="--ratio-padding: {{ ratio_padding }};"{% endif %} data-image-ratio="{{ use_ratio }}">
+  {%- if image != blank -%}
+    <img
+      srcset="{% render 'image-srcset', image: image %}"
+      sizes="{{ img_sizes }}"
+      src="{{ image | image_url: width: 800 }}"
+      alt="{{ alt | default: image.alt | escape }}"
+      width="{{ image.width }}"
+      height="{{ image.height }}"
+      loading="{{ img_loading }}"
+      class="responsive-image__img"
+    >
+  {%- else -%}
+    <div class="responsive-image__placeholder" aria-hidden="true">
+      {{ placeholder_name | placeholder_svg_tag: 'responsive-image__img responsive-image__img--placeholder' }}
+    </div>
+  {%- endif -%}
+</div>

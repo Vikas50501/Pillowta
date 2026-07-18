@@ -1,0 +1,33 @@
+{%- render 'structured-data-collection', collection: collection -%}
+<div class="collection-banner{% if section.settings.show_image and collection.image %} collection-banner--with-image{% endif %}">
+  {%- if section.settings.show_image and collection.image -%}
+    <div class="collection-banner__media">
+      {%- render 'responsive-image', image: collection.image, ratio: 'landscape', sizes: '100vw' -%}
+      <div class="collection-banner__overlay"></div>
+    </div>
+  {%- endif -%}
+
+  <div class="collection-banner__content page-width">
+    <nav class="collection-banner__breadcrumb text-caption" aria-label="Breadcrumb">
+      <a href="{{ routes.root_url }}">{{ 'general.breadcrumb.home' | t }}</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">{{ collection.title }}</span>
+    </nav>
+    <h1 class="collection-banner__title text-heading">{{ collection.title }}</h1>
+    {%- if section.settings.show_description and collection.description != blank -%}
+      <div class="collection-banner__description rte text-body">{{ collection.description }}</div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection banner",
+  "tag": "section",
+  "class": "shopify-section--collection-banner",
+  "settings": [
+    { "type": "checkbox", "id": "show_image", "label": "Show collection image", "default": true },
+    { "type": "checkbox", "id": "show_description", "label": "Show collection description", "default": true }
+  ]
+}
+{% endschema %}

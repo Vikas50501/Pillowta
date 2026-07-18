@@ -1,0 +1,66 @@
+<div class="customer-page page-width">
+  <div class="customer-page__header">
+    <h1 class="customer-page__title text-heading">
+      {{ 'customer.account.welcome' | t: name: customer.first_name }}
+    </h1>
+    <a href="{{ routes.account_logout_url }}" class="button button--secondary">{{ 'customer.account.logout' | t }}</a>
+  </div>
+
+  <section class="customer-page__section">
+    <h2 class="customer-page__section-title text-heading">{{ 'customer.account.orders' | t }}</h2>
+
+    {%- paginate customer.orders by 10 -%}
+      {%- if customer.orders.size == 0 -%}
+        <p class="text-body">{{ 'customer.account.no_orders' | t }}</p>
+      {%- else -%}
+        <table class="customer-orders-table">
+          <thead>
+            <tr>
+              <th class="text-caption">{{ 'customer.account.order_number' | t }}</th>
+              <th class="text-caption">{{ 'customer.account.order_date' | t }}</th>
+              <th class="text-caption">{{ 'customer.account.order_payment_status' | t }}</th>
+              <th class="text-caption">{{ 'customer.account.order_fulfillment_status' | t }}</th>
+              <th class="text-caption">{{ 'customer.account.order_total' | t }}</th>
+              <th class="visually-hidden">{{ 'customer.account.view_order' | t }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%- for order in customer.orders -%}
+              <tr>
+                <td><a href="{{ order.customer_url }}" class="text-body">{{ order.name }}</a></td>
+                <td class="text-body">{{ order.created_at | date: '%B %d, %Y' }}</td>
+                <td class="text-body">{{ order.financial_status_label }}</td>
+                <td class="text-body">{{ order.fulfillment_status_label }}</td>
+                <td class="text-price">{{ order.total_price | money }}</td>
+                <td><a href="{{ order.customer_url }}" class="text-caption">{{ 'customer.account.view_order' | t }}</a></td>
+              </tr>
+            {%- endfor -%}
+          </tbody>
+        </table>
+        {%- render 'pagination', paginate: paginate -%}
+      {%- endif -%}
+    {%- endpaginate -%}
+  </section>
+
+  <section class="customer-page__section">
+    <div class="customer-page__section-header">
+      <h2 class="customer-page__section-title text-heading">{{ 'customer.account.addresses_heading' | t }}</h2>
+      <a href="{{ routes.account_addresses_url }}" class="text-caption">{{ 'customer.account.manage_addresses' | t }}</a>
+    </div>
+
+    {%- if customer.addresses.size == 0 -%}
+      <p class="text-body">{{ 'customer.addresses.no_addresses' | t }}</p>
+    {%- else -%}
+      <div class="customer-addresses-grid">
+        {%- for address in customer.addresses limit: 2 -%}
+          <div class="customer-address-card">
+            {%- if address == customer.default_address -%}
+              <span class="badge badge--custom text-badge">{{ 'customer.addresses.default' | t }}</span>
+            {%- endif -%}
+            <p class="text-body">{{ address | format_address }}</p>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </section>
+</div>
