@@ -455,12 +455,12 @@
     "name": "t:settings.social.name",
     "settings": [
       { "type": "header", "content": "t:settings.social.accounts" },
-      { "type": "text", "id": "social_instagram", "label": "Instagram", "default": "" },
-      { "type": "text", "id": "social_tiktok", "label": "TikTok", "default": "" },
-      { "type": "text", "id": "social_facebook", "label": "Facebook", "default": "" },
-      { "type": "text", "id": "social_twitter", "label": "X (Twitter)", "default": "" },
-      { "type": "text", "id": "social_youtube", "label": "YouTube", "default": "" },
-      { "type": "text", "id": "social_pinterest", "label": "Pinterest", "default": "" }
+      { "type": "text", "id": "social_instagram", "label": "Instagram" },
+      { "type": "text", "id": "social_tiktok", "label": "TikTok" },
+      { "type": "text", "id": "social_facebook", "label": "Facebook" },
+      { "type": "text", "id": "social_twitter", "label": "X (Twitter)" },
+      { "type": "text", "id": "social_youtube", "label": "YouTube" },
+      { "type": "text", "id": "social_pinterest", "label": "Pinterest" }
     ]
   }
 ]
