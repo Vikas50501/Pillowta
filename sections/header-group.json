@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "name": "t:sections.header.name",
   "type": "header",
@@ -7,14 +16,23 @@
       "blocks": {
         "announcement_J7JJ8k": {
           "type": "announcement",
-          "settings": { "text": "enjoy our great international shipping rates", "link": "" }
+          "settings": {
+            "text": "enjoy our great international shipping rates",
+            "link": ""
+          }
         },
         "announcement-bar-0": {
           "type": "announcement",
-          "settings": { "text": "Welcome to our store", "link": "" }
+          "settings": {
+            "text": "Welcome to our store",
+            "link": ""
+          }
         }
       },
-      "block_order": ["announcement_J7JJ8k", "announcement-bar-0"],
+      "block_order": [
+        "announcement_J7JJ8k",
+        "announcement-bar-0"
+      ],
       "settings": {
         "background_color": "#efd7e5",
         "text_color": "#393939",
@@ -36,66 +54,116 @@
       "blocks": {
         "cosmetics_new": {
           "type": "menu_column",
-          "settings": { "parent_title": "cosmetics", "title": "new", "menu": "cosmetics-new" }
+          "settings": {
+            "parent_title": "cosmetics",
+            "title": "new",
+            "menu": ""
+          }
         },
         "cosmetics_best_sellers": {
           "type": "menu_column",
-          "settings": { "parent_title": "cosmetics", "title": "best sellers", "menu": "cosmetics-best-sellers" }
+          "settings": {
+            "parent_title": "cosmetics",
+            "title": "best sellers",
+            "menu": ""
+          }
         },
         "cosmetics_lips": {
           "type": "menu_column",
-          "settings": { "parent_title": "cosmetics", "title": "lips", "menu": "cosmetics-lips" }
+          "settings": {
+            "parent_title": "cosmetics",
+            "title": "lips",
+            "menu": ""
+          }
         },
         "cosmetics_face": {
           "type": "menu_column",
-          "settings": { "parent_title": "cosmetics", "title": "face", "menu": "cosmetics-face" }
+          "settings": {
+            "parent_title": "cosmetics",
+            "title": "face",
+            "menu": ""
+          }
         },
         "cosmetics_eyes_brows": {
           "type": "menu_column",
-          "settings": { "parent_title": "cosmetics", "title": "eyes & brows", "menu": "cosmetics-eyes-brows" }
+          "settings": {
+            "parent_title": "cosmetics",
+            "title": "eyes & brows",
+            "menu": ""
+          }
         },
         "cosmetics_featured": {
           "type": "menu_column",
-          "settings": { "parent_title": "cosmetics", "title": "featured", "menu": "cosmetics-featured" }
+          "settings": {
+            "parent_title": "cosmetics",
+            "title": "featured",
+            "menu": ""
+          }
         },
         "cosmetics_promo": {
           "type": "promo_banner",
           "settings": {
             "parent_title": "cosmetics",
             "heading": "complexion essentials",
+            "subheading": "",
             "link": "",
             "text_color": "light"
           }
         },
         "fragrance_intense": {
           "type": "image_card",
-          "settings": { "parent_title": "fragrance", "title": "cosmic kylie jenner intense", "link": "" }
+          "settings": {
+            "parent_title": "fragrance",
+            "title": "cosmic kylie jenner intense",
+            "link": ""
+          }
         },
         "fragrance_2_0": {
           "type": "image_card",
-          "settings": { "parent_title": "fragrance", "title": "cosmic kylie jenner 2.0", "link": "" }
+          "settings": {
+            "parent_title": "fragrance",
+            "title": "cosmic kylie jenner 2.0",
+            "link": ""
+          }
         },
         "fragrance_cosmic": {
           "type": "image_card",
-          "settings": { "parent_title": "fragrance", "title": "cosmic kylie jenner", "link": "" }
+          "settings": {
+            "parent_title": "fragrance",
+            "title": "cosmic kylie jenner",
+            "link": ""
+          }
         },
         "fragrance_hair_body": {
           "type": "menu_column",
-          "settings": { "parent_title": "fragrance", "title": "hair & body mists", "menu": "" }
+          "settings": {
+            "parent_title": "fragrance",
+            "title": "hair & body mists",
+            "menu": ""
+          }
         },
         "fragrance_bundles": {
           "type": "menu_column",
-          "settings": { "parent_title": "fragrance", "title": "bundles & gift sets", "menu": "" }
+          "settings": {
+            "parent_title": "fragrance",
+            "title": "bundles & gift sets",
+            "menu": ""
+          }
         },
         "fragrance_shop_all": {
           "type": "menu_column",
-          "settings": { "parent_title": "fragrance", "title": "shop all", "menu": "" }
+          "settings": {
+            "parent_title": "fragrance",
+            "title": "shop all",
+            "menu": ""
+          }
         },
         "fragrance_promo_travel": {
           "type": "promo_banner",
           "settings": {
             "parent_title": "fragrance",
             "heading": "travel-sized hair & body mists",
+            "subheading": "",
             "link": "",
             "text_color": "light"
           }
@@ -130,21 +198,25 @@
       ],
       "settings": {
         "menu": "main-menu",
+        "logo": "shopify://shop_images/Pillowta_logo_1-removebg-preview_1.png",
+        "logo_width": 150,
+        "logo_subtitle": "Pillowta",
         "menu_alignment": "center",
         "header_height": 88,
         "container_width": 1600,
         "container_padding": 32,
         "enable_transparent": true,
         "enable_sticky": true,
-        "blur_background": false,
+        "blur_background": true,
         "show_border": true,
         "show_shadow": true,
         "enable_country_selector": true,
+        "font": "sans_serif_n4",
         "font_weight": "400",
         "font_size": 14,
         "letter_spacing": 2,
-        "text_transform": "lowercase",
-        "color_bg_transparent": "#00000000",
+        "text_transform": "uppercase",
+        "color_bg_transparent": "rgba(0,0,0,0)",
         "color_text_transparent": "#ffffff",
         "color_bg": "#ffffff",
         "color_text": "#1a1a1a",
@@ -170,13 +242,15 @@
         "icon_size": 20,
         "icon_stroke_width": 1.5,
         "show_wishlist": true,
+        "wishlist_url": "",
         "show_account": true,
         "show_search": true,
         "show_cart": true
       }
     }
   },
-  "order": ["announcement-bar", "header"]
+  "order": [
+    "announcement-bar",
+    "header"
+  ]
 }
-
-
