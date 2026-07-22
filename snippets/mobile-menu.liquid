@@ -1,72 +1,122 @@
-{%- comment -%} Params: menu, mega_blocks, show_wishlist {%- endcomment -%}
-<mobile-menu class="mobile-menu color-drawer" id="MobileMenu" aria-hidden="true">
-  <div class="mobile-menu__overlay" data-mobile-menu-close></div>
-  <div class="mobile-menu__panel" role="dialog" aria-modal="true" aria-label="{{ 'header.menu' | t }}">
-    <header class="mobile-menu__header">
-      <span class="mobile-menu__logo text-heading">{{ shop.name }}</span>
-      <button type="button" class="mobile-menu__close" data-mobile-menu-close aria-label="{{ 'general.accessibility.close_menu' | t }}">
+{%- comment -%}
+  Off-canvas mobile navigation. Mirrors the desktop mega menu content as
+  nested <details> accordions so no JavaScript is required for the
+  expand/collapse behaviour itself — header.js only handles open/close of
+  the drawer and focus trapping.
+
+  Accepts:
+    - menu: {Object} linklist rendered on desktop
+    - blocks: {Array} section.blocks (menu_column / image_card / promo_banner / rich_text)
+    - section_id: {String} parent section id, used to build unique ids
+{%- endcomment -%}
+
+<div class="mobile-menu" id="MobileMenu-{{ section_id }}" data-mobile-menu aria-hidden="true">
+  <div class="mobile-menu__overlay" data-mobile-menu-overlay></div>
+
+  <div class="mobile-menu__drawer" role="dialog" aria-modal="true" aria-label="{{ 'accessibility.menu' | t | default: 'Menu' }}">
+    <div class="mobile-menu__header">
+      {%- if localization.available_countries.size > 0 -%}
+        <div class="mobile-menu__localization">
+          {%- render 'country-localization', localPosition: 'MobileHeader' -%}
+        </div>
+      {%- endif -%}
+      <button type="button" class="mobile-menu__close" aria-label="{{ 'accessibility.close' | t | default: 'Close menu' }}" data-mobile-menu-close>
         {%- render 'icon-close' -%}
       </button>
-    </header>
-
-    {%- if menu != blank -%}
-      <nav class="mobile-menu__nav" aria-label="{{ 'header.menu' | t }}">
-        <ul class="mobile-menu__list">
-          {%- for link in menu.links -%}
-            {%- liquid
-              assign matching_block = nil
-              for b in mega_blocks
-                if b.settings.parent_handle == link.handle
-                  assign matching_block = b
-                endif
-              endfor
-              assign has_children = false
-              if link.links != blank
-                assign has_children = true
-              endif
-            -%}
-            <li class="mobile-menu__item{% if has_children %} has-children{% endif %}">
-              {%- if has_children -%}
-                <button type="button" class="mobile-menu__link mobile-menu__disclosure text-navigation" data-mobile-submenu-toggle aria-expanded="false">
-                  {{ link.title }}
-                  {%- render 'icon-chevron-down' -%}
-                </button>
-                <ul class="mobile-menu__submenu" data-mobile-submenu hidden>
-                  <li><a href="{{ link.url }}" class="mobile-menu__submenu-link mobile-menu__submenu-link--all text-navigation">{{ link.title }}</a></li>
-                  {%- for childlink in link.links -%}
-                    <li><a href="{{ childlink.url }}" class="mobile-menu__submenu-link text-navigation">{{ childlink.title }}</a></li>
-                  {%- endfor -%}
-                  {%- if matching_block.settings.promo_image != blank -%}
-                    <li class="mobile-menu__submenu-promo">
-                      <a href="{{ matching_block.settings.promo_link | default: '#' }}">
-                        {%- render 'responsive-image', image: matching_block.settings.promo_image, ratio: 'landscape', sizes: '280px' -%}
-                        {%- if matching_block.settings.promo_heading != blank -%}
-                          <span class="text-heading">{{ matching_block.settings.promo_heading }}</span>
-                        {%- endif -%}
-                      </a>
-                    </li>
-                  {%- endif -%}
-                </ul>
-              {%- else -%}
-                <a href="{{ link.url }}" class="mobile-menu__link text-navigation"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a>
-              {%- endif -%}
-            </li>
-          {%- endfor -%}
-        </ul>
-      </nav>
-    {%- endif -%}
-
-    <div class="mobile-menu__utility">
-      <a href="{{ routes.account_url }}" class="mobile-menu__utility-link text-navigation">{%- render 'icon-account', size: '18px' -%} {{ 'header.account' | t }}</a>
-      {%- if show_wishlist -%}
-        <a href="{{ routes.root_url }}pages/wishlist" class="mobile-menu__utility-link text-navigation">{%- render 'icon-heart', size: '18px' -%} {{ 'header.wishlist' | t }}</a>
-      {%- endif -%}
     </div>
 
-    {%- if settings.social_instagram != blank or settings.social_tiktok != blank or settings.social_facebook != blank or settings.social_twitter != blank or settings.social_youtube != blank or settings.social_pinterest != blank -%}
-      <div class="mobile-menu__social">
-        {%- render 'social-icons' -%}
+    <nav class="mobile-menu__content">
+      <ul class="mobile-menu__list" role="list">
+        {%- for link in menu.links -%}
+          {%- liquid
+            assign link_title_down = link.title | downcase
+            assign has_mega_menu = false
+            for block in blocks
+              if block.settings.parent_title != blank and block.settings.parent_title | downcase == link_title_down
+                assign has_mega_menu = true
+                break
+              endif
+            endfor
+          -%}
+          <li class="mobile-menu__item">
+            {%- if has_mega_menu -%}
+              <details class="mobile-menu__accordion">
+                <summary class="mobile-menu__summary">
+                  <span>{{ link.title | escape }}</span>
+                  {{- 'icon-caret.svg' | inline_asset_content -}}
+                </summary>
+                <div class="mobile-menu__panel">
+                  {%- for block in blocks -%}
+                    {%- if block.settings.parent_title | downcase != link_title_down -%}
+                      {%- continue -%}
+                    {%- endif -%}
+
+                    {%- case block.type -%}
+                      {%- when 'menu_column' -%}
+                        <div class="mobile-menu__column">
+                          {%- if block.settings.title != blank -%}
+                            <p class="mobile-menu__column-title">{{ block.settings.title | escape }}</p>
+                          {%- endif -%}
+                          {%- if block.settings.menu != blank -%}
+                            <ul class="mobile-menu__sublist" role="list">
+                              {%- for childlink in block.settings.menu.links -%}
+                                <li>
+                                  <a href="{{ childlink.url }}" class="mobile-menu__link">{{ childlink.title | escape }}</a>
+                                </li>
+                              {%- endfor -%}
+                            </ul>
+                          {%- endif -%}
+                        </div>
+
+                      {%- when 'image_card' -%}
+                        <a href="{{ block.settings.link | default: '#' }}" class="mobile-menu__link mobile-menu__link--card">
+                          {{ block.settings.title | escape }}
+                        </a>
+
+                      {%- when 'promo_banner' -%}
+                        <a href="{{ block.settings.link | default: '#' }}" class="mobile-menu__link mobile-menu__link--card">
+                          {{ block.settings.heading | default: block.settings.title | escape }}
+                        </a>
+
+                      {%- when 'rich_text' -%}
+                        {%- if block.settings.button_label != blank -%}
+                          <a href="{{ block.settings.button_link | default: '#' }}" class="mobile-menu__link mobile-menu__link--card">
+                            {{ block.settings.button_label | escape }}
+                          </a>
+                        {%- endif -%}
+                    {%- endcase -%}
+                  {%- endfor -%}
+
+                  <a href="{{ link.url }}" class="mobile-menu__link mobile-menu__link--viewall">
+                    {{ 'general.view_all' | t | default: 'Shop all' }} {{ link.title | escape }}
+                  </a>
+                </div>
+              </details>
+            {%- else -%}
+              <a
+                href="{{ link.url }}"
+                class="mobile-menu__link mobile-menu__link--top"
+                {% if link.current %}aria-current="page"{% endif %}
+              >
+                {{ link.title | escape }}
+              </a>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      <div class="mobile-menu__footer">
+        {%- if shop.customer_accounts_enabled -%}
+          <a href="{{ routes.account_url }}" class="mobile-menu__footer-link">
+            {%- render 'icon-account' -%}
+            <span>{{ 'customer.account_fallback' | t | default: 'Account' }}</span>
+          </a>
+        {%- endif -%}
+        <a href="{{ routes.cart_url }}" class="mobile-menu__footer-link">
+          {%- render 'icon-cart' -%}
+          <span>{{ 'templates.cart.cart' | t | default: 'Cart' }}</span>
+        </a>
       </div>
-    {%- endif -%}
+    </nav>
   </div>
-</mobile-menu>
+</div>

@@ -1,9 +1,0 @@
-{%- comment -%} Params: image {%- endcomment -%}
-{%- liquid
-  assign widths = '200,400,600,800,1000,1200,1600,2000' | split: ','
--%}
-{%- for w in widths -%}
-  {%- if image.width >= w -%}
-    {{ image | image_url: width: w }} {{ w }}w{% unless forloop.last %}, {% endunless %}
-  {%- endif -%}
-{%- endfor -%}

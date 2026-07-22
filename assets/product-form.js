@@ -1,205 +1,192 @@
-/**
- * Product detail behavior: variant selection, gallery sync, add-to-cart, and
- * the sticky add-to-cart bar. Exported as initProductDetail(root) so it can
- * be run both for the page's own product and for quick-view's injected copy
- * (assets/quick-view.js) without either instance stepping on the other.
- */
-import { addToCart, refreshCartDrawer, openCartDrawer } from './cart.js';
+if (!customElements.get('product-form')) {
+  customElements.define(
+    'product-form',
+    class ProductForm extends HTMLElement {
+      constructor() {
+        super();
 
-function getJsonScript(root, selector) {
-  const script = root.querySelector(selector);
-  if (!script) return null;
-  try {
-    return JSON.parse(script.textContent);
-  } catch {
-    return null;
-  }
-}
+        this.form = this.querySelector('form');
+        this.variantIdInput.disabled = false;
+        this.form.addEventListener('submit', this.onSubmitHandler.bind(this));
+        this.cart = document.querySelector('cart-notification') || document.querySelector('cart-drawer');
+        this.submitButton = this.querySelector('[type="submit"]');
+        this.submitButtonText = this.submitButton.querySelector('span');
 
-function findMatchingVariant(variants, selectedOptions) {
-  return variants.find((variant) =>
-    selectedOptions.every((value, index) => variant[`option${index + 1}`] === value)
+        if (document.querySelector('cart-drawer')) this.submitButton.setAttribute('aria-haspopup', 'dialog');
+
+        this.hideErrors = this.dataset.hideErrors === 'true';
+      }
+
+      onSubmitHandler(evt) {
+        evt.preventDefault();
+        if (this.submitButton.getAttribute('aria-disabled') === 'true') return;
+
+        this.handleErrorMessage();
+
+        this.submitButton.setAttribute('aria-disabled', true);
+        this.submitButton.classList.add('loading');
+        this.querySelector('.loading__spinner').classList.remove('hidden');
+
+        const config = fetchConfig('javascript');
+        config.headers['X-Requested-With'] = 'XMLHttpRequest';
+        delete config.headers['Content-Type'];
+
+        const formData = new FormData(this.form);
+        if (this.cart) {
+          formData.append(
+            'sections',
+            this.cart.getSectionsToRender().map((section) => section.id)
+          );
+          formData.append('sections_url', window.location.pathname);
+          this.cart.setActiveElement(document.activeElement);
+        }
+        config.body = formData;
+
+        const variantId = formData.get('id');
+        const quantity = parseInt(formData.get('quantity')) || 1;
+        const linesUpdateDeferred = this.createCartLinesUpdateEvent(variantId, quantity);
+
+        fetch(`${routes.cart_add_url}`, config)
+          .then((response) => response.json())
+          .then((response) => {
+            if (response.status) {
+              publish(PUB_SUB_EVENTS.cartError, {
+                source: 'product-form',
+                productVariantId: variantId,
+                errors: response.errors || response.description,
+                message: response.message,
+              });
+              this.handleErrorMessage(response.description);
+              this.dispatchCartErrorEvent(response.description || response.message, 'INVALID');
+              linesUpdateDeferred?.reject(new Error(response.description || response.message));
+
+              const soldOutMessage = this.submitButton.querySelector('.sold-out-message');
+              if (!soldOutMessage) return;
+              this.submitButton.setAttribute('aria-disabled', true);
+              this.submitButtonText.classList.add('hidden');
+              soldOutMessage.classList.remove('hidden');
+              this.error = true;
+              return;
+            } else if (!this.cart) {
+              this.resolveCartLinesUpdate(linesUpdateDeferred);
+              window.location = window.routes.cart_url;
+              return;
+            }
+
+            this.resolveCartLinesUpdate(linesUpdateDeferred);
+
+            const startMarker = CartPerformance.createStartingMarker('add:wait-for-subscribers');
+            if (!this.error)
+              publish(PUB_SUB_EVENTS.cartUpdate, {
+                source: 'product-form',
+                productVariantId: variantId,
+                cartData: response,
+              }).then(() => {
+                CartPerformance.measureFromMarker('add:wait-for-subscribers', startMarker);
+              });
+            this.error = false;
+            const quickAddModal = this.closest('quick-add-modal');
+            if (quickAddModal) {
+              document.body.addEventListener(
+                'modalClosed',
+                () => {
+                  setTimeout(() => {
+                    CartPerformance.measure("add:paint-updated-sections", () => {
+                      this.cart.renderContents(response);
+                    });
+                  });
+                },
+                { once: true }
+              );
+              quickAddModal.hide(true);
+            } else {
+              CartPerformance.measure("add:paint-updated-sections", () => {
+                this.cart.renderContents(response);
+              });
+            }
+          })
+          .catch((e) => {
+            console.error(e);
+            this.dispatchCartErrorEvent(e.message || 'Network error', 'SERVICE_UNAVAILABLE');
+            linesUpdateDeferred?.reject(e);
+          })
+          .finally(() => {
+            this.submitButton.classList.remove('loading');
+            if (this.cart && this.cart.classList.contains('is-empty')) this.cart.classList.remove('is-empty');
+            if (!this.error) this.submitButton.removeAttribute('aria-disabled');
+            this.querySelector('.loading__spinner').classList.add('hidden');
+
+            CartPerformance.measureFromEvent("add:user-action", evt);
+          });
+      }
+
+      handleErrorMessage(errorMessage = false) {
+        if (this.hideErrors) return;
+
+        this.errorMessageWrapper =
+          this.errorMessageWrapper || this.querySelector('.product-form__error-message-wrapper');
+        if (!this.errorMessageWrapper) return;
+        this.errorMessage = this.errorMessage || this.errorMessageWrapper.querySelector('.product-form__error-message');
+
+        this.errorMessageWrapper.toggleAttribute('hidden', !errorMessage);
+
+        if (errorMessage) {
+          this.errorMessage.textContent = errorMessage;
+        }
+      }
+
+      toggleSubmitButton(disable = true, text) {
+        if (disable) {
+          this.submitButton.setAttribute('disabled', 'disabled');
+          if (text) this.submitButtonText.textContent = text;
+        } else {
+          this.submitButton.removeAttribute('disabled');
+          this.submitButtonText.textContent = window.variantStrings.addToCart;
+        }
+      }
+
+      createCartLinesUpdateEvent(variantId, quantity) {
+        const { CartLinesUpdateEvent } = window.StandardEvents || {};
+        if (!CartLinesUpdateEvent) return null;
+
+        const deferred = CartLinesUpdateEvent.createPromise();
+        this.dispatchEvent(
+          new CartLinesUpdateEvent({
+            action: 'add',
+            context: 'product',
+            lines: [{ merchandiseId: variantId, quantity }],
+            promise: deferred.promise,
+          })
+        );
+        return deferred;
+      }
+
+      resolveCartLinesUpdate(deferred) {
+        if (!deferred) return;
+        const { CartLinesUpdateEvent } = window.StandardEvents || {};
+        if (!CartLinesUpdateEvent) return;
+
+        const pendingCartDataPromise = typeof CartItems !== 'undefined'
+          ? CartItems.fetchCartData()
+          : fetch(`${routes.cart_url}.json`).then((response) => response.json());
+
+        pendingCartDataPromise
+          .then((cart) => {
+            if (!cart?.currency) return deferred.reject(new Error('Missing currency in cart response'));
+            deferred.resolve({ cart: CartLinesUpdateEvent.createCartFromAjaxResponse(cart) });
+          })
+          .catch((e) => deferred.reject(e));
+      }
+
+      dispatchCartErrorEvent(message, code) {
+        const { CartErrorEvent } = window.StandardEvents || {};
+        if (!CartErrorEvent) return;
+        this.dispatchEvent(new CartErrorEvent({ error: message, code }));
+      }
+
+      get variantIdInput() {
+        return this.form.querySelector('[name=id]');
+      }
+    }
   );
 }
-
-function getSelectedOptions(picker) {
-  return Array.from(picker.querySelectorAll('.variant-picker__option')).map((fieldset) => {
-    const checked = fieldset.querySelector('[data-option-value]:checked');
-    return checked ? checked.value : null;
-  });
-}
-
-async function refreshServerRenderedBits(root, productUrl, sectionId, variantId) {
-  const response = await fetch(`${productUrl}?variant=${variantId}&section_id=${sectionId}`);
-  if (!response.ok) return;
-  const html = await response.text();
-  const doc = new DOMParser().parseFromString(html, 'text/html');
-
-  ['[data-price-wrapper]', '[data-sku]', '[data-inventory]'].forEach((selector) => {
-    const fresh = doc.querySelector(selector);
-    const current = root.querySelector(selector);
-    if (fresh && current) current.innerHTML = fresh.innerHTML;
-  });
-}
-
-function updateGalleryForVariant(root, variantId, variants) {
-  const variant = variants.find((v) => v.id === variantId);
-  const mediaId = variant?.featured_media?.id;
-  if (!mediaId) return;
-
-  const gallery = root.querySelector('[data-gallery]');
-  if (!gallery) return;
-
-  gallery.querySelectorAll('[data-gallery-slide]').forEach((slide) => {
-    slide.classList.toggle('is-active', Number(slide.dataset.mediaId) === mediaId);
-  });
-  gallery.querySelectorAll('[data-gallery-thumb]').forEach((thumb) => {
-    const isMatch = Number(thumb.dataset.mediaId) === mediaId;
-    thumb.classList.toggle('is-active', isMatch);
-    thumb.setAttribute('aria-selected', String(isMatch));
-  });
-}
-
-function updateAddToCartState(root, variant) {
-  const button = root.querySelector('[data-add-to-cart]');
-  const text = button?.querySelector('[data-add-to-cart-text]');
-  const stickyButton = document.querySelector('[data-sticky-atc-button]');
-  const available = Boolean(variant?.available);
-
-  [button, stickyButton].forEach((el) => {
-    if (!el) return;
-    el.disabled = !available;
-  });
-
-  if (text) {
-    text.textContent = available
-      ? text.dataset.addLabel || text.textContent
-      : text.dataset.soldOutLabel || text.textContent;
-  }
-}
-
-function initVariantPicker(root) {
-  const picker = root.querySelector('[data-variant-picker]');
-  if (!picker) return;
-
-  const variants = getJsonScript(picker, '[data-product-variants-json]') || [];
-  const productUrl = getJsonScript(picker, '[data-product-url-json]') || window.location.pathname;
-  const sectionId = root.dataset.sectionId;
-  const variantIdInput = root.querySelector('[data-variant-id-input]');
-
-  picker.addEventListener('change', async (event) => {
-    if (!event.target.matches('[data-option-value]')) return;
-
-    const fieldset = event.target.closest('.variant-picker__option');
-    const label = fieldset?.querySelector('[data-selected-value]');
-    if (label) label.textContent = event.target.value;
-
-    const selectedOptions = getSelectedOptions(picker);
-    const variant = findMatchingVariant(variants, selectedOptions);
-    if (!variant) return;
-
-    if (variantIdInput) variantIdInput.value = variant.id;
-    updateGalleryForVariant(root, variant.id, variants);
-    updateAddToCartState(root, variant);
-
-    if (root.dataset.isQuickView !== 'true') {
-      const url = new URL(window.location.href);
-      url.searchParams.set('variant', variant.id);
-      window.history.replaceState({}, '', url);
-    }
-
-    if (sectionId) {
-      await refreshServerRenderedBits(root, productUrl, sectionId, variant.id);
-    }
-  });
-}
-
-function initAddToCart(root) {
-  const form = root.querySelector('[data-product-detail-form]') || root.querySelector('#ProductForm');
-  if (!form) return;
-
-  form.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const button = root.querySelector('[data-add-to-cart]');
-    button?.setAttribute('disabled', 'disabled');
-
-    try {
-      await addToCart(new FormData(form));
-      await refreshCartDrawer();
-      openCartDrawer();
-    } catch (error) {
-      // Swallow — a future toast/error-message component can surface `error.message`.
-    } finally {
-      button?.removeAttribute('disabled');
-    }
-  });
-}
-
-function initStickyAddToCart(root) {
-  const buyButtons = root.querySelector('[data-buy-buttons]');
-  const stickyBar = document.querySelector('[data-sticky-atc]');
-  if (!buyButtons || !stickyBar || !('IntersectionObserver' in window)) return;
-
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      const scrolledPast = !entry.isIntersecting && entry.boundingClientRect.top < 0;
-      stickyBar.hidden = !scrolledPast;
-    },
-    { threshold: 0 }
-  );
-
-  observer.observe(buyButtons);
-}
-
-// Delegated (safe to bind once, works for any number of galleries on the page).
-function initGalleryInteractions() {
-  document.addEventListener('click', (event) => {
-    const thumb = event.target.closest('[data-gallery-thumb]');
-    const zoomTrigger = event.target.closest('[data-gallery-zoom]');
-    const closeTrigger = event.target.closest('[data-gallery-lightbox-close]');
-
-    if (thumb) {
-      const gallery = thumb.closest('[data-gallery]');
-      const mediaId = thumb.dataset.mediaId;
-      gallery.querySelectorAll('[data-gallery-slide]').forEach((slide) => {
-        slide.classList.toggle('is-active', slide.dataset.mediaId === mediaId);
-      });
-      gallery.querySelectorAll('[data-gallery-thumb]').forEach((t) => {
-        t.classList.toggle('is-active', t === thumb);
-        t.setAttribute('aria-selected', String(t === thumb));
-      });
-    }
-
-    if (zoomTrigger) {
-      const gallery = zoomTrigger.closest('[data-gallery]');
-      const lightbox = gallery.querySelector('[data-gallery-lightbox]');
-      const stage = lightbox.querySelector('[data-gallery-lightbox-stage]');
-      stage.innerHTML = zoomTrigger.innerHTML;
-      lightbox.classList.add('is-open');
-      lightbox.setAttribute('aria-hidden', 'false');
-    }
-
-    if (closeTrigger) {
-      const lightbox = closeTrigger.closest('[data-gallery-lightbox]');
-      lightbox.classList.remove('is-open');
-      lightbox.setAttribute('aria-hidden', 'true');
-    }
-  });
-}
-
-let galleryInteractionsBound = false;
-
-export function initProductDetail(root) {
-  if (!root) return;
-  if (!galleryInteractionsBound) {
-    initGalleryInteractions();
-    galleryInteractionsBound = true;
-  }
-  initVariantPicker(root);
-  initAddToCart(root);
-  initStickyAddToCart(root);
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('[data-product-detail]').forEach((root) => initProductDetail(root));
-});

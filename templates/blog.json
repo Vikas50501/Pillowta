@@ -3,16 +3,17 @@
     "main": {
       "type": "main-blog",
       "settings": {
-        "posts_per_page": 12,
-        "columns_desktop": 3,
-        "section_width": "wide",
-        "animation": "fade",
-        "padding_top": 48,
-        "padding_bottom": 48,
-        "hide_on_mobile": false,
-        "hide_on_desktop": false
+        "layout": "collage",
+        "show_image": true,
+        "image_height": "medium",
+        "show_date": true,
+        "show_author": false,
+        "padding_top": 36,
+        "padding_bottom": 36
       }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }

@@ -1,13 +1,1 @@
-{
-  "type": "header",
-  "name": "Header",
-  "sections": {
-    "announcement-bar": {
-      "type": "announcement-bar"
-    },
-    "header": {
-      "type": "header"
-    }
-  },
-  "order": ["announcement-bar", "header"]
-}
+{"name":"t:sections.header.name","type":"header","sections":{"announcement-bar":{"type":"announcement-bar","blocks":{"announcement_J7JJ8k":{"type":"announcement","settings":{"text":"enjoy our great international shipping rates","link":""}},"announcement-bar-0":{"type":"announcement","settings":{"text":"Welcome to our store","link":""}}},"block_order":["announcement_J7JJ8k","announcement-bar-0"],"settings":{"background_color":"#efd7e5","text_color":"#393939","border_bottom_color":"#7a9ca0","border_bottom_width":0,"text_alignment":"center","font_size":14,"font_weight":"400","letter_spacing":0,"padding_top":4,"padding_bottom":4,"autoplay":true,"autoplay_speed":5,"transition_speed":400}},"header":{"type":"header","settings":{"logo_position":"middle-left","mobile_logo_position":"center","menu":"main-menu","menu_type_desktop":"dropdown","sticky_header_type":"on-scroll-up","show_line_separator":true,"color_scheme":"scheme-1","menu_color_scheme":"scheme-1","enable_country_selector":true,"enable_language_selector":true,"enable_customer_avatar":true,"margin_bottom":0,"padding_top":20,"padding_bottom":20}}},"order":["announcement-bar","header"]}

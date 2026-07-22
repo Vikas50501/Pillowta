@@ -1,16 +1,1 @@
-{
-  "sections": {
-    "main": {
-      "type": "main-article",
-      "settings": {
-        "animation": "fade",
-        "section_width": "wide",
-        "padding_top": 48,
-        "padding_bottom": 48,
-        "hide_on_mobile": false,
-        "hide_on_desktop": false
-      }
-    }
-  },
-  "order": ["main"]
-}
+{"sections":{"main":{"type":"main-article","blocks":{"featured_image":{"type":"featured_image","settings":{"image_height":"adapt"}},"title":{"type":"title","settings":{"blog_show_date":true,"blog_show_author":false}},"share":{"type":"share","settings":{"share_label":"Share"}},"content":{"type":"content","settings":{}}},"block_order":["featured_image","title","share","content"],"settings":{}}},"order":["main"]}
