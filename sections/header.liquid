@@ -21,10 +21,14 @@
   endif
 
   assign show_localization = false
-  if s.enable_country_selector and localization.available_countries.size > 0
+  if s.enable_country_selector and localization.available_countries.size > 1 or localization.available_languages.size > 1
     assign show_localization = true
   endif
 -%}
+
+{%- if show_localization -%}
+  {{ 'component-localization-form.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
 
 {%- style -%}
   #shopify-section-{{ section.id }} {
@@ -182,7 +186,7 @@
     <div class="site-header__region site-header__region--end">
       <div class="site-header__actions">
         {%- if s.show_wishlist -%}
-          <a href="{{ s.wishlist_url | default: routes.account_url }}" class="site-header__icon site-header__icon--wishlist" aria-label="{{ 'general.wishlist' | t | default: 'Wishlist' }}">
+          <a href="{{ s.wishlist_url | default: routes.account_url }}" class="site-header__icon site-header__icon--wishlist" aria-label="Wishlist">
             {%- render 'icon-heart' -%}
           </a>
         {%- endif -%}
@@ -217,7 +221,7 @@
         class="site-header__mobile-toggle"
         aria-expanded="false"
         aria-controls="MobileMenu-{{ section.id }}"
-        aria-label="{{ 'accessibility.menu' | t | default: 'Menu' }}"
+        aria-label="Menu"
         data-mobile-menu-toggle
       >
         <span class="site-header__hamburger" aria-hidden="true">

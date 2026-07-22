@@ -13,9 +13,9 @@
 <div class="mobile-menu" id="MobileMenu-{{ section_id }}" data-mobile-menu aria-hidden="true">
   <div class="mobile-menu__overlay" data-mobile-menu-overlay></div>
 
-  <div class="mobile-menu__drawer" role="dialog" aria-modal="true" aria-label="{{ 'accessibility.menu' | t | default: 'Menu' }}">
+  <div class="mobile-menu__drawer" role="dialog" aria-modal="true" aria-label="Menu">
     <div class="mobile-menu__header">
-      {%- if localization.available_countries.size > 0 -%}
+      {%- if localization.available_countries.size > 1 or localization.available_languages.size > 1 -%}
         <div class="mobile-menu__localization">
           {%- render 'country-localization', localPosition: 'MobileHeader' -%}
         </div>
@@ -87,7 +87,7 @@
                   {%- endfor -%}
 
                   <a href="{{ link.url }}" class="mobile-menu__link mobile-menu__link--viewall">
-                    {{ 'general.view_all' | t | default: 'Shop all' }} {{ link.title | escape }}
+                    Shop all {{ link.title | escape }}
                   </a>
                 </div>
               </details>
