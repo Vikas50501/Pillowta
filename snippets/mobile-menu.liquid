@@ -31,10 +31,13 @@
           {%- liquid
             assign link_title_down = link.title | downcase
             assign has_mega_menu = false
+            assign link_blocks = '' | split: ','
+
             for block in blocks
-              if block.settings.parent_title != blank and block.settings.parent_title | downcase == link_title_down
+              assign parent_title_down = block.settings.parent_title | downcase
+              if parent_title_down == link_title_down
                 assign has_mega_menu = true
-                break
+                assign link_blocks = link_blocks | push: block
               endif
             endfor
           -%}
@@ -46,11 +49,7 @@
                   {{- 'icon-caret.svg' | inline_asset_content -}}
                 </summary>
                 <div class="mobile-menu__panel">
-                  {%- for block in blocks -%}
-                    {%- if block.settings.parent_title | downcase != link_title_down -%}
-                      {%- continue -%}
-                    {%- endif -%}
-
+                  {%- for block in link_blocks -%}
                     {%- case block.type -%}
                       {%- when 'menu_column' -%}
                         <div class="mobile-menu__column">

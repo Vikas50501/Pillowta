@@ -1,1 +1,180 @@
-{"name":"t:sections.header.name","type":"header","sections":{"announcement-bar":{"type":"announcement-bar","blocks":{"announcement_J7JJ8k":{"type":"announcement","settings":{"text":"enjoy our great international shipping rates","link":""}},"announcement-bar-0":{"type":"announcement","settings":{"text":"Welcome to our store","link":""}}},"block_order":["announcement_J7JJ8k","announcement-bar-0"],"settings":{"background_color":"#efd7e5","text_color":"#393939","border_bottom_color":"#7a9ca0","border_bottom_width":0,"text_alignment":"center","font_size":14,"font_weight":"400","letter_spacing":0,"padding_top":4,"padding_bottom":4,"autoplay":true,"autoplay_speed":5,"transition_speed":400}},"header":{"type":"header","settings":{"logo_position":"middle-left","mobile_logo_position":"center","menu":"main-menu","menu_type_desktop":"dropdown","sticky_header_type":"on-scroll-up","show_line_separator":true,"color_scheme":"scheme-1","menu_color_scheme":"scheme-1","enable_country_selector":true,"enable_language_selector":true,"enable_customer_avatar":true,"margin_bottom":0,"padding_top":20,"padding_bottom":20}}},"order":["announcement-bar","header"]}
+{
+  "name": "t:sections.header.name",
+  "type": "header",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "announcement_J7JJ8k": {
+          "type": "announcement",
+          "settings": { "text": "enjoy our great international shipping rates", "link": "" }
+        },
+        "announcement-bar-0": {
+          "type": "announcement",
+          "settings": { "text": "Welcome to our store", "link": "" }
+        }
+      },
+      "block_order": ["announcement_J7JJ8k", "announcement-bar-0"],
+      "settings": {
+        "background_color": "#efd7e5",
+        "text_color": "#393939",
+        "border_bottom_color": "#7a9ca0",
+        "border_bottom_width": 0,
+        "text_alignment": "center",
+        "font_size": 14,
+        "font_weight": "400",
+        "letter_spacing": 0,
+        "padding_top": 4,
+        "padding_bottom": 4,
+        "autoplay": true,
+        "autoplay_speed": 5,
+        "transition_speed": 400
+      }
+    },
+    "header": {
+      "type": "header",
+      "blocks": {
+        "cosmetics_new": {
+          "type": "menu_column",
+          "settings": { "parent_title": "cosmetics", "title": "new", "menu": "cosmetics-new" }
+        },
+        "cosmetics_best_sellers": {
+          "type": "menu_column",
+          "settings": { "parent_title": "cosmetics", "title": "best sellers", "menu": "cosmetics-best-sellers" }
+        },
+        "cosmetics_lips": {
+          "type": "menu_column",
+          "settings": { "parent_title": "cosmetics", "title": "lips", "menu": "cosmetics-lips" }
+        },
+        "cosmetics_face": {
+          "type": "menu_column",
+          "settings": { "parent_title": "cosmetics", "title": "face", "menu": "cosmetics-face" }
+        },
+        "cosmetics_eyes_brows": {
+          "type": "menu_column",
+          "settings": { "parent_title": "cosmetics", "title": "eyes & brows", "menu": "cosmetics-eyes-brows" }
+        },
+        "cosmetics_featured": {
+          "type": "menu_column",
+          "settings": { "parent_title": "cosmetics", "title": "featured", "menu": "cosmetics-featured" }
+        },
+        "cosmetics_promo": {
+          "type": "promo_banner",
+          "settings": {
+            "parent_title": "cosmetics",
+            "heading": "complexion essentials",
+            "link": "",
+            "text_color": "light"
+          }
+        },
+        "fragrance_intense": {
+          "type": "image_card",
+          "settings": { "parent_title": "fragrance", "title": "cosmic kylie jenner intense", "link": "" }
+        },
+        "fragrance_2_0": {
+          "type": "image_card",
+          "settings": { "parent_title": "fragrance", "title": "cosmic kylie jenner 2.0", "link": "" }
+        },
+        "fragrance_cosmic": {
+          "type": "image_card",
+          "settings": { "parent_title": "fragrance", "title": "cosmic kylie jenner", "link": "" }
+        },
+        "fragrance_hair_body": {
+          "type": "menu_column",
+          "settings": { "parent_title": "fragrance", "title": "hair & body mists", "menu": "" }
+        },
+        "fragrance_bundles": {
+          "type": "menu_column",
+          "settings": { "parent_title": "fragrance", "title": "bundles & gift sets", "menu": "" }
+        },
+        "fragrance_shop_all": {
+          "type": "menu_column",
+          "settings": { "parent_title": "fragrance", "title": "shop all", "menu": "" }
+        },
+        "fragrance_promo_travel": {
+          "type": "promo_banner",
+          "settings": {
+            "parent_title": "fragrance",
+            "heading": "travel-sized hair & body mists",
+            "link": "",
+            "text_color": "light"
+          }
+        },
+        "fragrance_promo_engraving": {
+          "type": "promo_banner",
+          "settings": {
+            "parent_title": "fragrance",
+            "heading": "custom engraving",
+            "subheading": "now available for all sizes",
+            "link": "",
+            "text_color": "light"
+          }
+        }
+      },
+      "block_order": [
+        "cosmetics_new",
+        "cosmetics_best_sellers",
+        "cosmetics_lips",
+        "cosmetics_face",
+        "cosmetics_eyes_brows",
+        "cosmetics_featured",
+        "cosmetics_promo",
+        "fragrance_intense",
+        "fragrance_2_0",
+        "fragrance_cosmic",
+        "fragrance_hair_body",
+        "fragrance_bundles",
+        "fragrance_shop_all",
+        "fragrance_promo_travel",
+        "fragrance_promo_engraving"
+      ],
+      "settings": {
+        "menu": "main-menu",
+        "menu_alignment": "center",
+        "header_height": 88,
+        "container_width": 1600,
+        "container_padding": 32,
+        "enable_transparent": true,
+        "enable_sticky": true,
+        "blur_background": false,
+        "show_border": true,
+        "show_shadow": true,
+        "enable_country_selector": true,
+        "font_weight": "400",
+        "font_size": 14,
+        "letter_spacing": 2,
+        "text_transform": "lowercase",
+        "color_bg_transparent": "#00000000",
+        "color_text_transparent": "#ffffff",
+        "color_bg": "#ffffff",
+        "color_text": "#1a1a1a",
+        "color_bg_hover": "#ffffff",
+        "color_text_hover": "#1a1a1a",
+        "color_bg_sticky": "#ffffff",
+        "color_text_sticky": "#1a1a1a",
+        "color_text_active": "#a94165",
+        "color_border": "#e5e5e5",
+        "nav_gap": 32,
+        "hover_style": "pill",
+        "show_indicator": false,
+        "transition_speed": 260,
+        "mega_menu_width": "full",
+        "mega_menu_max_width": 1600,
+        "card_radius": 4,
+        "card_gap": 24,
+        "card_shadow": false,
+        "enable_overlay": true,
+        "overlay_opacity": 40,
+        "open_delay": 80,
+        "close_delay": 200,
+        "icon_size": 20,
+        "icon_stroke_width": 15,
+        "show_wishlist": true,
+        "show_account": true,
+        "show_search": true,
+        "show_cart": true
+      }
+    }
+  },
+  "order": ["announcement-bar", "header"]
+}
