@@ -45,3 +45,4 @@ class DetailsModal extends HTMLElement {
 }
 
 customElements.define('details-modal', DetailsModal);
+

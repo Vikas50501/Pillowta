@@ -25,3 +25,4 @@ if (!customElements.get('show-more-button')) {
     }
   );
 }
+

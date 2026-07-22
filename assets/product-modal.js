@@ -40,3 +40,4 @@ if (!customElements.get('product-modal')) {
     }
   );
 }
+

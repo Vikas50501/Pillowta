@@ -24,3 +24,4 @@ class DisclosuresContent extends HTMLElement {
 if (!customElements.get('disclosures-content')) {
   customElements.define('disclosures-content', DisclosuresContent);
 }
+

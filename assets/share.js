@@ -54,3 +54,4 @@ if (!customElements.get('share-button')) {
     }
   );
 }
+

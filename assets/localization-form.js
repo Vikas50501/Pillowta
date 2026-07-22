@@ -204,3 +204,4 @@ if (!customElements.get('localization-form')) {
     }
   );
 }
+

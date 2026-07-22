@@ -100,3 +100,4 @@ if (Shopify.designMode) {
   document.addEventListener('shopify:section:load', (event) => initializeScrollAnimationTrigger(event.target, true));
   document.addEventListener('shopify:section:reorder', () => initializeScrollAnimationTrigger(document, true));
 }
+

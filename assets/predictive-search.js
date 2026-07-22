@@ -301,3 +301,4 @@ class PredictiveSearch extends SearchForm {
 }
 
 customElements.define('predictive-search', PredictiveSearch);
+

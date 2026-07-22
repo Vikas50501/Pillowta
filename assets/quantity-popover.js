@@ -87,3 +87,4 @@ if (!customElements.get('quantity-popover')) {
     }
   );
 }
+

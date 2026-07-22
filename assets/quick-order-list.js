@@ -498,3 +498,4 @@ if (!customElements.get('quick-order-list-remove-all-button')) {
     }
   );
 }
+

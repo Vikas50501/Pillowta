@@ -7,3 +7,4 @@ const PUB_SUB_EVENTS = {
   variantChange: 'variant-change',
   cartError: 'cart-error',
 };
+

@@ -45,3 +45,4 @@ class SearchForm extends HTMLElement {
 }
 
 customElements.define('search-form', SearchForm);
+

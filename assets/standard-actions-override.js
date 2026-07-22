@@ -155,3 +155,4 @@ if (window.Shopify?.actions) {
 } else {
   document.addEventListener('DOMContentLoaded', initStandardActions, { once: true });
 }
+

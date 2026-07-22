@@ -115,3 +115,4 @@ if (!customElements.get('media-gallery')) {
     }
   );
 }
+

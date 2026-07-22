@@ -190,3 +190,4 @@ if (!customElements.get('cart-disclosure-modal')) {
 
   customElements.define('cart-disclosure-modal', CartDisclosureModal);
 }
+

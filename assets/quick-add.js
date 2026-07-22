@@ -122,3 +122,4 @@ if (!customElements.get('quick-add-modal')) {
     }
   );
 }
+

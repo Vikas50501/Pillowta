@@ -163,3 +163,4 @@ if (!customElements.get('recipient-form')) {
     }
   );
 }
+

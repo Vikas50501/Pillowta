@@ -101,3 +101,4 @@ if (!customElements.get('price-per-item')) {
     }
   );
 }
+
