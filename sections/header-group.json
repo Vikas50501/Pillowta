@@ -142,7 +142,7 @@
         "enable_country_selector": true,
         "font_weight": "400",
         "font_size": 14,
-        "letter_spacing": 0.02,
+        "letter_spacing": 2,
         "text_transform": "lowercase",
         "color_bg_transparent": "#00000000",
         "color_text_transparent": "#ffffff",

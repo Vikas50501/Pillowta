@@ -37,7 +37,7 @@
     --header-font-style: {{ header_font.style }};
     --header-font-weight: {{ s.font_weight }};
     --header-font-size: {{ s.font_size }}px;
-    --header-letter-spacing: {{ s.letter_spacing }}em;
+    --header-letter-spacing: {{ s.letter_spacing | divided_by: 100.0 }}em;
     --header-text-transform: {{ s.text_transform }};
 
     --header-bg-transparent: {{ s.color_bg_transparent.red }}, {{ s.color_bg_transparent.green }}, {{ s.color_bg_transparent.blue }};
@@ -382,11 +382,11 @@
       "type": "range",
       "id": "letter_spacing",
       "min": 0,
-      "max": 0.2,
-      "step": 0.01,
-      "unit": "em",
+      "max": 20,
+      "step": 1,
       "label": "Letter spacing",
-      "default": 0.02
+      "info": "Value is hundredths of an em (e.g. 2 = 0.02em).",
+      "default": 2
     },
     {
       "type": "select",
